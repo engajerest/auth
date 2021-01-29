@@ -49,8 +49,7 @@ func main() {
 	router := chi.NewRouter()
 	router.Use(controller.Middleware())
 	dbconfig.InitDB(dbName, userName, password, host)
-
-	logger.Info("application started")
+    logger.Info("application started")
 
 	server := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
 	router.Handle("/", playground.Handler("Engaje", "/query"))

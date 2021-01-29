@@ -3,7 +3,6 @@
 package generated
 
 import (
-	"github.com/engajerest/auth/graph/model"
 	"bytes"
 	"context"
 	"errors"
@@ -13,6 +12,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/engajerest/auth/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -474,6 +474,9 @@ input NewUser {
   email:String!
   password: String!
   Mobile:String!
+  roleid:Int
+  referenceid:Int
+locationid:Int
 }
 
 input Login {
@@ -514,7 +517,7 @@ func (ec *executionContext) field_Mutation_ResetPassword_args(ctx context.Contex
 	var arg0 model.Reset
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNReset2bitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐReset(ctx, tmp)
+		arg0, err = ec.unmarshalNReset2githubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐReset(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -529,7 +532,7 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 	var arg0 model.NewUser
 	if tmp, ok := rawArgs["create"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("create"))
-		arg0, err = ec.unmarshalNNewUser2bitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐNewUser(ctx, tmp)
+		arg0, err = ec.unmarshalNNewUser2githubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐNewUser(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -544,7 +547,7 @@ func (ec *executionContext) field_Mutation_login_args(ctx context.Context, rawAr
 	var arg0 model.Login
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNLogin2bitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐLogin(ctx, tmp)
+		arg0, err = ec.unmarshalNLogin2githubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐLogin(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -559,7 +562,7 @@ func (ec *executionContext) field_Mutation_refreshToken_args(ctx context.Context
 	var arg0 model.RefreshTokenInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNRefreshTokenInput2bitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐRefreshTokenInput(ctx, tmp)
+		arg0, err = ec.unmarshalNRefreshTokenInput2githubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐRefreshTokenInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1003,7 +1006,7 @@ func (ec *executionContext) _LoginData_userInfo(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.UserData)
 	fc.Result = res
-	return ec.marshalNUserData2ᚖbitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐUserData(ctx, field.Selections, res)
+	return ec.marshalNUserData2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐUserData(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1045,7 +1048,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.UserCreatedData)
 	fc.Result = res
-	return ec.marshalNUserCreatedData2ᚖbitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐUserCreatedData(ctx, field.Selections, res)
+	return ec.marshalNUserCreatedData2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐUserCreatedData(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_login(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1087,7 +1090,7 @@ func (ec *executionContext) _Mutation_login(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.LoginData)
 	fc.Result = res
-	return ec.marshalNLoginData2ᚖbitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐLoginData(ctx, field.Selections, res)
+	return ec.marshalNLoginData2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐLoginData(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_ResetPassword(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1206,7 +1209,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.GetUser)
 	fc.Result = res
-	return ec.marshalNGetUser2ᚕᚖbitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐGetUser(ctx, field.Selections, res)
+	return ec.marshalNGetUser2ᚕᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐGetUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_getuser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1241,7 +1244,7 @@ func (ec *executionContext) _Query_getuser(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.LoginData)
 	fc.Result = res
-	return ec.marshalNLoginData2ᚖbitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐLoginData(ctx, field.Selections, res)
+	return ec.marshalNLoginData2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐLoginData(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1522,7 +1525,7 @@ func (ec *executionContext) _UserCreatedData_userInfo(ctx context.Context, field
 	}
 	res := resTmp.(*model.UserData)
 	fc.Result = res
-	return ec.marshalNUserData2ᚖbitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐUserData(ctx, field.Selections, res)
+	return ec.marshalNUserData2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐUserData(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserData_UserId(ctx context.Context, field graphql.CollectedField, obj *model.UserData) (ret graphql.Marshaler) {
@@ -2966,6 +2969,30 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 			if err != nil {
 				return it, err
 			}
+		case "roleid":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("roleid"))
+			it.Roleid, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "referenceid":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("referenceid"))
+			it.Referenceid, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "locationid":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("locationid"))
+			it.Locationid, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		}
 	}
 
@@ -3619,7 +3646,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNGetUser2ᚕᚖbitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐGetUser(ctx context.Context, sel ast.SelectionSet, v []*model.GetUser) graphql.Marshaler {
+func (ec *executionContext) marshalNGetUser2ᚕᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐGetUser(ctx context.Context, sel ast.SelectionSet, v []*model.GetUser) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3643,7 +3670,7 @@ func (ec *executionContext) marshalNGetUser2ᚕᚖbitbucketᚋengaje_rest_apiᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOGetUser2ᚖbitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐGetUser(ctx, sel, v[i])
+			ret[i] = ec.marshalOGetUser2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐGetUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3671,16 +3698,16 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) unmarshalNLogin2bitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐLogin(ctx context.Context, v interface{}) (model.Login, error) {
+func (ec *executionContext) unmarshalNLogin2githubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐLogin(ctx context.Context, v interface{}) (model.Login, error) {
 	res, err := ec.unmarshalInputLogin(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNLoginData2bitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐLoginData(ctx context.Context, sel ast.SelectionSet, v model.LoginData) graphql.Marshaler {
+func (ec *executionContext) marshalNLoginData2githubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐLoginData(ctx context.Context, sel ast.SelectionSet, v model.LoginData) graphql.Marshaler {
 	return ec._LoginData(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNLoginData2ᚖbitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐLoginData(ctx context.Context, sel ast.SelectionSet, v *model.LoginData) graphql.Marshaler {
+func (ec *executionContext) marshalNLoginData2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐLoginData(ctx context.Context, sel ast.SelectionSet, v *model.LoginData) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3690,17 +3717,17 @@ func (ec *executionContext) marshalNLoginData2ᚖbitbucketᚋengaje_rest_apiᚋe
 	return ec._LoginData(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNNewUser2bitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐNewUser(ctx context.Context, v interface{}) (model.NewUser, error) {
+func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐNewUser(ctx context.Context, v interface{}) (model.NewUser, error) {
 	res, err := ec.unmarshalInputNewUser(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNRefreshTokenInput2bitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐRefreshTokenInput(ctx context.Context, v interface{}) (model.RefreshTokenInput, error) {
+func (ec *executionContext) unmarshalNRefreshTokenInput2githubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐRefreshTokenInput(ctx context.Context, v interface{}) (model.RefreshTokenInput, error) {
 	res, err := ec.unmarshalInputRefreshTokenInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNReset2bitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐReset(ctx context.Context, v interface{}) (model.Reset, error) {
+func (ec *executionContext) unmarshalNReset2githubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐReset(ctx context.Context, v interface{}) (model.Reset, error) {
 	res, err := ec.unmarshalInputReset(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -3720,11 +3747,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNUserCreatedData2bitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐUserCreatedData(ctx context.Context, sel ast.SelectionSet, v model.UserCreatedData) graphql.Marshaler {
+func (ec *executionContext) marshalNUserCreatedData2githubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐUserCreatedData(ctx context.Context, sel ast.SelectionSet, v model.UserCreatedData) graphql.Marshaler {
 	return ec._UserCreatedData(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUserCreatedData2ᚖbitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐUserCreatedData(ctx context.Context, sel ast.SelectionSet, v *model.UserCreatedData) graphql.Marshaler {
+func (ec *executionContext) marshalNUserCreatedData2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐUserCreatedData(ctx context.Context, sel ast.SelectionSet, v *model.UserCreatedData) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3734,7 +3761,7 @@ func (ec *executionContext) marshalNUserCreatedData2ᚖbitbucketᚋengaje_rest_a
 	return ec._UserCreatedData(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNUserData2ᚖbitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐUserData(ctx context.Context, sel ast.SelectionSet, v *model.UserData) graphql.Marshaler {
+func (ec *executionContext) marshalNUserData2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐUserData(ctx context.Context, sel ast.SelectionSet, v *model.UserData) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3997,11 +4024,26 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return graphql.MarshalBoolean(*v)
 }
 
-func (ec *executionContext) marshalOGetUser2ᚖbitbucketᚋengaje_rest_apiᚋengajeᚑauthᚋgraphᚋmodelᚐGetUser(ctx context.Context, sel ast.SelectionSet, v *model.GetUser) graphql.Marshaler {
+func (ec *executionContext) marshalOGetUser2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐGetUser(ctx context.Context, sel ast.SelectionSet, v *model.GetUser) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._GetUser(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return graphql.MarshalInt(*v)
 }
 
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {

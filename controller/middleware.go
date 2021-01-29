@@ -1,16 +1,17 @@
 package controller
 
 import (
+	"errors"
+
+
 	"github.com/engajerest/auth/Models/users"
 	"github.com/engajerest/auth/logger"
 	"github.com/engajerest/auth/utils/Errors"
 	"github.com/engajerest/auth/utils/accesstoken"
-	"errors"
 
 	"context"
 
 	"net/http"
-
 	// "github.com/99designs/gqlgen/graphql"
 	// "github.com/vektah/gqlparser/v2/gqlerror"
 	// "strconv"
@@ -30,7 +31,7 @@ func Middleware() func(http.Handler) http.Handler {
 
 			// Allow unauthenticated users in
 			if header == "" {
-			
+				// http.Error(w, "token null", http.StatusForbidden)
 				next.ServeHTTP(w, r)
 				return
 			}
@@ -88,3 +89,4 @@ func ForContext(ctx context.Context) (*users.User,*Errors.RestError) {
 	}
 return user,nil
 }
+

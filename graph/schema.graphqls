@@ -49,6 +49,9 @@ input NewUser {
   email:String!
   password: String!
   Mobile:String!
+  roleid:Int
+  referenceid:Int
+locationid:Int
 }
 
 input Login {

@@ -4,16 +4,16 @@ package graph
 // will be copied through when generating and any unknown code will be moved to the end.
 
 import (
-	"github.com/engajerest/auth/Models/users"
-	"github.com/engajerest/auth/controller"
-	"github.com/engajerest/auth/graph/generated"
-	"github.com/engajerest/auth/graph/model"
-	"github.com/engajerest/auth/utils/accesstoken"
 	"context"
 	"fmt"
 	"net/http"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/engajerest/auth/Models/users"
+	"github.com/engajerest/auth/controller"
+	"github.com/engajerest/auth/graph/generated"
+	"github.com/engajerest/auth/graph/model"
+	"github.com/engajerest/auth/utils/accesstoken"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -24,6 +24,10 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 	user.Password = create.Password
 	user.Email = create.Email
 	user.Mobile = create.Mobile
+	user.Referenceid = *create.Referenceid
+	user.Roleid = *create.Roleid
+	user.LocationId=*create.Locationid
+
 	// user.Status = "Active"
 
 	userid := user.Create()
@@ -107,7 +111,7 @@ func (r *mutationResolver) ResetPassword(ctx context.Context, input model.Reset)
 	var user users.User
 	// user.Username = input.Username
 	user.Password = input.Password
-	user.ID=id.ID
+	user.ID = id.ID
 	print(user.ID)
 	reset := user.ResetPassword()
 	if reset != false {
@@ -140,8 +144,6 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.GetUser, error) {
 }
 
 func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
-
-
 	id, usererr := controller.ForContext(ctx)
 	if usererr != nil {
 		return nil, &gqlerror.Error{

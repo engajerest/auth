@@ -16,8 +16,8 @@ import (
 
 
 const(
-	createUserQuery="INSERT INTO app_users (authname,password,hashsalt,contactno) VALUES(?,?,?,?)"
-	insertUsertoProfileQuery="INSERT INTO app_userprofile (userid,firstname,lastname,email,contactno) VALUES(?,?,?,?,?)"
+	createUserQuery="INSERT INTO app_users (authname,password,hashsalt,contactno,roleid,referenceid) VALUES(?,?,?,?,?,?)"
+	insertUsertoProfileQuery="INSERT INTO app_userprofile (userid,firstname,lastname,email,contactno,userlocationid) VALUES(?,?,?,?,?,?)"
 	getUseridByNameQuery="select user_id, email, mobile,status,created_date from engaje_users WHERE user_name = ?"
 	authenticationQuery="select userid,password,hashsalt from app_users WHERE authname = ? and password = ?"
 	usersGetAllQuery="select userid, firstname,lastname, contactno,email,status,created from app_userprofile"
@@ -42,7 +42,7 @@ log.Fatal(err)
 	hashedPassword, err := HashPassword(user.Password)
 	fmt.Println("2")
 
-	res, err := statement.Exec(&user.Email,&user.Password,&hashedPassword,&user.Mobile)
+	res, err := statement.Exec(&user.Email,&user.Password,&hashedPassword,&user.Mobile,&user.Roleid,&user.Referenceid)
 	if err != nil {
 
 		log.Fatal(err)
@@ -63,7 +63,7 @@ func (user *User) InsertUserintoProfile() int64 {
 		log.Fatal(err)
 	}
 	defer statement.Close()
-	res, err := statement.Exec(&user.ID,&user.FirstName,&user.LastName,&user.Email,&user.Mobile)
+	res, err := statement.Exec(&user.ID,&user.FirstName,&user.LastName,&user.Email,&user.Mobile,&user.LocationId)
 	if err != nil {
 		log.Fatal(err)
 	}

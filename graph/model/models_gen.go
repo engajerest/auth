@@ -25,11 +25,14 @@ type LoginData struct {
 }
 
 type NewUser struct {
-	Firstname string `json:"firstname"`
-	Lastname  string `json:"lastname"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
-	Mobile    string `json:"Mobile"`
+	Firstname   string `json:"firstname"`
+	Lastname    string `json:"lastname"`
+	Email       string `json:"email"`
+	Password    string `json:"password"`
+	Mobile      string `json:"Mobile"`
+	Roleid      *int   `json:"roleid"`
+	Referenceid *int   `json:"referenceid"`
+	Locationid  *int   `json:"locationid"`
 }
 
 type RefreshTokenInput struct {

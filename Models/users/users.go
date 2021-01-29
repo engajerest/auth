@@ -9,6 +9,9 @@ type User struct {
 	Mobile      string `json:"mobile"`
 	CreatedDate string `json:"created"`
 	Status      string `json:"status"`
+	Roleid      int  `json:"roleid"`
+	Referenceid   int `json:"referenceid"`
+	LocationId int `json:"locationid"`
 }
 
 
