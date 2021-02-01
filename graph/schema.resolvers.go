@@ -24,9 +24,8 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 	user.Password = create.Password
 	user.Email = create.Email
 	user.Mobile = create.Mobile
-	user.Referenceid = *create.Referenceid
+
 	user.Roleid = *create.Roleid
-	user.LocationId=*create.Locationid
 
 	// user.Status = "Active"
 
@@ -76,15 +75,22 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 		return nil, err
 	}
 
-	user.GetByUserId(int64(user.ID))
+	user.LoginResponse(int64(user.ID))
 
 	user.InsertToken(token)
+
 	return &model.LoginData{
 		Status:  true,
 		Code:    http.StatusOK,
 		Message: "Success",
 		UserInfo: &model.UserData{
 			UserID:      user.ID,
+			Tenantid: &user.Referenceid,
+			Locationid: &user.LocationId,
+			Moduleid: &user.LocationId,
+			Packageid: &user.Packageid,
+			Modulename: &user.Modulename,
+			Tenantname: &user.Tenantname,
 			Firstname:   user.FirstName,
 			Lastname:    user.LastName,
 			Email:       user.Email,

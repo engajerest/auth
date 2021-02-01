@@ -12,14 +12,21 @@ type GetUser{
  email:String!
  created:String!
  status:String!
+ 
 }
 type UserData{
   UserId:Int!
+  Tenantid:Int
+  Locationid:Int
+  Moduleid:Int
+  Packageid:Int
   Firstname:String!
   Lastname:String!
   Email:String!
   Mobile:String!
   Token:String!
+  Modulename:String
+  Tenantname:String
   CreatedDate:String!
   Status:String!
 }

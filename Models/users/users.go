@@ -12,6 +12,10 @@ type User struct {
 	Roleid      int  `json:"roleid"`
 	Referenceid   int `json:"referenceid"`
 	LocationId int `json:"locationid"`
+	Moduleid int `json:"moduleid"`
+	Packageid int `json:"packageid"`
+	Modulename string `json:"modulename"`
+Tenantname string `json:"tenantname"`
 }
 
 

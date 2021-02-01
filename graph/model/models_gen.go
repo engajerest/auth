@@ -56,12 +56,18 @@ type UserCreatedData struct {
 }
 
 type UserData struct {
-	UserID      int    `json:"UserId"`
-	Firstname   string `json:"Firstname"`
-	Lastname    string `json:"Lastname"`
-	Email       string `json:"Email"`
-	Mobile      string `json:"Mobile"`
-	Token       string `json:"Token"`
-	CreatedDate string `json:"CreatedDate"`
-	Status      string `json:"Status"`
+	UserID      int     `json:"UserId"`
+	Tenantid    *int    `json:"Tenantid"`
+	Locationid  *int    `json:"Locationid"`
+	Moduleid    *int    `json:"Moduleid"`
+	Packageid   *int    `json:"Packageid"`
+	Firstname   string  `json:"Firstname"`
+	Lastname    string  `json:"Lastname"`
+	Email       string  `json:"Email"`
+	Mobile      string  `json:"Mobile"`
+	Token       string  `json:"Token"`
+	Modulename  *string `json:"Modulename"`
+	Tenantname  *string `json:"Tenantname"`
+	CreatedDate string  `json:"CreatedDate"`
+	Status      string  `json:"Status"`
 }
