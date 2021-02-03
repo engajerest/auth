@@ -27,9 +27,6 @@ const (
 	checkUseridinSessionQuery = "select userid from app_session WHERE userid= ?"
 	userAuthentication        = "SELECT a.userid,b.firstname,b.lastname,b.email,b.contactno,b.status,b.created FROM app_users a, app_userprofile b WHERE a.userid=b.userid AND a.status ='Active' AND a.userid=?"
     loginResponseQueryByUserid="SELECT a.userid,b.firstname,b.lastname,b.contactno,b.email,IFNULL(b.userlocationid,0) AS userlocationid,b.status,b.created, IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(d.packageid,0) AS packageid, IFNULL(d.moduleid,0) AS moduleid, IFNULL(e.modulename,'') AS modulename  FROM app_users a INNER JOIN app_userprofile b ON a.userid = b.userid LEFT OUTER JOIN tenantinfo c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantsubscription d ON c.tenantid=d.tenantid LEFT OUTER JOIN app_module e ON d.moduleid=e.moduleid WHERE a.userid=?"
-
-
-
 )
 func (user *User) Create() int64 {
 	fmt.Println("0")

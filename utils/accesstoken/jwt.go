@@ -6,17 +6,24 @@ import (
 	"fmt"
 	"log"
 	"time"
-
+	"github.com/spf13/viper"
 	"github.com/dgrijalva/jwt-go"
-)
-
-
-var (
-	SecretKey = []byte("secret")
+	"os"
 )
 
 // GenerateToken generates a jwt token and assign a username to it's claims and return it
 func GenerateToken(id int) (string, error) {
+	viper.SetConfigName("config") // config file name without extension
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig()
+	if err != nil {
+		fmt.Println("fatal error config file: default \n", err)
+		os.Exit(1)
+	}
+	Key := viper.GetString("APP.JWT_SECRET_KEY")
+	SecretKey := []byte(Key)
+
 	token := jwt.New(jwt.SigningMethodHS256)
 	/* Create a map to store our claims */
 	claims := token.Claims.(jwt.MapClaims)
@@ -34,6 +41,17 @@ func GenerateToken(id int) (string, error) {
 
 // ParseToken parses a jwt token and returns the username in it's claims
 func ParseToken(tokenStr string) (float64, error) {
+	viper.SetConfigName("config") // config file name without extension
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig()
+	if err != nil {
+		fmt.Println("fatal error config file: default \n", err)
+		os.Exit(1)
+	}
+	Key := viper.GetString("APP.JWT_SECRET_KEY")
+	SecretKey := []byte(Key)
+
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		return SecretKey, nil
 	})

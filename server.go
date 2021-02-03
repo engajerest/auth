@@ -43,17 +43,17 @@ func main() {
 	userName := viper.GetString("APP.DATABASE_USERNAME")
 	_ = viper.GetString("APP.DATABASE_PORT")
 	host := viper.GetString("APP.DATABASE_SERVER_HOST")
-
+	userCtxKey:=viper.GetString("APP.USER_CONTEXT_KEY")
 	fmt.Println("PORT :", defaultPort)
 
 	router := chi.NewRouter()
-	router.Use(controller.Middleware())
+	router.Use(controller.Middleware(userCtxKey))
 	dbconfig.InitDB(dbName, userName, password, host)
     logger.Info("application started")
 
 	server := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
 	router.Handle("/", playground.Handler("Engaje", "/query"))
-	router.Handle("/query", server)
+	router.Handle("/auth", server)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", defaultPort)
 	log.Fatal(http.ListenAndServe(":"+defaultPort, router))
