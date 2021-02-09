@@ -17,16 +17,16 @@ import (
 
 const (
 	createUserQuery           = "INSERT INTO app_users (authname,password,hashsalt,contactno,roleid) VALUES(?,?,?,?,?)"
-	insertUsertoProfileQuery  = "INSERT INTO app_userprofile (userid,firstname,lastname,email,contactno) VALUES(?,?,?,?,?)"
+	insertUsertoProfileQuery  = "INSERT INTO app_userprofiles (userid,firstname,lastname,email,contactno) VALUES(?,?,?,?,?)"
 	getUseridByNameQuery      = "select user_id, email, mobile,status,created_date from engaje_users WHERE user_name = ?"
 	authenticationQuery       = "select userid,password,hashsalt from app_users WHERE authname = ? and password = ?"
-	usersGetAllQuery          = "select userid, firstname,lastname, contactno,email,status,created from app_userprofile"
-	getUserByidQuery          = "select userid, firstname,lastname,contactno,email,status,created from app_userprofile WHERE userid=?"
+	usersGetAllQuery          = "select userid, firstname,lastname, contactno,email,status,created from app_userprofiles"
+	getUserByidQuery          = "select userid, firstname,lastname,contactno,email,status,created from app_userprofiles WHERE userid=?"
 	resetPasswordQuery        = "UPDATE app_users SET password=? ,hashsalt=?  WHERE userid = ?"
 	insertTokentoSessionQuery = "INSERT INTO app_session (userid,sessionname,sessiondate,sessionexpiry) VALUES(?,?,?,?)"
 	checkUseridinSessionQuery = "select userid from app_session WHERE userid= ?"
-	userAuthentication        = "SELECT a.userid,b.firstname,b.lastname,b.email,b.contactno,b.status,b.created FROM app_users a, app_userprofile b WHERE a.userid=b.userid AND a.status ='Active' AND a.userid=?"
-    loginResponseQueryByUserid="SELECT a.userid,b.firstname,b.lastname,b.contactno,b.email,IFNULL(b.userlocationid,0) AS userlocationid,b.status,b.created, IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(d.packageid,0) AS packageid, IFNULL(d.moduleid,0) AS moduleid, IFNULL(e.modulename,'') AS modulename  FROM app_users a INNER JOIN app_userprofile b ON a.userid = b.userid LEFT OUTER JOIN tenantinfo c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantsubscription d ON c.tenantid=d.tenantid LEFT OUTER JOIN app_module e ON d.moduleid=e.moduleid WHERE a.userid=?"
+	userAuthentication        = "SELECT a.userid,b.firstname,b.lastname,b.email,b.contactno,b.status,b.created FROM app_users a, app_userprofiles b WHERE a.userid=b.userid AND a.status ='Active' AND a.userid=?"
+    loginResponseQueryByUserid="SELECT a.userid,b.firstname,b.lastname,b.contactno,b.email,IFNULL(b.userlocationid,0) AS userlocationid,b.status,b.created, IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(d.packageid,0) AS packageid, IFNULL(d.moduleid,0) AS moduleid, IFNULL(e.modulename,'') AS modulename  FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenantinfo c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantsubscription d ON c.tenantid=d.tenantid LEFT OUTER JOIN app_module e ON d.moduleid=e.moduleid WHERE a.userid=?"
 )
 func (user *User) Create() int64 {
 	fmt.Println("0")
