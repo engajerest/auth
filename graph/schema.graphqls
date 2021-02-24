@@ -27,6 +27,8 @@ type UserData{
   Token:String!
   Modulename:String
   Tenantname:String
+  Opentime:String
+  Closetime:String
   CreatedDate:String!
   Status:String!
 }
@@ -34,7 +36,7 @@ type LoginData{
  status:Boolean!
  code:Int!
  message:String!
- userInfo:UserData!
+ userInfo:UserData
  
 }
 
@@ -80,7 +82,7 @@ type Query {
 type Mutation {
 
   createUser(create: NewUser!): UserCreatedData!
-  login(input: Login!): LoginData!
+  login(input: Login!): LoginData
 
   ResetPassword(input:Reset!):String!
   # we'll talk about this in authentication section

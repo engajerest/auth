@@ -26,7 +26,7 @@ const (
 	insertTokentoSessionQuery = "INSERT INTO app_session (userid,sessionname,sessiondate,sessionexpiry) VALUES(?,?,?,?)"
 	checkUseridinSessionQuery = "select userid from app_session WHERE userid= ?"
 	userAuthentication        = "SELECT a.userid,b.firstname,b.lastname,b.email,b.contactno,b.status,b.created FROM app_users a, app_userprofiles b WHERE a.userid=b.userid AND a.status ='Active' AND a.userid=?"
-    loginResponseQueryByUserid="SELECT a.userid,b.firstname,b.lastname,b.contactno,b.email,IFNULL(b.userlocationid,0) AS userlocationid,b.status,b.created, IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(d.packageid,0) AS packageid, IFNULL(d.moduleid,0) AS moduleid, IFNULL(e.modulename,'') AS modulename  FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenantinfo c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantsubscription d ON c.tenantid=d.tenantid LEFT OUTER JOIN app_module e ON d.moduleid=e.moduleid WHERE a.userid=?"
+    loginResponseQueryByUserid="SELECT a.userid,b.firstname,b.lastname,b.contactno,b.email,IFNULL(b.userlocationid,0) AS userlocationid,b.status,b.created, IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(d.packageid,0) AS packageid, IFNULL(d.moduleid,0) AS moduleid, IFNULL(e.modulename,'') AS modulename, IFNULL(f.opentime,'') AS opentime,IFNULL(f.closetime,'') AS closetime  FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantsubscription d ON c.tenantid=d.tenantid LEFT OUTER JOIN app_module e ON d.moduleid=e.moduleid  LEFT OUTER JOIN tenantlocation f ON c.tenantid=f.tenantid WHERE a.userid=?"
 )
 func (user *User) Create() int64 {
 	fmt.Println("0")
@@ -220,7 +220,7 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	defer stmt.Close()
 	row := stmt.QueryRow(id)
 	// print(row)
-	err = row.Scan(&data.ID,&data.FirstName, &data.LastName, &data.Mobile, &data.Email,&data.LocationId, &data.Status, &data.CreatedDate,&data.Referenceid, &data.Tenantname,&data.Packageid,&data.Moduleid,&data.Modulename)
+	err = row.Scan(&data.ID,&data.FirstName, &data.LastName, &data.Mobile, &data.Email,&data.LocationId, &data.Status, &data.CreatedDate,&data.Referenceid, &data.Tenantname,&data.Packageid,&data.Moduleid,&data.Modulename,&data.Opentime,&data.Closetime)
 	print(err)
 	fmt.Println("2")
 	if err != nil {
@@ -244,6 +244,8 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	user.Modulename=data.Modulename
 	user.Tenantname=data.Tenantname
 	user.LocationId=data.LocationId
+	user.Closetime=data.Closetime
+	user.Opentime=data.Opentime
 	print(user.ID)
 	// print(user.FirstName)
 	// print(user.LastName)

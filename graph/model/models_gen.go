@@ -68,6 +68,8 @@ type UserData struct {
 	Token       string  `json:"Token"`
 	Modulename  *string `json:"Modulename"`
 	Tenantname  *string `json:"Tenantname"`
+	Opentime    *string `json:"Opentime"`
+	Closetime   *string `json:"Closetime"`
 	CreatedDate string  `json:"CreatedDate"`
 	Status      string  `json:"Status"`
 }

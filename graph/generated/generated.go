@@ -85,6 +85,7 @@ type ComplexityRoot struct {
 	}
 
 	UserData struct {
+		Closetime   func(childComplexity int) int
 		CreatedDate func(childComplexity int) int
 		Email       func(childComplexity int) int
 		Firstname   func(childComplexity int) int
@@ -93,6 +94,7 @@ type ComplexityRoot struct {
 		Mobile      func(childComplexity int) int
 		Moduleid    func(childComplexity int) int
 		Modulename  func(childComplexity int) int
+		Opentime    func(childComplexity int) int
 		Packageid   func(childComplexity int) int
 		Status      func(childComplexity int) int
 		Tenantid    func(childComplexity int) int
@@ -309,6 +311,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserCreatedData.UserInfo(childComplexity), true
 
+	case "UserData.Closetime":
+		if e.complexity.UserData.Closetime == nil {
+			break
+		}
+
+		return e.complexity.UserData.Closetime(childComplexity), true
+
 	case "UserData.CreatedDate":
 		if e.complexity.UserData.CreatedDate == nil {
 			break
@@ -364,6 +373,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserData.Modulename(childComplexity), true
+
+	case "UserData.Opentime":
+		if e.complexity.UserData.Opentime == nil {
+			break
+		}
+
+		return e.complexity.UserData.Opentime(childComplexity), true
 
 	case "UserData.Packageid":
 		if e.complexity.UserData.Packageid == nil {
@@ -500,6 +516,8 @@ type UserData{
   Token:String!
   Modulename:String
   Tenantname:String
+  Opentime:String
+  Closetime:String
   CreatedDate:String!
   Status:String!
 }
@@ -507,7 +525,7 @@ type LoginData{
  status:Boolean!
  code:Int!
  message:String!
- userInfo:UserData!
+ userInfo:UserData
  
 }
 
@@ -553,7 +571,7 @@ type Query {
 type Mutation {
 
   createUser(create: NewUser!): UserCreatedData!
-  login(input: Login!): LoginData!
+  login(input: Login!): LoginData
 
   ResetPassword(input:Reset!):String!
   # we'll talk about this in authentication section
@@ -1054,14 +1072,11 @@ func (ec *executionContext) _LoginData_userInfo(ctx context.Context, field graph
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.UserData)
 	fc.Result = res
-	return ec.marshalNUserData2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐUserData(ctx, field.Selections, res)
+	return ec.marshalOUserData2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐUserData(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1138,14 +1153,11 @@ func (ec *executionContext) _Mutation_login(ctx context.Context, field graphql.C
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.LoginData)
 	fc.Result = res
-	return ec.marshalNLoginData2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐLoginData(ctx, field.Selections, res)
+	return ec.marshalOLoginData2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐLoginData(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_ResetPassword(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1972,6 +1984,70 @@ func (ec *executionContext) _UserData_Tenantname(ctx context.Context, field grap
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.Tenantname, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _UserData_Opentime(ctx context.Context, field graphql.CollectedField, obj *model.UserData) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "UserData",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Opentime, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _UserData_Closetime(ctx context.Context, field graphql.CollectedField, obj *model.UserData) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "UserData",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Closetime, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3379,9 +3455,6 @@ func (ec *executionContext) _LoginData(ctx context.Context, sel ast.SelectionSet
 			}
 		case "userInfo":
 			out.Values[i] = ec._LoginData_userInfo(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3415,9 +3488,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			}
 		case "login":
 			out.Values[i] = ec._Mutation_login(ctx, field)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "ResetPassword":
 			out.Values[i] = ec._Mutation_ResetPassword(ctx, field)
 			if out.Values[i] == graphql.Null {
@@ -3624,6 +3694,10 @@ func (ec *executionContext) _UserData(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._UserData_Modulename(ctx, field, obj)
 		case "Tenantname":
 			out.Values[i] = ec._UserData_Tenantname(ctx, field, obj)
+		case "Opentime":
+			out.Values[i] = ec._UserData_Opentime(ctx, field, obj)
+		case "Closetime":
+			out.Values[i] = ec._UserData_Closetime(ctx, field, obj)
 		case "CreatedDate":
 			out.Values[i] = ec._UserData_CreatedDate(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -4305,6 +4379,13 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return graphql.MarshalInt(*v)
 }
 
+func (ec *executionContext) marshalOLoginData2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐLoginData(ctx context.Context, sel ast.SelectionSet, v *model.LoginData) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._LoginData(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -4327,6 +4408,13 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 		return graphql.Null
 	}
 	return graphql.MarshalString(*v)
+}
+
+func (ec *executionContext) marshalOUserData2ᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐUserData(ctx context.Context, sel ast.SelectionSet, v *model.UserData) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._UserData(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

@@ -60,14 +60,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 	correct := user.Authenticate()
 	if !correct {
 		// 1
-		return nil, &gqlerror.Error{
-
-			Path:    graphql.GetPath(ctx),
-			Message: "Incorrect Username or Password",
-			Extensions: map[string]interface{}{
-				"code": "400",
-			},
-		}
+		return &model.LoginData{Status: false, Code: http.StatusBadRequest, Message: "Incorrect Username or password", UserInfo: nil}, nil
 	}
 
 	token, err := accesstoken.GenerateToken(user.ID)
@@ -85,17 +78,19 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 		Message: "Success",
 		UserInfo: &model.UserData{
 			UserID:      user.ID,
-			Tenantid: &user.Referenceid,
-			Locationid: &user.LocationId,
-			Moduleid: &user.LocationId,
-			Packageid: &user.Packageid,
-			Modulename: &user.Modulename,
-			Tenantname: &user.Tenantname,
+			Tenantid:    &user.Referenceid,
+			Locationid:  &user.LocationId,
+			Moduleid:    &user.LocationId,
+			Packageid:   &user.Packageid,
+			Modulename:  &user.Modulename,
+			Tenantname:  &user.Tenantname,
 			Firstname:   user.FirstName,
 			Lastname:    user.LastName,
 			Email:       user.Email,
 			Mobile:      user.Mobile,
 			Token:       token,
+			Opentime: &user.Opentime,
+			Closetime: &user.Closetime,
 			CreatedDate: user.CreatedDate,
 			Status:      user.Status,
 		}}, nil
