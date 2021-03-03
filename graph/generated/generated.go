@@ -555,6 +555,7 @@ locationid:Int
 input Login {
   username: String!
   password: String!
+  tenanttoken:String!
 }
 input Reset {
  
@@ -3237,6 +3238,14 @@ func (ec *executionContext) unmarshalInputLogin(ctx context.Context, obj interfa
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
 			it.Password, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "tenanttoken":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tenanttoken"))
+			it.Tenanttoken, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}

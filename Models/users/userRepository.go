@@ -27,6 +27,7 @@ const (
 	checkUseridinSessionQuery = "select userid from app_session WHERE userid= ?"
 	userAuthentication        = "SELECT a.userid,b.firstname,b.lastname,b.email,b.contactno,b.status,b.created FROM app_users a, app_userprofiles b WHERE a.userid=b.userid AND a.status ='Active' AND a.userid=?"
     loginResponseQueryByUserid="SELECT a.userid,b.firstname,b.lastname,b.contactno,b.email,IFNULL(b.userlocationid,0) AS userlocationid,b.status,b.created, IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(d.packageid,0) AS packageid, IFNULL(d.moduleid,0) AS moduleid, IFNULL(e.modulename,'') AS modulename, IFNULL(f.opentime,'') AS opentime,IFNULL(f.closetime,'') AS closetime  FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantsubscription d ON c.tenantid=d.tenantid LEFT OUTER JOIN app_module e ON d.moduleid=e.moduleid  LEFT OUTER JOIN tenantlocation f ON c.tenantid=f.tenantid WHERE a.userid=?"
+	updateenanttoken = "UPDATE tenants SET tenanttoken=? WHERE tenantid=?"
 )
 func (user *User) Create() int64 {
 	fmt.Println("0")
@@ -127,7 +128,7 @@ func (user *User) Authenticate() bool {
 	}
 	fmt.Println("1")
 	row := statement.QueryRow(user.FirstName, user.Password)
-	print(row)
+
 
 	var hashedPassword string
 
@@ -141,7 +142,7 @@ func (user *User) Authenticate() bool {
 			log.Fatal(err)
 		}
 	}
-	fmt.Println(user)
+	// fmt.Println(user)
 	user.ID = data.ID
 	return CheckPasswordHash(user.Password, hashedPassword)
 }
@@ -368,5 +369,18 @@ func (user *User) RetrieveToken(c *gin.Context) bool {
 
 	}
 	return true
+}
+func  Updatetenant(token string ,tenantid int) bool {
+	stmt, err := database.Db.Prepare(updateenanttoken)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = stmt.Exec(token,tenantid)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return true
+
 }
 

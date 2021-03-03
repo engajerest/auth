@@ -71,6 +71,14 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 	user.LoginResponse(int64(user.ID))
 
 	user.InsertToken(token)
+	if user.Referenceid!=0{
+		
+		if input.Tenanttoken!=""{
+			status:=users.Updatetenant(input.Tenanttoken,user.Referenceid)
+			print("tentokenupdate=",status)
+		}
+	}
+	
 
 	return &model.LoginData{
 		Status:  true,
@@ -89,8 +97,8 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			Email:       user.Email,
 			Mobile:      user.Mobile,
 			Token:       token,
-			Opentime: &user.Opentime,
-			Closetime: &user.Closetime,
+			Opentime:    &user.Opentime,
+			Closetime:   &user.Closetime,
 			CreatedDate: user.CreatedDate,
 			Status:      user.Status,
 		}}, nil
