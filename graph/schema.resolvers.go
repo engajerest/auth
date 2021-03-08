@@ -10,7 +10,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/engajerest/auth/Models/users"
-	"github.com/engajerest/auth/contextdata"
+	"github.com/engajerest/auth/datacontext"
+
 	"github.com/engajerest/auth/graph/generated"
 	"github.com/engajerest/auth/graph/model"
 	"github.com/engajerest/auth/utils/accesstoken"
@@ -131,7 +132,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 }
 
 func (r *mutationResolver) ResetPassword(ctx context.Context, input model.Reset) (string, error) {
-	id, usererr := contextdata.ForAuthContext(ctx)
+	id, usererr := datacontext.ForAuthContext(ctx)
 	if usererr != nil {
 		return "nil", &gqlerror.Error{
 
@@ -168,7 +169,7 @@ func (r *mutationResolver) RefreshToken(ctx context.Context, input model.Refresh
 }
 
 func (r *mutationResolver) Updateuser(ctx context.Context, input *model.Userupdateinput) (*model.Updateddata, error) {
-	id, usererr := contextdata.ForAuthContext(ctx)
+	id, usererr := datacontext.ForAuthContext(ctx)
 	if usererr != nil {
 		return nil, &gqlerror.Error{
 
@@ -215,7 +216,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.GetUser, error) {
 }
 
 func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
-	id, usererr := contextdata.ForAuthContext(ctx)
+	id, usererr := datacontext.ForAuthContext(ctx)
 	if usererr != nil {
 		return nil, &gqlerror.Error{
 
