@@ -2,7 +2,6 @@ package controller
 
 import (
 	"errors"
-
 	"context"
 	"fmt"
 	"github.com/engajerest/auth/Models/users"
@@ -12,12 +11,9 @@ import (
 	"github.com/spf13/viper"
 	"net/http"
 	"os"
-	// "github.com/99designs/gqlgen/graphql"
-	// "github.com/vektah/gqlparser/v2/gqlerror"
-	// "strconv"
 )
 
-// var userCtxKey = "usercontextkey"
+
 
 func Middleware(key string) func(http.Handler) http.Handler {
 	// fmt.Println("1")
@@ -37,31 +33,35 @@ func Middleware(key string) func(http.Handler) http.Handler {
 				// fmt.Println("4")
 				//validate jwt token
 				tokenStr := header
-				userid, err := accesstoken.ParseToken(tokenStr)
+				userid,configid, err := accesstoken.ParseToken(tokenStr)
 				// fmt.Println("5")
 				if err != nil {
 					http.Error(w, "session expired login again", http.StatusForbidden)
 					logger.Error("session token expired", err)
 					return
 				}
-				// create user and check if user exists in db
-				data1 := users.User{}
-
-				user, status, _ := data1.UserAuthentication(int64(userid))
-				print(status)
-				print("testing")
-				// if usererr !=nil {
-				// 	print("st1")
-				// 	http.Error(w, "no user found", http.StatusForbidden)
-				// 	return
-				// }
-
-				// put it in context
-				ctx := context.WithValue(r.Context(), key, user)
-
-				// and call the next with our new context
-				r = r.WithContext(ctx)
-				next.ServeHTTP(w, r)
+				print("configid=",int(configid))
+				if int(configid)==1{
+					data1 := users.User{}
+					user, status, _ := data1.UserAuthentication(int64(userid))
+					print(status)
+					print("testing")
+					// if usererr !=nil {
+					// 	print("st1")
+					// 	http.Error(w, "no user found", http.StatusForbidden)
+					// 	return
+					// }
+	
+					// put it in context
+					ctx := context.WithValue(r.Context(), key, user)
+	
+					// and call the next with our new context
+					r = r.WithContext(ctx)
+					next.ServeHTTP(w, r)
+				}else{
+					print("configid>1")
+				}
+				
 
 			})
 	}
@@ -84,7 +84,7 @@ func ForContext(ctx context.Context) (*users.User, *Errors.RestError) {
 		return nil, &Errors.RestError{
 			Error:   noUserFoundError,
 			Message: "no data",
-			Code:    http.StatusBadRequest,
+			Code:    http.StatusUnauthorized,
 		}
 	}
 	user, ok := ctx.Value(userCtxKey).(*users.User)
@@ -92,7 +92,7 @@ func ForContext(ctx context.Context) (*users.User, *Errors.RestError) {
 		return nil, &Errors.RestError{
 			Error:   noUserFoundError,
 			Message: "no data",
-			Code:    http.StatusBadRequest,
+			Code:    http.StatusUnauthorized,
 		}
 	}
 	return user, nil

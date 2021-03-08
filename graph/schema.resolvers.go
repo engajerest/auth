@@ -10,7 +10,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/engajerest/auth/Models/users"
-	"github.com/engajerest/auth/controller"
+	"github.com/engajerest/auth/contextdata"
 	"github.com/engajerest/auth/graph/generated"
 	"github.com/engajerest/auth/graph/model"
 	"github.com/engajerest/auth/utils/accesstoken"
@@ -24,12 +24,28 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 	user.Password = create.Password
 	user.Email = create.Email
 	user.Mobile = create.Mobile
-
-	user.Roleid = *create.Roleid
-
+	user.Roleid = create.Roleid
+	user.Configid = create.Configid
+	var userid int64
+	var err error
 	// user.Status = "Active"
+	if create.Password != "" {
 
-	userid := user.Create()
+		userid, err = user.Create()
+		if err != nil {
+			return nil, err
+			// return &model.UserCreatedData{Status: false,Code: http.StatusBadRequest,Message: "Email Already Exists",
+			// UserInfo: &model.UserData{}}, nil
+		}
+	} else {
+		userid, err = user.Createwithoutpassword()
+		if err != nil {
+			// return &model.UserCreatedData{Status: false,Code: http.StatusBadRequest,Message: "Email Already Exists",
+			// UserInfo: &model.UserData{},}, nil
+			return nil, err
+		}
+	}
+
 	user.ID = int(userid)
 	user.InsertUserintoProfile()
 	user.GetByUserId(userid)
@@ -57,28 +73,38 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 	var user users.User
 	user.FirstName = input.Username
 	user.Password = input.Password
-	correct := user.Authenticate()
-	if !correct {
-		// 1
-		return &model.LoginData{Status: false, Code: http.StatusBadRequest, Message: "Incorrect Username or password", UserInfo: nil}, nil
+	if input.Password != "" {
+		correct := user.Authenticate()
+		if !correct {
+			// 1
+			return &model.LoginData{Status: false, Code: http.StatusBadRequest, Message: "Incorrect Username or password", UserInfo: nil}, nil
+		}
+	} else {
+		stat := user.Checkauthname()
+		if stat == false {
+			return &model.LoginData{Status: false, Code: http.StatusBadRequest, Message: "Incorrect Username", UserInfo: nil}, nil
+		}
 	}
-
-	token, err := accesstoken.GenerateToken(user.ID)
-	if err != nil {
-		return nil, err
+	var token string
+	var err error
+	if user.ID != 0 && user.Configid != 0 {
+		token, err = accesstoken.GenerateToken(user.ID, user.Configid)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		return &model.LoginData{Status: false, Code: http.StatusBadGateway, Message: "update user now"}, nil
 	}
 
 	user.LoginResponse(int64(user.ID))
-
 	user.InsertToken(token)
-	if user.Referenceid!=0{
-		
-		if input.Tenanttoken!=""{
-			status:=users.Updatetenant(input.Tenanttoken,user.Referenceid)
-			print("tentokenupdate=",status)
+	if user.Referenceid != 0 {
+
+		if input.Tenanttoken != "" {
+			status := users.Updatetenant(input.Tenanttoken, user.Referenceid)
+			print("tentokenupdate=", status)
 		}
 	}
-	
 
 	return &model.LoginData{
 		Status:  true,
@@ -105,7 +131,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 }
 
 func (r *mutationResolver) ResetPassword(ctx context.Context, input model.Reset) (string, error) {
-	id, usererr := controller.ForContext(ctx)
+	id, usererr := contextdata.ForAuthContext(ctx)
 	if usererr != nil {
 		return "nil", &gqlerror.Error{
 
@@ -130,15 +156,51 @@ func (r *mutationResolver) ResetPassword(ctx context.Context, input model.Reset)
 }
 
 func (r *mutationResolver) RefreshToken(ctx context.Context, input model.RefreshTokenInput) (string, error) {
-	_, err := accesstoken.ParseToken(input.Token)
+	_, _, err := accesstoken.ParseToken(input.Token)
 	if err != nil {
 		return "", fmt.Errorf("access denied")
 	}
-	token, err := accesstoken.GenerateToken(0)
+	token, err := accesstoken.GenerateToken(0, 0)
 	if err != nil {
 		return "", err
 	}
 	return token, nil
+}
+
+func (r *mutationResolver) Updateuser(ctx context.Context, input *model.Userupdateinput) (*model.Updateddata, error) {
+	id, usererr := contextdata.ForAuthContext(ctx)
+	if usererr != nil {
+		return nil, &gqlerror.Error{
+
+			Path:    graphql.GetPath(ctx),
+			Message: "no userfound",
+
+			Extensions: map[string]interface{}{
+				"code": "400",
+			},
+		}
+	}
+	print(id.From)
+	var d users.User
+	d.FirstName=input.Firstname
+	d.LastName=input.Lastname
+	d.Email=input.Email
+	d.Mobile=input.Contactno
+	d.ID=input.Userid
+	stat,er:=d.Updateappuser()
+	if er!=nil{
+		return nil,er
+	}
+	if stat==true{
+		st,er1:=d.Updateuserprofile()
+		if er1!=nil{
+			return nil,er1
+		}
+		print("userprofileupdate",st)
+	}
+
+
+	return &model.Updateddata{Status: true,Code: http.StatusCreated,Message: "Profile Update Successfully"},nil
 }
 
 func (r *queryResolver) Users(ctx context.Context) ([]*model.GetUser, error) {
@@ -153,7 +215,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.GetUser, error) {
 }
 
 func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
-	id, usererr := controller.ForContext(ctx)
+	id, usererr := contextdata.ForAuthContext(ctx)
 	if usererr != nil {
 		return nil, &gqlerror.Error{
 
@@ -165,7 +227,7 @@ func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
 			},
 		}
 	}
-	// print(id.ID)
+	print(id.From)
 
 	return &model.LoginData{
 		Status:  true,

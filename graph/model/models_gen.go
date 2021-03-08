@@ -3,7 +3,7 @@
 package model
 
 type GetUser struct {
-	UserID    int    `json:"userId"`
+	UserID    int    `json:"UserId"`
 	Firstname string `json:"firstname"`
 	Lastname  string `json:"lastname"`
 	Mobile    string `json:"mobile"`
@@ -31,9 +31,10 @@ type NewUser struct {
 	Email       string `json:"email"`
 	Password    string `json:"password"`
 	Mobile      string `json:"Mobile"`
-	Roleid      *int   `json:"roleid"`
-	Referenceid *int   `json:"referenceid"`
-	Locationid  *int   `json:"locationid"`
+	Roleid      int    `json:"roleid"`
+	Referenceid int    `json:"referenceid"`
+	Locationid  int    `json:"locationid"`
+	Configid    int    `json:"configid"`
 }
 
 type RefreshTokenInput struct {
@@ -73,4 +74,18 @@ type UserData struct {
 	Closetime   *string `json:"Closetime"`
 	CreatedDate string  `json:"CreatedDate"`
 	Status      string  `json:"Status"`
+}
+
+type Updateddata struct {
+	Status  bool   `json:"status"`
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}
+
+type Userupdateinput struct {
+	Userid    int    `json:"userid"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
+	Email     string `json:"email"`
+	Contactno string `json:"contactno"`
 }

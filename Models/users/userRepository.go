@@ -16,41 +16,79 @@ import (
 )
 
 const (
-	createUserQuery           = "INSERT INTO app_users (authname,password,hashsalt,contactno,roleid) VALUES(?,?,?,?,?)"
-	insertUsertoProfileQuery  = "INSERT INTO app_userprofiles (userid,firstname,lastname,email,contactno) VALUES(?,?,?,?,?)"
-	getUseridByNameQuery      = "select user_id, email, mobile,status,created_date from engaje_users WHERE user_name = ?"
-	authenticationQuery       = "select userid,password,hashsalt from app_users WHERE authname = ? and password = ?"
-	usersGetAllQuery          = "select userid, firstname,lastname, contactno,email,status,created from app_userprofiles"
-	getUserByidQuery          = "select userid, firstname,lastname,contactno,email,status,created from app_userprofiles WHERE userid=?"
-	resetPasswordQuery        = "UPDATE app_users SET password=? ,hashsalt=?  WHERE userid = ?"
-	insertTokentoSessionQuery = "INSERT INTO app_session (userid,sessionname,sessiondate,sessionexpiry) VALUES(?,?,?,?)"
-	checkUseridinSessionQuery = "select userid from app_session WHERE userid= ?"
-	userAuthentication        = "SELECT a.userid,b.firstname,b.lastname,b.email,b.contactno,b.status,b.created FROM app_users a, app_userprofiles b WHERE a.userid=b.userid AND a.status ='Active' AND a.userid=?"
-    loginResponseQueryByUserid="SELECT a.userid,b.firstname,b.lastname,b.contactno,b.email,IFNULL(b.userlocationid,0) AS userlocationid,b.status,b.created, IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(d.packageid,0) AS packageid, IFNULL(d.moduleid,0) AS moduleid, IFNULL(e.modulename,'') AS modulename, IFNULL(f.opentime,'') AS opentime,IFNULL(f.closetime,'') AS closetime  FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantsubscription d ON c.tenantid=d.tenantid LEFT OUTER JOIN app_module e ON d.moduleid=e.moduleid  LEFT OUTER JOIN tenantlocation f ON c.tenantid=f.tenantid WHERE a.userid=?"
-	updateenanttoken = "UPDATE tenants SET tenanttoken=? WHERE tenantid=?"
+	createUserQuery            = "INSERT INTO app_users (authname,password,hashsalt,contactno,roleid,configid) VALUES(?,?,?,?,?,?)"
+	createUsernopassword       = "INSERT INTO app_users (authname,contactno,roleid,configid) VALUES(?,?,?,?)"
+	insertUsertoProfileQuery   = "INSERT INTO app_userprofiles (userid,firstname,lastname,email,contactno) VALUES(?,?,?,?,?)"
+	getUseridByNameQuery       = "select user_id, email, mobile,status,created_date from engaje_users WHERE user_name = ?"
+	authenticationQuery        = "SELECT userid,password,hashsalt,IFNULL(configid,0) AS configid FROM app_users WHERE authname=? OR contactno=? AND password=? "
+	usersGetAllQuery           = "select userid, firstname,lastname, contactno,email,status,created from app_userprofiles"
+	getUserByidQuery           = "select userid, firstname,lastname,contactno,email,status,created from app_userprofiles WHERE userid=?"
+	resetPasswordQuery         = "UPDATE app_users SET password=? ,hashsalt=?  WHERE userid = ?"
+	insertTokentoSessionQuery  = "INSERT INTO app_session (userid,sessionname,sessiondate,sessionexpiry) VALUES(?,?,?,?)"
+	checkUseridinSessionQuery  = "select userid from app_session WHERE userid= ?"
+	userAuthentication         = "SELECT a.userid,b.firstname,b.lastname,b.email,b.contactno,b.status,b.created FROM app_users a, app_userprofiles b WHERE a.userid=b.userid AND a.status ='Active' AND a.userid=?"
+	loginResponseQueryByUserid = "SELECT a.userid,b.firstname,b.lastname,b.contactno,b.email,IFNULL(b.userlocationid,0) AS userlocationid,b.status,b.created, IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(d.packageid,0) AS packageid, IFNULL(d.moduleid,0) AS moduleid, IFNULL(e.modulename,'') AS modulename, IFNULL(f.opentime,'') AS opentime,IFNULL(f.closetime,'') AS closetime  FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantsubscription d ON c.tenantid=d.tenantid LEFT OUTER JOIN app_module e ON d.moduleid=e.moduleid  LEFT OUTER JOIN tenantlocation f ON c.tenantid=f.tenantid WHERE a.userid=?"
+	updateenanttoken           = "UPDATE tenants SET tenanttoken=? WHERE tenantid=?"
+	checkauthname = "SELECT userid,IFNULL(configid,0) AS configid FROM app_users WHERE authname= ? OR contactno=?"
+	getCustomerByid ="SELECT customerid,firstname,lastname,contactno,email,IFNULL(configid,0) AS configid  FROM customers WHERE customerid=?"
+    updateappuser="UPDATE app_users SET authname=? , contactno=? WHERE userid=?"
+	updateuserprofile="UPDATE app_userprofiles SET firstname=?,lastname=?,email=?,contactno=? WHERE userid=?"
+
+
 )
-func (user *User) Create() int64 {
+
+func (user *User) Create() (int64, error) {
 	fmt.Println("0")
 	statement, err := database.Db.Prepare(createUserQuery)
 	fmt.Println("1")
 	if err != nil {
-		log.Fatal(err)
+		// log.Fatal(err)
+		return 0, err
 	}
 	defer statement.Close()
 	hashedPassword, err := HashPassword(user.Password)
 	fmt.Println("2")
 
-	res, err := statement.Exec(&user.Email, &user.Password, &hashedPassword, &user.Mobile, &user.Roleid)
-	if err != nil {
+	res, err1 := statement.Exec(&user.Email, &user.Password, &hashedPassword, &user.Mobile, &user.Roleid, &user.Configid)
+	if err1 != nil {
 
-		log.Fatal(err)
+		// log.Fatal(err1)
+		return 0, err1
+
 	}
-	id, err := res.LastInsertId()
-	if err != nil {
-		log.Fatal("Error:", err.Error())
+	id, err2 := res.LastInsertId()
+	if err2 != nil {
+		// log.Fatal("Error:", err2.Error())
+		return 0, err2
 	}
 	log.Print("Row inserted!")
-	return id
+	return id, nil
+}
+func (user *User) Createwithoutpassword() (int64, error) {
+	fmt.Println("nopass")
+	statement, err := database.Db.Prepare(createUsernopassword)
+	fmt.Println("1")
+	if err != nil {
+		return 0, err
+
+	}
+	defer statement.Close()
+
+	fmt.Println("2")
+
+	res, err1 := statement.Exec(&user.Email, &user.Mobile, &user.Roleid, &user.Configid)
+	if err1 != nil {
+
+		return 0, err1
+
+	}
+	id, err2 := res.LastInsertId()
+	if err2 != nil {
+		log.Fatal("Error:", err2.Error())
+		return 0, err
+	}
+	log.Print("Row inserted!")
+	return id, nil
 }
 func (user *User) InsertUserintoProfile() int64 {
 	statement, err := database.Db.Prepare(insertUsertoProfileQuery)
@@ -71,11 +109,13 @@ func (user *User) InsertUserintoProfile() int64 {
 	log.Print("Row inserted!")
 	return id
 }
+
 //HashPassword hashes given password
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes), err
 }
+
 //CheckPassword hash compares raw password with it's hashed values
 func CheckPasswordHash(password, hash string) bool {
 
@@ -127,12 +167,11 @@ func (user *User) Authenticate() bool {
 		log.Fatal(err)
 	}
 	fmt.Println("1")
-	row := statement.QueryRow(user.FirstName, user.Password)
-
+	row := statement.QueryRow(user.FirstName,user.FirstName, user.Password)
 
 	var hashedPassword string
 
-	err = row.Scan(&data.ID, &data.Password, &hashedPassword)
+	err = row.Scan(&data.ID, &data.Password, &hashedPassword,&data.Configid)
 	print(err)
 	fmt.Println("2")
 	if err != nil {
@@ -144,8 +183,36 @@ func (user *User) Authenticate() bool {
 	}
 	// fmt.Println(user)
 	user.ID = data.ID
+	user.Configid=data.Configid
 	return CheckPasswordHash(user.Password, hashedPassword)
 }
+
+func (user *User) Checkauthname() bool{
+	var data User
+	statement, err := database.Db.Prepare(checkauthname)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("1")
+	row := statement.QueryRow(user.FirstName,user.FirstName)
+	err = row.Scan(&data.ID, &data.Configid)
+	print(err)
+	fmt.Println("2")
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false
+		} else {
+			return false
+			
+		}
+	}
+	// fmt.Println(user)
+	user.ID = data.ID
+	user.Configid=data.Configid
+return true
+}
+
 func GetAllUsers() []User {
 	stmt, err := database.Db.Prepare(usersGetAllQuery)
 	if err != nil {
@@ -221,7 +288,7 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	defer stmt.Close()
 	row := stmt.QueryRow(id)
 	// print(row)
-	err = row.Scan(&data.ID,&data.FirstName, &data.LastName, &data.Mobile, &data.Email,&data.LocationId, &data.Status, &data.CreatedDate,&data.Referenceid, &data.Tenantname,&data.Packageid,&data.Moduleid,&data.Modulename,&data.Opentime,&data.Closetime)
+	err = row.Scan(&data.ID, &data.FirstName, &data.LastName, &data.Mobile, &data.Email, &data.LocationId, &data.Status, &data.CreatedDate, &data.Referenceid, &data.Tenantname, &data.Packageid, &data.Moduleid, &data.Modulename, &data.Opentime, &data.Closetime)
 	print(err)
 	fmt.Println("2")
 	if err != nil {
@@ -239,14 +306,14 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	user.CreatedDate = data.CreatedDate
 	user.Mobile = data.Mobile
 	user.Status = data.Status
-	user.Referenceid=data.Referenceid
-	user.Packageid=data.Packageid
-	user.Moduleid=data.Moduleid
-	user.Modulename=data.Modulename
-	user.Tenantname=data.Tenantname
-	user.LocationId=data.LocationId
-	user.Closetime=data.Closetime
-	user.Opentime=data.Opentime
+	user.Referenceid = data.Referenceid
+	user.Packageid = data.Packageid
+	user.Moduleid = data.Moduleid
+	user.Modulename = data.Modulename
+	user.Tenantname = data.Tenantname
+	user.LocationId = data.LocationId
+	user.Closetime = data.Closetime
+	user.Opentime = data.Opentime
 	print(user.ID)
 	// print(user.FirstName)
 	// print(user.LastName)
@@ -283,9 +350,45 @@ func (user *User) UserAuthentication(id int64) (*User, bool, error) {
 		}
 
 	}
+	data.From="USER"
 	// user.Check=true
 	return &data, true, err
 }
+func (c *User) Customerauthenticate(id int64) (*User, bool, error) {
+
+	fmt.Println("enrty in customergetbyid")
+	print(id)
+	var data User
+	stmt, err := database.Db.Prepare(getCustomerByid)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+	row := stmt.QueryRow(id)
+	// print(row)
+	err = row.Scan(&data.ID,&data.FirstName,&data.LastName,&data.Mobile,&data.Email,&data.Configid)
+	print(err)
+	fmt.Println("2")
+	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Println("no rows found")
+			data1 := Errors.RestError{}
+			data1.Error = err
+			return &data, false, err
+		} else {
+			log.Fatal(err)
+			fmt.Println("nodata")
+			var data1 *Errors.RestError
+			data1.Error = err
+			return &data, false, err
+		}
+
+	}
+	data.From="CUSTOMER"
+	fmt.Println("completed")
+	return &data,true,nil
+}
+
 func (user *User) ResetPassword() bool {
 	stmt, err := database.Db.Prepare(resetPasswordQuery)
 	if err != nil {
@@ -352,7 +455,7 @@ func (user *User) RetrieveToken(c *gin.Context) bool {
 		return false
 	}
 	tokenStr := header
-	userid, err := accesstoken.ParseToken(tokenStr)
+	userid,_, err := accesstoken.ParseToken(tokenStr)
 	if err != nil {
 		fmt.Println("token denied")
 		return false
@@ -370,17 +473,50 @@ func (user *User) RetrieveToken(c *gin.Context) bool {
 	}
 	return true
 }
-func  Updatetenant(token string ,tenantid int) bool {
+func Updatetenant(token string, tenantid int) bool {
 	stmt, err := database.Db.Prepare(updateenanttoken)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	_, err = stmt.Exec(token,tenantid)
+	_, err = stmt.Exec(token, tenantid)
 	if err != nil {
 		log.Fatal(err)
 	}
 	return true
 
 }
+func (u *User) Updateappuser() (bool,error){
+	stmt, err := database.Db.Prepare(updateappuser)
+	if err != nil {
+		fmt.Println(err)
+		return false,err
+	
+	}
 
+	_, err1 := stmt.Exec(&u.Email,&u.Mobile,&u.ID)
+	if err1 != nil {
+		fmt.Println(err1)
+		return false,err1
+		
+	}
+	return true,nil
+
+}
+func (u *User) Updateuserprofile() (bool,error){
+	stmt, err := database.Db.Prepare(updateuserprofile)
+	if err != nil {
+		fmt.Println(err)
+		return false,err
+	
+	}
+
+	_, err1 := stmt.Exec(&u.FirstName,&u.LastName,&u.Email,&u.Mobile,&u.ID)
+	if err1 != nil {
+		fmt.Println(err1)
+		return false,err1
+		
+	}
+	return true,nil
+
+}

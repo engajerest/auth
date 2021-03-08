@@ -10,6 +10,7 @@ type User struct {
 	CreatedDate string `json:"created"`
 	Status      string `json:"status"`
 	Roleid      int    `json:"roleid"`
+	Configid    int    `json:"configid"`
 	Referenceid int    `json:"referenceid"`
 	LocationId  int    `json:"locationid"`
 	Moduleid    int    `json:"moduleid"`
@@ -18,4 +19,5 @@ type User struct {
 	Tenantname  string `json:"tenantname"`
 	Opentime    string `json:"opentime"`
 	Closetime   string `json:"closetime"`
+	From string `json:"from"`
 }

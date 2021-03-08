@@ -1,91 +1,92 @@
 
 
 type User {
-  id: Int!
-  name: String!
+id: Int!
+name: String!
 }
 type GetUser{
- userId: Int!
-  firstname: String!
-  lastname:String!
- mobile:String!
- email:String!
- created:String!
- status:String!
- 
+UserId: Int!
+firstname: String!
+lastname:String!
+mobile:String!
+email:String!
+created:String!
+status:String!
 }
 type UserData{
-  UserId:Int!
-  Tenantid:Int
-  Locationid:Int
-  Moduleid:Int
-  Packageid:Int
-  Firstname:String!
-  Lastname:String!
-  Email:String!
-  Mobile:String!
-  Token:String!
-  Modulename:String
-  Tenantname:String
-  Opentime:String
-  Closetime:String
-  CreatedDate:String!
-  Status:String!
+UserId:Int!
+Tenantid:Int
+Locationid:Int
+Moduleid:Int
+Packageid:Int
+Firstname:String!
+Lastname:String!
+Email:String!
+Mobile:String!
+Token:String!
+Modulename:String
+Tenantname:String
+Opentime:String
+Closetime:String
+CreatedDate:String!
+Status:String!
 }
 type LoginData{
- status:Boolean!
- code:Int!
- message:String!
- userInfo:UserData
- 
+status:Boolean!
+code:Int!
+message:String!
+userInfo:UserData
 }
-
 type UserCreatedData{
-   status:Boolean!
- code:Int!
- message:String!
- userInfo:UserData!
+status:Boolean!
+code:Int!
+message:String!
+userInfo:UserData!
 }
-
-
 input RefreshTokenInput{
   token: String!
 }
-
 input NewUser {
-  firstname: String!
-  lastname:String!
-  email:String!
-  password: String!
-  Mobile:String!
-  roleid:Int
-  referenceid:Int
-locationid:Int
+firstname: String!
+lastname:String!
+email:String!
+password: String!
+Mobile:String!
+roleid:Int!
+referenceid:Int!
+locationid:Int!
+configid:Int!
 }
-
 input Login {
-  username: String!
-  password: String!
-  tenanttoken:String!
+username: String!
+password: String!
+tenanttoken:String!
 }
 input Reset {
- 
-  password: String!
+ password: String!
+}
+input userupdateinput{
+  userid:Int!
+  firstname:String!
+  lastname:String!
+  email:String!
+  contactno:String!
 
+}
+type updateddata{
+status:Boolean!
+code:Int!
+message:String!
 }
 type Query {
- 
-   users:[GetUser]!
-   getuser:LoginData!
-   
-
+users:[GetUser]!
+getuser:LoginData! 
 }
 type Mutation {
-
-  createUser(create: NewUser!): UserCreatedData!
-  login(input: Login!): LoginData
-
-  ResetPassword(input:Reset!):String!
-  # we'll talk about this in authentication section
-  refreshToken(input: RefreshTokenInput!): String!
+createUser(create: NewUser!): UserCreatedData
+login(input: Login!): LoginData
+ResetPassword(input:Reset!):String!
+# we'll talk about this in authentication section
+refreshToken(input: RefreshTokenInput!): String!
+updateuser(input:userupdateinput):updateddata
 }

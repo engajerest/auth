@@ -12,7 +12,7 @@ import (
 )
 
 // GenerateToken generates a jwt token and assign a username to it's claims and return it
-func GenerateToken(id int) (string, error) {
+func GenerateToken(userid,configid int) (string, error) {
 	viper.SetConfigName("config") // config file name without extension
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
@@ -28,7 +28,8 @@ func GenerateToken(id int) (string, error) {
 	/* Create a map to store our claims */
 	claims := token.Claims.(jwt.MapClaims)
 	/* Set token claims */
-	claims["userid"] = id
+	claims["userid"] = userid
+	claims["configid"]=configid
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 	tokenString, err := token.SignedString(SecretKey)
 	if err != nil {
@@ -40,7 +41,7 @@ func GenerateToken(id int) (string, error) {
 }
 
 // ParseToken parses a jwt token and returns the username in it's claims
-func ParseToken(tokenStr string) (float64, error) {
+func ParseToken(tokenStr string) (userid,configid float64,Error error) {
 	viper.SetConfigName("config") // config file name without extension
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
@@ -58,6 +59,9 @@ func ParseToken(tokenStr string) (float64, error) {
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		
 		userid := claims["userid"].(float64)
+		configid:=claims["configid"].(float64)
+		
+		
 		var tm time.Time
 		switch iat := claims["exp"].(type) {
 		case float64:
@@ -69,8 +73,8 @@ func ParseToken(tokenStr string) (float64, error) {
 	
 		fmt.Println(tm)
 		logger.Time("expiry time",tm)
-		return userid, nil
+		return userid,configid, nil
 	} else {
-		return 0, err
+		return 0,0, err
 	}
 }
