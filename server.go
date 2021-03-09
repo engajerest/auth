@@ -1,17 +1,9 @@
 package main
 
 import (
-	// "net/http"
-	// "github.com/engajerest/auth/graph"
-	// "github.com/engajerest/auth/graph/generated"
-	// "github.com/99designs/gqlgen/graphql/handler"
-	// "github.com/99designs/gqlgen/graphql/playground"
-	// "github.com/go-chi/chi"
-
 	"fmt"
 	"log"
 	"os"
-
 	"github.com/engajerest/auth/controller"
 	"github.com/engajerest/auth/logger"
 	"github.com/engajerest/auth/utils/dbconfig"
@@ -46,7 +38,7 @@ func main() {
 
 	dbconfig.InitDB(dbName, userName, password, host)
 	logger.Info("auth application started")
-	router.Use(controller.TokenAuthMiddleware(userCtxKey))
+	router.Use(controller.TokenNoAuthMiddleware(userCtxKey))
 	router.GET("/", controller.PlaygroundHandlers())
 	router.POST("/auth", controller.GraphHandler())
 	router.Run(defaultPort)
