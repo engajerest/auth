@@ -34,16 +34,32 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 
 		userid, err = user.Create()
 		if err != nil {
-			return nil, err
-			// return &model.UserCreatedData{Status: false,Code: http.StatusBadRequest,Message: "Email Already Exists",
-			// UserInfo: &model.UserData{}}, nil
+			if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'authname'", user.Email) {
+				print("true")
+				return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Email Already Exists",
+					UserInfo: &model.UserData{}}, nil
+			} else if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'contactno'", user.Mobile) {
+				return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Contactno Already Exists",
+				UserInfo: &model.UserData{}}, nil
+			}else{
+				return nil,err
+			}
+
 		}
 	} else {
 		userid, err = user.Createwithoutpassword()
 		if err != nil {
-			// return &model.UserCreatedData{Status: false,Code: http.StatusBadRequest,Message: "Email Already Exists",
-			// UserInfo: &model.UserData{},}, nil
-			return nil, err
+			if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'authname'", user.Email) {
+				print("true")
+				return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Email Already Exists",
+					UserInfo: &model.UserData{}}, nil
+			} else if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'contactno'", user.Mobile) {
+				return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Contactno Already Exists",
+				UserInfo: &model.UserData{}}, nil
+			}else{
+				return nil,err
+			}
+
 		}
 	}
 
@@ -115,7 +131,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			UserID:      user.ID,
 			Tenantid:    &user.Referenceid,
 			Locationid:  &user.LocationId,
-			Moduleid:    &user.LocationId,
+			Moduleid:    &user.Moduleid,
 			Packageid:   &user.Packageid,
 			Modulename:  &user.Modulename,
 			Tenantname:  &user.Tenantname,
@@ -183,25 +199,24 @@ func (r *mutationResolver) Updateuser(ctx context.Context, input *model.Userupda
 	}
 	print(id.From)
 	var d users.User
-	d.FirstName=input.Firstname
-	d.LastName=input.Lastname
-	d.Email=input.Email
-	d.Mobile=input.Contactno
-	d.ID=input.Userid
-	stat,er:=d.Updateappuser()
-	if er!=nil{
-		return nil,er
+	d.FirstName = input.Firstname
+	d.LastName = input.Lastname
+	d.Email = input.Email
+	d.Mobile = input.Contactno
+	d.ID = input.Userid
+	stat, er := d.Updateappuser()
+	if er != nil {
+		return nil, er
 	}
-	if stat==true{
-		st,er1:=d.Updateuserprofile()
-		if er1!=nil{
-			return nil,er1
+	if stat == true {
+		st, er1 := d.Updateuserprofile()
+		if er1 != nil {
+			return nil, er1
 		}
-		print("userprofileupdate",st)
+		print("userprofileupdate", st)
 	}
 
-
-	return &model.Updateddata{Status: true,Code: http.StatusCreated,Message: "Profile Update Successfully"},nil
+	return &model.Updateddata{Status: true, Code: http.StatusCreated, Message: "Profile Update Successfully"}, nil
 }
 
 func (r *queryResolver) Users(ctx context.Context) ([]*model.GetUser, error) {

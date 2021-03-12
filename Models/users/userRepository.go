@@ -69,6 +69,7 @@ func (user *User) Createwithoutpassword() (int64, error) {
 	statement, err := database.Db.Prepare(createUsernopassword)
 	fmt.Println("1")
 	if err != nil {
+	print(err)
 		return 0, err
 
 	}
@@ -78,6 +79,8 @@ func (user *User) Createwithoutpassword() (int64, error) {
 
 	res, err1 := statement.Exec(&user.Email, &user.Mobile, &user.Roleid, &user.Configid)
 	if err1 != nil {
+
+		fmt.Println(err1)
 
 		return 0, err1
 
@@ -288,7 +291,9 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	defer stmt.Close()
 	row := stmt.QueryRow(id)
 	// print(row)
-	err = row.Scan(&data.ID, &data.FirstName, &data.LastName, &data.Mobile, &data.Email, &data.LocationId, &data.Status, &data.CreatedDate, &data.Referenceid, &data.Tenantname, &data.Packageid, &data.Moduleid, &data.Modulename, &data.Opentime, &data.Closetime)
+	err = row.Scan(&data.ID, &data.FirstName, &data.LastName, &data.Mobile, &data.Email, 
+		&data.LocationId, &data.Status, &data.CreatedDate, &data.Referenceid,
+		 &data.Tenantname, &data.Packageid, &data.Moduleid, &data.Modulename, &data.Opentime, &data.Closetime)
 	print(err)
 	fmt.Println("2")
 	if err != nil {
