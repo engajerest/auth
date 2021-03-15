@@ -11,7 +11,6 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/engajerest/auth/Models/users"
 	"github.com/engajerest/auth/datacontext"
-
 	"github.com/engajerest/auth/graph/generated"
 	"github.com/engajerest/auth/graph/model"
 	"github.com/engajerest/auth/utils/accesstoken"
@@ -40,9 +39,9 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 					UserInfo: &model.UserData{}}, nil
 			} else if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'contactno'", user.Mobile) {
 				return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Contactno Already Exists",
-				UserInfo: &model.UserData{}}, nil
-			}else{
-				return nil,err
+					UserInfo: &model.UserData{}}, nil
+			} else {
+				return nil, err
 			}
 
 		}
@@ -55,9 +54,9 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 					UserInfo: &model.UserData{}}, nil
 			} else if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'contactno'", user.Mobile) {
 				return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Contactno Already Exists",
-				UserInfo: &model.UserData{}}, nil
-			}else{
-				return nil,err
+					UserInfo: &model.UserData{}}, nil
+			} else {
+				return nil, err
 			}
 
 		}
@@ -88,18 +87,21 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 
 func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model.LoginData, error) {
 	var user users.User
+	var tenantlist []*model.Tenantdata
+	var t []users.Tenant
 	user.FirstName = input.Username
 	user.Password = input.Password
 	if input.Password != "" {
 		correct := user.Authenticate()
 		if !correct {
 			// 1
-			return &model.LoginData{Status: false, Code: http.StatusBadRequest, Message: "Incorrect Username or password", UserInfo: nil}, nil
+			return &model.LoginData{Status: false, Code: http.StatusBadRequest, Message: "Incorrect Username or password", UserInfo: nil,
+				Tenantinfo: tenantlist}, nil
 		}
 	} else {
 		stat := user.Checkauthname()
 		if stat == false {
-			return &model.LoginData{Status: false, Code: http.StatusBadRequest, Message: "Incorrect Username", UserInfo: nil}, nil
+			return &model.LoginData{Status: false, Code: http.StatusBadRequest, Message: "Incorrect Username", UserInfo: nil, Tenantinfo: tenantlist}, nil
 		}
 	}
 	var token string
@@ -114,6 +116,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 	}
 
 	user.LoginResponse(int64(user.ID))
+
 	user.InsertToken(token)
 	if user.Referenceid != 0 {
 
@@ -121,6 +124,16 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			status := users.Updatetenant(input.Tenanttoken, user.Referenceid)
 			print("tentokenupdate=", status)
 		}
+
+		t = users.Tenantresponse(user.Referenceid)
+		if len(t) != 0 {
+			for _, k := range t {
+				tenantlist = append(tenantlist, &model.Tenantdata{Subscriptionid: k.Subscriptionid,
+					Packageid: k.Packageid, Packagename: k.Packagename, Moduleid: k.Moduleid,
+					Modulename: k.Modulename})
+			}
+		}
+
 	}
 
 	return &model.LoginData{
@@ -131,10 +144,6 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			UserID:      user.ID,
 			Tenantid:    &user.Referenceid,
 			Locationid:  &user.LocationId,
-			Moduleid:    &user.Moduleid,
-			Packageid:   &user.Packageid,
-			Modulename:  &user.Modulename,
-			Tenantname:  &user.Tenantname,
 			Firstname:   user.FirstName,
 			Lastname:    user.LastName,
 			Email:       user.Email,
@@ -144,7 +153,10 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			Closetime:   &user.Closetime,
 			CreatedDate: user.CreatedDate,
 			Status:      user.Status,
-		}}, nil
+			Roleid:      &user.Roleid,
+			Configid:    &user.Configid,
+			Tenantname: &user.Tenantname,
+		}, Tenantinfo: tenantlist}, nil
 }
 
 func (r *mutationResolver) ResetPassword(ctx context.Context, input model.Reset) (string, error) {

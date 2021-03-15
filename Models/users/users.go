@@ -21,3 +21,10 @@ type User struct {
 	Closetime   string `json:"closetime"`
 	From string `json:"from"`
 }
+type Tenant struct {
+	Subscriptionid int `json:"subscriptonid"`
+	Moduleid    int    `json:"moduleid"`
+	Packageid   int    `json:"packageid"`
+	Modulename  string `json:"modulename"`
+	Packagename  string `json:"packagename"`
+}

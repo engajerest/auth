@@ -15,27 +15,36 @@ status:String!
 }
 type UserData{
 UserId:Int!
-Tenantid:Int
-Locationid:Int
-Moduleid:Int
-Packageid:Int
 Firstname:String!
 Lastname:String!
 Email:String!
 Mobile:String!
+Roleid:Int
+Configid:Int
 Token:String!
-Modulename:String
+Tenantid:Int
 Tenantname:String
+Locationid:Int
 Opentime:String
 Closetime:String
 CreatedDate:String!
 Status:String!
 }
+type tenantdata{
+  Subscriptionid:Int!
+  Packageid:Int!
+  Packagename:String!
+  Moduleid:Int!
+  Modulename:String!
+
+}
+
 type LoginData{
 status:Boolean!
 code:Int!
 message:String!
 userInfo:UserData
+tenantinfo:[tenantdata]
 }
 type UserCreatedData{
 status:Boolean!

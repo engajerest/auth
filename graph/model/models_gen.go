@@ -19,10 +19,11 @@ type Login struct {
 }
 
 type LoginData struct {
-	Status   bool      `json:"status"`
-	Code     int       `json:"code"`
-	Message  string    `json:"message"`
-	UserInfo *UserData `json:"userInfo"`
+	Status     bool          `json:"status"`
+	Code       int           `json:"code"`
+	Message    string        `json:"message"`
+	UserInfo   *UserData     `json:"userInfo"`
+	Tenantinfo []*Tenantdata `json:"tenantinfo"`
 }
 
 type NewUser struct {
@@ -59,21 +60,28 @@ type UserCreatedData struct {
 
 type UserData struct {
 	UserID      int     `json:"UserId"`
-	Tenantid    *int    `json:"Tenantid"`
-	Locationid  *int    `json:"Locationid"`
-	Moduleid    *int    `json:"Moduleid"`
-	Packageid   *int    `json:"Packageid"`
 	Firstname   string  `json:"Firstname"`
 	Lastname    string  `json:"Lastname"`
 	Email       string  `json:"Email"`
 	Mobile      string  `json:"Mobile"`
+	Roleid      *int    `json:"Roleid"`
+	Configid    *int    `json:"Configid"`
 	Token       string  `json:"Token"`
-	Modulename  *string `json:"Modulename"`
+	Tenantid    *int    `json:"Tenantid"`
 	Tenantname  *string `json:"Tenantname"`
+	Locationid  *int    `json:"Locationid"`
 	Opentime    *string `json:"Opentime"`
 	Closetime   *string `json:"Closetime"`
 	CreatedDate string  `json:"CreatedDate"`
 	Status      string  `json:"Status"`
+}
+
+type Tenantdata struct {
+	Subscriptionid int    `json:"Subscriptionid"`
+	Packageid      int    `json:"Packageid"`
+	Packagename    string `json:"Packagename"`
+	Moduleid       int    `json:"Moduleid"`
+	Modulename     string `json:"Modulename"`
 }
 
 type Updateddata struct {

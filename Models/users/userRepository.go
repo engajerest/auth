@@ -33,7 +33,8 @@ const (
 	getCustomerByid ="SELECT customerid,firstname,lastname,contactno,email,IFNULL(configid,0) AS configid  FROM customers WHERE customerid=?"
     updateappuser="UPDATE app_users SET authname=? , contactno=? WHERE userid=?"
 	updateuserprofile="UPDATE app_userprofiles SET firstname=?,lastname=?,email=?,contactno=? WHERE userid=?"
-
+    loginuserresponse="SELECT a.userid,a.authname,a.contactno,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname,IFNULL(d.locationid,0) AS locationid, IFNULL(d.opentime,'') AS opentime,IFNULL(d.closetime,'') AS closetime FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantlocations d ON c.tenantid=d.tenantid WHERE   a.userid=?"
+	logintenantresponse="SELECT a.subscriptionid,a.packageid,a.moduleid,b.modulename,c.packagename FROM tenantsubscription a,app_module b, app_package c WHERE a.moduleid=b.moduleid AND a.packageid=c.packageid AND  tenantid=?"
 
 )
 
@@ -241,6 +242,31 @@ func GetAllUsers() []User {
 	}
 	return users
 }
+func Tenantresponse(userid int) []Tenant {
+	stmt, err := database.Db.Prepare(logintenantresponse)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+	rows, err := stmt.Query(userid)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+	var list []Tenant
+	for rows.Next() {
+		var t Tenant
+		err := rows.Scan(&t.Subscriptionid,&t.Packageid,&t.Moduleid,&t.Modulename,&t.Packagename)
+		if err != nil {
+			log.Fatal(err)
+		}
+		list = append(list, t)
+	}
+	if err = rows.Err(); err != nil {
+		log.Fatal(err)
+	}
+	return list
+}
 func (user *User) GetByUserId(id int64) (*User, error) {
 
 	fmt.Println("enrty in getbyid")
@@ -284,16 +310,15 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	fmt.Println("enrty in login response")
 	print(id)
 	var data User
-	stmt, err := database.Db.Prepare(loginResponseQueryByUserid)
+	stmt, err := database.Db.Prepare(loginuserresponse)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer stmt.Close()
 	row := stmt.QueryRow(id)
 	// print(row)
-	err = row.Scan(&data.ID, &data.FirstName, &data.LastName, &data.Mobile, &data.Email, 
-		&data.LocationId, &data.Status, &data.CreatedDate, &data.Referenceid,
-		 &data.Tenantname, &data.Packageid, &data.Moduleid, &data.Modulename, &data.Opentime, &data.Closetime)
+	err = row.Scan(&data.ID,&data.Email,&data.Mobile,&data.Roleid,&data.Configid,&data.Status,
+	&data.CreatedDate,&data.FirstName,&data.LastName,&data.Referenceid,&data.Tenantname,&data.LocationId,&data.Opentime,&data.Closetime)
 	print(err)
 	fmt.Println("2")
 	if err != nil {
@@ -312,9 +337,9 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	user.Mobile = data.Mobile
 	user.Status = data.Status
 	user.Referenceid = data.Referenceid
-	user.Packageid = data.Packageid
-	user.Moduleid = data.Moduleid
-	user.Modulename = data.Modulename
+	user.Roleid = data.Roleid
+	user.Configid = data.Configid
+	// user.Modulename = data.Modulename
 	user.Tenantname = data.Tenantname
 	user.LocationId = data.LocationId
 	user.Closetime = data.Closetime

@@ -43,7 +43,7 @@ func TokenAuthMiddleware(contextkey string) gin.HandlerFunc {
 		if token == "" {
 			c.JSON(http.StatusUnauthorized, "token null")
 			c.Abort()
-			// c.Next()
+	
 			return
 		}
 		// fmt.Println("tkn3")
