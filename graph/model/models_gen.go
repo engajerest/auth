@@ -59,21 +59,22 @@ type UserCreatedData struct {
 }
 
 type UserData struct {
-	UserID      int     `json:"UserId"`
-	Firstname   string  `json:"Firstname"`
-	Lastname    string  `json:"Lastname"`
-	Email       string  `json:"Email"`
-	Mobile      string  `json:"Mobile"`
-	Roleid      *int    `json:"Roleid"`
-	Configid    *int    `json:"Configid"`
-	Token       string  `json:"Token"`
-	Tenantid    *int    `json:"Tenantid"`
-	Tenantname  *string `json:"Tenantname"`
-	Locationid  *int    `json:"Locationid"`
-	Opentime    *string `json:"Opentime"`
-	Closetime   *string `json:"Closetime"`
-	CreatedDate string  `json:"CreatedDate"`
-	Status      string  `json:"Status"`
+	UserID         int     `json:"UserId"`
+	Firstname      string  `json:"Firstname"`
+	Lastname       string  `json:"Lastname"`
+	Email          string  `json:"Email"`
+	Mobile         string  `json:"Mobile"`
+	Roleid         *int    `json:"Roleid"`
+	Configid       *int    `json:"Configid"`
+	Token          string  `json:"Token"`
+	Tenantid       *int    `json:"Tenantid"`
+	Tenantname     *string `json:"Tenantname"`
+	Tenantimageurl *string `json:"Tenantimageurl"`
+	Locationid     *int    `json:"Locationid"`
+	Opentime       *string `json:"Opentime"`
+	Closetime      *string `json:"Closetime"`
+	CreatedDate    string  `json:"CreatedDate"`
+	Status         string  `json:"Status"`
 }
 
 type Tenantdata struct {
@@ -82,6 +83,8 @@ type Tenantdata struct {
 	Packagename    string `json:"Packagename"`
 	Moduleid       int    `json:"Moduleid"`
 	Modulename     string `json:"Modulename"`
+	Validitydate   string `json:"Validitydate"`
+	Validity       bool   `json:"Validity"`
 }
 
 type Updateddata struct {

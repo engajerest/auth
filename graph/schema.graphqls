@@ -24,6 +24,7 @@ Configid:Int
 Token:String!
 Tenantid:Int
 Tenantname:String
+Tenantimageurl:String
 Locationid:Int
 Opentime:String
 Closetime:String
@@ -36,6 +37,8 @@ type tenantdata{
   Packagename:String!
   Moduleid:Int!
   Modulename:String!
+  Validitydate:String!
+  Validity:Boolean!
 
 }
 

@@ -129,7 +129,8 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 		if len(t) != 0 {
 			for _, k := range t {
 				tenantlist = append(tenantlist, &model.Tenantdata{Subscriptionid: k.Subscriptionid,
-					Packageid: k.Packageid, Packagename: k.Packagename, Moduleid: k.Moduleid,
+					Packageid: k.Packageid, Packagename: k.Packagename, Moduleid: k.Moduleid, Validitydate: k.Validiydate,
+					Validity:   k.Validity,
 					Modulename: k.Modulename})
 			}
 		}
@@ -155,7 +156,8 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			Status:      user.Status,
 			Roleid:      &user.Roleid,
 			Configid:    &user.Configid,
-			Tenantname: &user.Tenantname,
+			Tenantname:  &user.Tenantname,
+			Tenantimageurl: &user.Tenantimage,
 		}, Tenantinfo: tenantlist}, nil
 }
 

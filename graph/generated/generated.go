@@ -87,21 +87,22 @@ type ComplexityRoot struct {
 	}
 
 	UserData struct {
-		Closetime   func(childComplexity int) int
-		Configid    func(childComplexity int) int
-		CreatedDate func(childComplexity int) int
-		Email       func(childComplexity int) int
-		Firstname   func(childComplexity int) int
-		Lastname    func(childComplexity int) int
-		Locationid  func(childComplexity int) int
-		Mobile      func(childComplexity int) int
-		Opentime    func(childComplexity int) int
-		Roleid      func(childComplexity int) int
-		Status      func(childComplexity int) int
-		Tenantid    func(childComplexity int) int
-		Tenantname  func(childComplexity int) int
-		Token       func(childComplexity int) int
-		UserID      func(childComplexity int) int
+		Closetime      func(childComplexity int) int
+		Configid       func(childComplexity int) int
+		CreatedDate    func(childComplexity int) int
+		Email          func(childComplexity int) int
+		Firstname      func(childComplexity int) int
+		Lastname       func(childComplexity int) int
+		Locationid     func(childComplexity int) int
+		Mobile         func(childComplexity int) int
+		Opentime       func(childComplexity int) int
+		Roleid         func(childComplexity int) int
+		Status         func(childComplexity int) int
+		Tenantid       func(childComplexity int) int
+		Tenantimageurl func(childComplexity int) int
+		Tenantname     func(childComplexity int) int
+		Token          func(childComplexity int) int
+		UserID         func(childComplexity int) int
 	}
 
 	Tenantdata struct {
@@ -110,6 +111,8 @@ type ComplexityRoot struct {
 		Packageid      func(childComplexity int) int
 		Packagename    func(childComplexity int) int
 		Subscriptionid func(childComplexity int) int
+		Validity       func(childComplexity int) int
+		Validitydate   func(childComplexity int) int
 	}
 
 	Updateddata struct {
@@ -430,6 +433,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserData.Tenantid(childComplexity), true
 
+	case "UserData.Tenantimageurl":
+		if e.complexity.UserData.Tenantimageurl == nil {
+			break
+		}
+
+		return e.complexity.UserData.Tenantimageurl(childComplexity), true
+
 	case "UserData.Tenantname":
 		if e.complexity.UserData.Tenantname == nil {
 			break
@@ -485,6 +495,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Tenantdata.Subscriptionid(childComplexity), true
+
+	case "tenantdata.Validity":
+		if e.complexity.Tenantdata.Validity == nil {
+			break
+		}
+
+		return e.complexity.Tenantdata.Validity(childComplexity), true
+
+	case "tenantdata.Validitydate":
+		if e.complexity.Tenantdata.Validitydate == nil {
+			break
+		}
+
+		return e.complexity.Tenantdata.Validitydate(childComplexity), true
 
 	case "updateddata.code":
 		if e.complexity.Updateddata.Code == nil {
@@ -597,6 +621,7 @@ Configid:Int
 Token:String!
 Tenantid:Int
 Tenantname:String
+Tenantimageurl:String
 Locationid:Int
 Opentime:String
 Closetime:String
@@ -609,6 +634,8 @@ type tenantdata{
   Packagename:String!
   Moduleid:Int!
   Modulename:String!
+  Validitydate:String!
+  Validity:Boolean!
 
 }
 
@@ -2111,6 +2138,38 @@ func (ec *executionContext) _UserData_Tenantname(ctx context.Context, field grap
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _UserData_Tenantimageurl(ctx context.Context, field graphql.CollectedField, obj *model.UserData) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "UserData",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tenantimageurl, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _UserData_Locationid(ctx context.Context, field graphql.CollectedField, obj *model.UserData) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3535,6 +3594,76 @@ func (ec *executionContext) _tenantdata_Modulename(ctx context.Context, field gr
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _tenantdata_Validitydate(ctx context.Context, field graphql.CollectedField, obj *model.Tenantdata) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "tenantdata",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Validitydate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _tenantdata_Validity(ctx context.Context, field graphql.CollectedField, obj *model.Tenantdata) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "tenantdata",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Validity, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _updateddata_status(ctx context.Context, field graphql.CollectedField, obj *model.Updateddata) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -4185,6 +4314,8 @@ func (ec *executionContext) _UserData(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._UserData_Tenantid(ctx, field, obj)
 		case "Tenantname":
 			out.Values[i] = ec._UserData_Tenantname(ctx, field, obj)
+		case "Tenantimageurl":
+			out.Values[i] = ec._UserData_Tenantimageurl(ctx, field, obj)
 		case "Locationid":
 			out.Values[i] = ec._UserData_Locationid(ctx, field, obj)
 		case "Opentime":
@@ -4486,6 +4617,16 @@ func (ec *executionContext) _tenantdata(ctx context.Context, sel ast.SelectionSe
 			}
 		case "Modulename":
 			out.Values[i] = ec._tenantdata_Modulename(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Validitydate":
+			out.Values[i] = ec._tenantdata_Validitydate(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Validity":
+			out.Values[i] = ec._tenantdata_Validity(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

@@ -17,6 +17,7 @@ type User struct {
 	Packageid   int    `json:"packageid"`
 	Modulename  string `json:"modulename"`
 	Tenantname  string `json:"tenantname"`
+	Tenantimage string `json:"tenantimage"`
 	Opentime    string `json:"opentime"`
 	Closetime   string `json:"closetime"`
 	From string `json:"from"`
@@ -27,4 +28,6 @@ type Tenant struct {
 	Packageid   int    `json:"packageid"`
 	Modulename  string `json:"modulename"`
 	Packagename  string `json:"packagename"`
+   Validiydate string `json:"validitydate"`
+   Validity bool `json:"validity"`
 }
