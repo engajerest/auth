@@ -34,7 +34,7 @@ const (
     updateappuser="UPDATE app_users SET authname=? , contactno=? WHERE userid=?"
 	updateuserprofile="UPDATE app_userprofiles SET firstname=?,lastname=?,email=?,contactno=? WHERE userid=?"
     loginuserresponse="SELECT a.userid,a.authname,a.contactno,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(d.locationid,0) AS locationid, IFNULL(d.opentime,'') AS opentime,IFNULL(d.closetime,'') AS closetime FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantlocations d ON c.tenantid=d.tenantid WHERE   a.userid=?"
-	logintenantresponse="SELECT a.subscriptionid,a.packageid,a.moduleid,IFNULL(a.validitydate,'') AS validitydate,IF(a.validitydate>=DATE(NOW()), true, false) AS validity,b.modulename,c.packagename FROM tenantsubscription a,app_module b, app_package c WHERE a.moduleid=b.moduleid AND a.packageid=c.packageid AND  tenantid=? ORDER BY a.subscriptionid ASC "
+	logintenantresponse="SELECT a.subscriptionid,a.packageid,a.moduleid,a.categoryid,a.subcategoryid,IFNULL(a.validitydate,'') AS validitydate,IF(a.validitydate>=DATE(NOW()), true, false) AS validity,b.modulename,c.packagename FROM tenantsubscription a,app_module b, app_package c WHERE a.moduleid=b.moduleid AND a.packageid=c.packageid AND  tenantid=? ORDER BY a.subscriptionid ASC "
 
 )
 
@@ -256,7 +256,7 @@ func Tenantresponse(userid int) []Tenant {
 	var list []Tenant
 	for rows.Next() {
 		var t Tenant
-		err := rows.Scan(&t.Subscriptionid,&t.Packageid,&t.Moduleid,&t.Validiydate,&t.Validity,&t.Modulename,&t.Packagename)
+		err := rows.Scan(&t.Subscriptionid,&t.Packageid,&t.Moduleid,&t.Categoryid,&t.Subcategoryid,&t.Validiydate,&t.Validity,&t.Modulename,&t.Packagename)
 		if err != nil {
 			log.Fatal(err)
 		}

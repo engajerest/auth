@@ -39,6 +39,8 @@ type tenantdata{
   Modulename:String!
   Validitydate:String!
   Validity:Boolean!
+   Categoryid:Int!
+ Subcategoryid:Int!
 
 }
 

@@ -30,4 +30,6 @@ type Tenant struct {
 	Packagename  string `json:"packagename"`
    Validiydate string `json:"validitydate"`
    Validity bool `json:"validity"`
+   Subcategoryid int `json:"subcategoryid"`
+	Categoryid int `json:"categoryid"`
 }

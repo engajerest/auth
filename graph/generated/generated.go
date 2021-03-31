@@ -106,10 +106,12 @@ type ComplexityRoot struct {
 	}
 
 	Tenantdata struct {
+		Categoryid     func(childComplexity int) int
 		Moduleid       func(childComplexity int) int
 		Modulename     func(childComplexity int) int
 		Packageid      func(childComplexity int) int
 		Packagename    func(childComplexity int) int
+		Subcategoryid  func(childComplexity int) int
 		Subscriptionid func(childComplexity int) int
 		Validity       func(childComplexity int) int
 		Validitydate   func(childComplexity int) int
@@ -461,6 +463,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserData.UserID(childComplexity), true
 
+	case "tenantdata.Categoryid":
+		if e.complexity.Tenantdata.Categoryid == nil {
+			break
+		}
+
+		return e.complexity.Tenantdata.Categoryid(childComplexity), true
+
 	case "tenantdata.Moduleid":
 		if e.complexity.Tenantdata.Moduleid == nil {
 			break
@@ -488,6 +497,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Tenantdata.Packagename(childComplexity), true
+
+	case "tenantdata.Subcategoryid":
+		if e.complexity.Tenantdata.Subcategoryid == nil {
+			break
+		}
+
+		return e.complexity.Tenantdata.Subcategoryid(childComplexity), true
 
 	case "tenantdata.Subscriptionid":
 		if e.complexity.Tenantdata.Subscriptionid == nil {
@@ -636,6 +652,8 @@ type tenantdata{
   Modulename:String!
   Validitydate:String!
   Validity:Boolean!
+   Categoryid:Int!
+ Subcategoryid:Int!
 
 }
 
@@ -3664,6 +3682,76 @@ func (ec *executionContext) _tenantdata_Validity(ctx context.Context, field grap
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _tenantdata_Categoryid(ctx context.Context, field graphql.CollectedField, obj *model.Tenantdata) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "tenantdata",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Categoryid, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _tenantdata_Subcategoryid(ctx context.Context, field graphql.CollectedField, obj *model.Tenantdata) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "tenantdata",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Subcategoryid, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _updateddata_status(ctx context.Context, field graphql.CollectedField, obj *model.Updateddata) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -4627,6 +4715,16 @@ func (ec *executionContext) _tenantdata(ctx context.Context, sel ast.SelectionSe
 			}
 		case "Validity":
 			out.Values[i] = ec._tenantdata_Validity(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Categoryid":
+			out.Values[i] = ec._tenantdata_Categoryid(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Subcategoryid":
+			out.Values[i] = ec._tenantdata_Subcategoryid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

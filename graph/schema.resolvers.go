@@ -130,7 +130,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			for _, k := range t {
 				tenantlist = append(tenantlist, &model.Tenantdata{Subscriptionid: k.Subscriptionid,
 					Packageid: k.Packageid, Packagename: k.Packagename, Moduleid: k.Moduleid, Validitydate: k.Validiydate,
-					Validity:   k.Validity,
+					Validity:   k.Validity,Categoryid: k.Categoryid,Subcategoryid: k.Subcategoryid,
 					Modulename: k.Modulename})
 			}
 		}
@@ -142,21 +142,21 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 		Code:    http.StatusOK,
 		Message: "Success",
 		UserInfo: &model.UserData{
-			UserID:      user.ID,
-			Tenantid:    &user.Referenceid,
-			Locationid:  &user.LocationId,
-			Firstname:   user.FirstName,
-			Lastname:    user.LastName,
-			Email:       user.Email,
-			Mobile:      user.Mobile,
-			Token:       token,
-			Opentime:    &user.Opentime,
-			Closetime:   &user.Closetime,
-			CreatedDate: user.CreatedDate,
-			Status:      user.Status,
-			Roleid:      &user.Roleid,
-			Configid:    &user.Configid,
-			Tenantname:  &user.Tenantname,
+			UserID:         user.ID,
+			Tenantid:       &user.Referenceid,
+			Locationid:     &user.LocationId,
+			Firstname:      user.FirstName,
+			Lastname:       user.LastName,
+			Email:          user.Email,
+			Mobile:         user.Mobile,
+			Token:          token,
+			Opentime:       &user.Opentime,
+			Closetime:      &user.Closetime,
+			CreatedDate:    user.CreatedDate,
+			Status:         user.Status,
+			Roleid:         &user.Roleid,
+			Configid:       &user.Configid,
+			Tenantname:     &user.Tenantname,
 			Tenantimageurl: &user.Tenantimage,
 		}, Tenantinfo: tenantlist}, nil
 }

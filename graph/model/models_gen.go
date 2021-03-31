@@ -85,6 +85,8 @@ type Tenantdata struct {
 	Modulename     string `json:"Modulename"`
 	Validitydate   string `json:"Validitydate"`
 	Validity       bool   `json:"Validity"`
+	Categoryid     int    `json:"Categoryid"`
+	Subcategoryid  int    `json:"Subcategoryid"`
 }
 
 type Updateddata struct {
