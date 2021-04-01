@@ -116,10 +116,11 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 	}
 
 	user.LoginResponse(int64(user.ID))
+	print("refid",user.Referenceid)
 
 	user.InsertToken(token)
 	if user.Referenceid != 0 {
-
+print("not 0")
 		if input.Tenanttoken != "" {
 			status := users.Updatetenant(input.Tenanttoken, user.Referenceid)
 			print("tentokenupdate=", status)
@@ -135,6 +136,8 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			}
 		}
 
+	}else{
+		print("not 0")
 	}
 
 	return &model.LoginData{
