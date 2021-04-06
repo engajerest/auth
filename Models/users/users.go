@@ -27,6 +27,8 @@ type Tenant struct {
 	Moduleid    int    `json:"moduleid"`
 	Packageid   int    `json:"packageid"`
 	Modulename  string `json:"modulename"`
+	Iconurl string `json:"iconurl"`
+	Logourl string `json:"imageurl"`
 	Packagename  string `json:"packagename"`
    Validiydate string `json:"validitydate"`
    Validity bool `json:"validity"`

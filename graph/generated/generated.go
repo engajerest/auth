@@ -107,6 +107,8 @@ type ComplexityRoot struct {
 
 	Tenantdata struct {
 		Categoryid     func(childComplexity int) int
+		Iconurl        func(childComplexity int) int
+		Logourl        func(childComplexity int) int
 		Moduleid       func(childComplexity int) int
 		Modulename     func(childComplexity int) int
 		Packageid      func(childComplexity int) int
@@ -470,6 +472,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Tenantdata.Categoryid(childComplexity), true
 
+	case "tenantdata.Iconurl":
+		if e.complexity.Tenantdata.Iconurl == nil {
+			break
+		}
+
+		return e.complexity.Tenantdata.Iconurl(childComplexity), true
+
+	case "tenantdata.Logourl":
+		if e.complexity.Tenantdata.Logourl == nil {
+			break
+		}
+
+		return e.complexity.Tenantdata.Logourl(childComplexity), true
+
 	case "tenantdata.Moduleid":
 		if e.complexity.Tenantdata.Moduleid == nil {
 			break
@@ -654,6 +670,8 @@ type tenantdata{
   Validity:Boolean!
    Categoryid:Int!
  Subcategoryid:Int!
+ Iconurl:String!
+ Logourl:String!
 
 }
 
@@ -3752,6 +3770,76 @@ func (ec *executionContext) _tenantdata_Subcategoryid(ctx context.Context, field
 	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _tenantdata_Iconurl(ctx context.Context, field graphql.CollectedField, obj *model.Tenantdata) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "tenantdata",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Iconurl, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _tenantdata_Logourl(ctx context.Context, field graphql.CollectedField, obj *model.Tenantdata) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "tenantdata",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Logourl, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _updateddata_status(ctx context.Context, field graphql.CollectedField, obj *model.Updateddata) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -4725,6 +4813,16 @@ func (ec *executionContext) _tenantdata(ctx context.Context, sel ast.SelectionSe
 			}
 		case "Subcategoryid":
 			out.Values[i] = ec._tenantdata_Subcategoryid(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Iconurl":
+			out.Values[i] = ec._tenantdata_Iconurl(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Logourl":
+			out.Values[i] = ec._tenantdata_Logourl(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

@@ -41,6 +41,8 @@ type tenantdata{
   Validity:Boolean!
    Categoryid:Int!
  Subcategoryid:Int!
+ Iconurl:String!
+ Logourl:String!
 
 }
 

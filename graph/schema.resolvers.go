@@ -116,11 +116,11 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 	}
 
 	user.LoginResponse(int64(user.ID))
-	print("refid",user.Referenceid)
+	print("refid", user.Referenceid)
 
 	user.InsertToken(token)
 	if user.Referenceid != 0 {
-print("not 0")
+		print("not 0")
 		if input.Tenanttoken != "" {
 			status := users.Updatetenant(input.Tenanttoken, user.Referenceid)
 			print("tentokenupdate=", status)
@@ -131,12 +131,12 @@ print("not 0")
 			for _, k := range t {
 				tenantlist = append(tenantlist, &model.Tenantdata{Subscriptionid: k.Subscriptionid,
 					Packageid: k.Packageid, Packagename: k.Packagename, Moduleid: k.Moduleid, Validitydate: k.Validiydate,
-					Validity:   k.Validity,Categoryid: k.Categoryid,Subcategoryid: k.Subcategoryid,
-					Modulename: k.Modulename})
+					Validity: k.Validity, Categoryid: k.Categoryid, Subcategoryid: k.Subcategoryid,
+					Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
 			}
 		}
 
-	}else{
+	} else {
 		print("not 0")
 	}
 
