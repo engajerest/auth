@@ -364,7 +364,7 @@ func (user *User) UserAuthentication(id int64) (*User, bool, error) {
 	}
 	defer stmt.Close()
 	row := stmt.QueryRow(id)
-	err = row.Scan(&data.ID, &data.FirstName, &data.LastName, &data.Mobile, &data.Email, &data.Status, &data.CreatedDate)
+	err = row.Scan(&data.ID, &data.FirstName, &data.LastName,&data.Email,  &data.Mobile, &data.Status, &data.CreatedDate)
 	print(err)
 	if err != nil {
 		if err == sql.ErrNoRows {
