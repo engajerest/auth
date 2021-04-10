@@ -43,6 +43,7 @@ type tenantdata{
  Subcategoryid:Int!
  Iconurl:String!
  Logourl:String!
+ Paymentstatus:Boolean!
 
 }
 

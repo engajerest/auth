@@ -113,6 +113,7 @@ type ComplexityRoot struct {
 		Modulename     func(childComplexity int) int
 		Packageid      func(childComplexity int) int
 		Packagename    func(childComplexity int) int
+		Paymentstatus  func(childComplexity int) int
 		Subcategoryid  func(childComplexity int) int
 		Subscriptionid func(childComplexity int) int
 		Validity       func(childComplexity int) int
@@ -514,6 +515,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Tenantdata.Packagename(childComplexity), true
 
+	case "tenantdata.Paymentstatus":
+		if e.complexity.Tenantdata.Paymentstatus == nil {
+			break
+		}
+
+		return e.complexity.Tenantdata.Paymentstatus(childComplexity), true
+
 	case "tenantdata.Subcategoryid":
 		if e.complexity.Tenantdata.Subcategoryid == nil {
 			break
@@ -672,6 +680,7 @@ type tenantdata{
  Subcategoryid:Int!
  Iconurl:String!
  Logourl:String!
+ Paymentstatus:Boolean!
 
 }
 
@@ -3840,6 +3849,41 @@ func (ec *executionContext) _tenantdata_Logourl(ctx context.Context, field graph
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _tenantdata_Paymentstatus(ctx context.Context, field graphql.CollectedField, obj *model.Tenantdata) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "tenantdata",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Paymentstatus, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _updateddata_status(ctx context.Context, field graphql.CollectedField, obj *model.Updateddata) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -4823,6 +4867,11 @@ func (ec *executionContext) _tenantdata(ctx context.Context, sel ast.SelectionSe
 			}
 		case "Logourl":
 			out.Values[i] = ec._tenantdata_Logourl(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Paymentstatus":
+			out.Values[i] = ec._tenantdata_Paymentstatus(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

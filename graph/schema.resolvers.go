@@ -132,7 +132,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 				tenantlist = append(tenantlist, &model.Tenantdata{Subscriptionid: k.Subscriptionid,
 					Packageid: k.Packageid, Packagename: k.Packagename, Moduleid: k.Moduleid, Validitydate: k.Validiydate,
 					Validity: k.Validity, Categoryid: k.Categoryid, Subcategoryid: k.Subcategoryid,
-					Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
+				Paymentstatus: k.Paymentstatus,	Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
 			}
 		}
 
@@ -221,9 +221,17 @@ func (r *mutationResolver) Updateuser(ctx context.Context, input *model.Userupda
 	d.Email = input.Email
 	d.Mobile = input.Contactno
 	d.ID = input.Userid
-	stat, er := d.Updateappuser()
-	if er != nil {
-		return nil, er
+	stat, err := d.Updateappuser()
+	if err != nil {
+		if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'authname'", d.Email) {
+			print("true")
+			return &model.Updateddata{Status: false, Code: http.StatusConflict, Message: "Email Already Exists"}, nil
+		} else if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'contactno'", d.Mobile) {
+			return &model.Updateddata{Status: false, Code: http.StatusConflict, Message: "Contactno Already Exists"}, nil
+		} else {
+			return nil, err
+		}
+
 	}
 	if stat == true {
 		st, er1 := d.Updateuserprofile()

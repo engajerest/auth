@@ -89,6 +89,7 @@ type Tenantdata struct {
 	Subcategoryid  int    `json:"Subcategoryid"`
 	Iconurl        string `json:"Iconurl"`
 	Logourl        string `json:"Logourl"`
+	Paymentstatus  bool   `json:"Paymentstatus"`
 }
 
 type Updateddata struct {

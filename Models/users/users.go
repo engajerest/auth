@@ -34,4 +34,5 @@ type Tenant struct {
    Validity bool `json:"validity"`
    Subcategoryid int `json:"subcategoryid"`
 	Categoryid int `json:"categoryid"`
+	Paymentstatus bool `json:"paymentstatus"`
 }
