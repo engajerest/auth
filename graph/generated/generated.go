@@ -44,13 +44,14 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	GetUser struct {
-		Created   func(childComplexity int) int
-		Email     func(childComplexity int) int
-		Firstname func(childComplexity int) int
-		Lastname  func(childComplexity int) int
-		Mobile    func(childComplexity int) int
-		Status    func(childComplexity int) int
-		UserID    func(childComplexity int) int
+		Created      func(childComplexity int) int
+		Email        func(childComplexity int) int
+		Firstname    func(childComplexity int) int
+		Lastname     func(childComplexity int) int
+		Mobile       func(childComplexity int) int
+		Profileimage func(childComplexity int) int
+		Status       func(childComplexity int) int
+		UserID       func(childComplexity int) int
 	}
 
 	LoginData struct {
@@ -96,6 +97,7 @@ type ComplexityRoot struct {
 		Locationid     func(childComplexity int) int
 		Mobile         func(childComplexity int) int
 		Opentime       func(childComplexity int) int
+		Profileimage   func(childComplexity int) int
 		Roleid         func(childComplexity int) int
 		Status         func(childComplexity int) int
 		Tenantid       func(childComplexity int) int
@@ -188,6 +190,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.GetUser.Mobile(childComplexity), true
+
+	case "GetUser.Profileimage":
+		if e.complexity.GetUser.Profileimage == nil {
+			break
+		}
+
+		return e.complexity.GetUser.Profileimage(childComplexity), true
 
 	case "GetUser.status":
 		if e.complexity.GetUser.Status == nil {
@@ -416,6 +425,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserData.Opentime(childComplexity), true
+
+	case "UserData.Profileimage":
+		if e.complexity.UserData.Profileimage == nil {
+			break
+		}
+
+		return e.complexity.UserData.Profileimage(childComplexity), true
 
 	case "UserData.Roleid":
 		if e.complexity.UserData.Roleid == nil {
@@ -647,6 +663,7 @@ firstname: String!
 lastname:String!
 mobile:String!
 email:String!
+Profileimage:String!
 created:String!
 status:String!
 }
@@ -656,6 +673,7 @@ Firstname:String!
 Lastname:String!
 Email:String!
 Mobile:String!
+Profileimage:String!
 Roleid:Int
 Configid:Int
 Token:String!
@@ -725,6 +743,7 @@ input userupdateinput{
   lastname:String!
   email:String!
   contactno:String!
+  profileimage:String!
 
 }
 type updateddata{
@@ -1038,6 +1057,41 @@ func (ec *executionContext) _GetUser_email(ctx context.Context, field graphql.Co
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.Email, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _GetUser_Profileimage(ctx context.Context, field graphql.CollectedField, obj *model.GetUser) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "GetUser",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Profileimage, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2004,6 +2058,41 @@ func (ec *executionContext) _UserData_Mobile(ctx context.Context, field graphql.
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.Mobile, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _UserData_Profileimage(ctx context.Context, field graphql.CollectedField, obj *model.UserData) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "UserData",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Profileimage, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4199,6 +4288,14 @@ func (ec *executionContext) unmarshalInputuserupdateinput(ctx context.Context, o
 			if err != nil {
 				return it, err
 			}
+		case "profileimage":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("profileimage"))
+			it.Profileimage, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		}
 	}
 
@@ -4246,6 +4343,11 @@ func (ec *executionContext) _GetUser(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "email":
 			out.Values[i] = ec._GetUser_email(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Profileimage":
+			out.Values[i] = ec._GetUser_Profileimage(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -4518,6 +4620,11 @@ func (ec *executionContext) _UserData(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "Mobile":
 			out.Values[i] = ec._UserData_Mobile(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Profileimage":
+			out.Values[i] = ec._UserData_Profileimage(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

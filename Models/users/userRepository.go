@@ -21,7 +21,7 @@ const (
 	insertUsertoProfileQuery   = "INSERT INTO app_userprofiles (userid,firstname,lastname,email,contactno) VALUES(?,?,?,?,?)"
 	getUseridByNameQuery       = "select user_id, email, mobile,status,created_date from engaje_users WHERE user_name = ?"
 	authenticationQuery        = "SELECT userid,password,hashsalt,IFNULL(configid,0) AS configid FROM app_users WHERE authname=? OR contactno=? AND password=? "
-	usersGetAllQuery           = "select userid, firstname,lastname, contactno,email,status,created from app_userprofiles"
+	usersGetAllQuery           = "select userid, firstname,lastname, contactno,email,IFNULL(profileimage,'') AS profileimage, status,created from app_userprofiles"
 	getUserByidQuery           = "select userid, firstname,lastname,contactno,email,status,created from app_userprofiles WHERE userid=?"
 	resetPasswordQuery         = "UPDATE app_users SET password=? ,hashsalt=?  WHERE userid = ?"
 	insertTokentoSessionQuery  = "INSERT INTO app_session (userid,sessionname,sessiondate,sessionexpiry) VALUES(?,?,?,?)"
@@ -32,8 +32,8 @@ const (
 	checkauthname = "SELECT userid,IFNULL(configid,0) AS configid FROM app_users WHERE authname= ? OR contactno=?"
 	getCustomerByid ="SELECT customerid,firstname,lastname,contactno,email,IFNULL(configid,0) AS configid  FROM customers WHERE customerid=?"
     updateappuser="UPDATE app_users SET authname=? , contactno=? WHERE userid=?"
-	updateuserprofile="UPDATE app_userprofiles SET firstname=?,lastname=?,email=?,contactno=? WHERE userid=?"
-    loginuserresponse="SELECT a.userid,a.authname,a.contactno,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(d.locationid,0) AS locationid, IFNULL(d.opentime,'') AS opentime,IFNULL(d.closetime,'') AS closetime FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantlocations d ON c.tenantid=d.tenantid WHERE   a.userid=?"
+	updateuserprofile="UPDATE app_userprofiles SET firstname=?,lastname=?,email=?,contactno=?,profileimage=? WHERE userid=?"
+    loginuserresponse="SELECT a.userid,a.authname,a.contactno,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(b.profileimage,'') AS profileimage,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(d.locationid,0) AS locationid, IFNULL(d.opentime,'') AS opentime,IFNULL(d.closetime,'') AS closetime FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantlocations d ON c.tenantid=d.tenantid WHERE   a.userid=?"
 	logintenantresponse="SELECT a.subscriptionid,a.packageid,a.moduleid,a.categoryid,a.subcategoryid,IFNULL(a.validitydate,'') AS validitydate,IF(a.validitydate>=DATE(NOW()), true, false) AS validity,a.paymentstatus,b.modulename,IFNULL(b.logourl,'') AS logourl,IFNULL(b.iconurl,'') AS iconurl FROM tenantsubscription a,app_module b WHERE a.moduleid=b.moduleid  AND  tenantid=? ORDER BY a.subscriptionid ASC "
 
 )
@@ -231,7 +231,7 @@ func GetAllUsers() []User {
 	var users []User
 	for rows.Next() {
 		var user User
-		err := rows.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Mobile, &user.Email, &user.Status, &user.CreatedDate)
+		err := rows.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Mobile, &user.Email,&user.Profileimage, &user.Status, &user.CreatedDate)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -318,7 +318,7 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	row := stmt.QueryRow(id)
 	// print(row)
 	err = row.Scan(&data.ID,&data.Email,&data.Mobile,&data.Roleid,&data.Configid,&data.Status,
-	&data.CreatedDate,&data.FirstName,&data.LastName,&data.Referenceid,&data.Tenantname,&data.Tenantimage,&data.LocationId,&data.Opentime,&data.Closetime)
+	&data.CreatedDate,&data.FirstName,&data.LastName,&data.Profileimage,&data.Referenceid,&data.Tenantname,&data.Tenantimage,&data.LocationId,&data.Opentime,&data.Closetime)
 	print(err)
 	fmt.Println("2")
 	if err != nil {
@@ -345,6 +345,7 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	user.Closetime = data.Closetime
 	user.Opentime = data.Opentime
 	user.Tenantimage=data.Tenantimage
+	user.Profileimage=data.Profileimage
 	print(user.ID)
 	// print(user.FirstName)
 	// print(user.LastName)
@@ -542,7 +543,7 @@ func (u *User) Updateuserprofile() (bool,error){
 	
 	}
 
-	_, err1 := stmt.Exec(&u.FirstName,&u.LastName,&u.Email,&u.Mobile,&u.ID)
+	_, err1 := stmt.Exec(&u.FirstName,&u.LastName,&u.Email,&u.Mobile,&u.Profileimage,&u.ID)
 	if err1 != nil {
 		fmt.Println(err1)
 		return false,err1

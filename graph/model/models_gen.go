@@ -3,13 +3,14 @@
 package model
 
 type GetUser struct {
-	UserID    int    `json:"UserId"`
-	Firstname string `json:"firstname"`
-	Lastname  string `json:"lastname"`
-	Mobile    string `json:"mobile"`
-	Email     string `json:"email"`
-	Created   string `json:"created"`
-	Status    string `json:"status"`
+	UserID       int    `json:"UserId"`
+	Firstname    string `json:"firstname"`
+	Lastname     string `json:"lastname"`
+	Mobile       string `json:"mobile"`
+	Email        string `json:"email"`
+	Profileimage string `json:"Profileimage"`
+	Created      string `json:"created"`
+	Status       string `json:"status"`
 }
 
 type Login struct {
@@ -64,6 +65,7 @@ type UserData struct {
 	Lastname       string  `json:"Lastname"`
 	Email          string  `json:"Email"`
 	Mobile         string  `json:"Mobile"`
+	Profileimage   string  `json:"Profileimage"`
 	Roleid         *int    `json:"Roleid"`
 	Configid       *int    `json:"Configid"`
 	Token          string  `json:"Token"`
@@ -99,9 +101,10 @@ type Updateddata struct {
 }
 
 type Userupdateinput struct {
-	Userid    int    `json:"userid"`
-	Firstname string `json:"firstname"`
-	Lastname  string `json:"lastname"`
-	Email     string `json:"email"`
-	Contactno string `json:"contactno"`
+	Userid       int    `json:"userid"`
+	Firstname    string `json:"firstname"`
+	Lastname     string `json:"lastname"`
+	Email        string `json:"email"`
+	Contactno    string `json:"contactno"`
+	Profileimage string `json:"profileimage"`
 }

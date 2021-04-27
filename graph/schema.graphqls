@@ -10,6 +10,7 @@ firstname: String!
 lastname:String!
 mobile:String!
 email:String!
+Profileimage:String!
 created:String!
 status:String!
 }
@@ -19,6 +20,7 @@ Firstname:String!
 Lastname:String!
 Email:String!
 Mobile:String!
+Profileimage:String!
 Roleid:Int
 Configid:Int
 Token:String!
@@ -88,6 +90,7 @@ input userupdateinput{
   lastname:String!
   email:String!
   contactno:String!
+  profileimage:String!
 
 }
 type updateddata{

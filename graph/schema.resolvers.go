@@ -132,7 +132,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 				tenantlist = append(tenantlist, &model.Tenantdata{Subscriptionid: k.Subscriptionid,
 					Packageid: k.Packageid, Packagename: k.Packagename, Moduleid: k.Moduleid, Validitydate: k.Validiydate,
 					Validity: k.Validity, Categoryid: k.Categoryid, Subcategoryid: k.Subcategoryid,
-				Paymentstatus: k.Paymentstatus,	Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
+					Paymentstatus: k.Paymentstatus, Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
 			}
 		}
 
@@ -161,6 +161,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			Configid:       &user.Configid,
 			Tenantname:     &user.Tenantname,
 			Tenantimageurl: &user.Tenantimage,
+			Profileimage: user.Profileimage,
 		}, Tenantinfo: tenantlist}, nil
 }
 
@@ -219,6 +220,7 @@ func (r *mutationResolver) Updateuser(ctx context.Context, input *model.Userupda
 	d.FirstName = input.Firstname
 	d.LastName = input.Lastname
 	d.Email = input.Email
+	d.Profileimage=input.Profileimage
 	d.Mobile = input.Contactno
 	d.ID = input.Userid
 	stat, err := d.Updateappuser()
@@ -250,7 +252,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.GetUser, error) {
 
 	userGetAll = users.GetAllUsers()
 	for _, user := range userGetAll {
-		userResult = append(userResult, &model.GetUser{UserID: user.ID, Firstname: user.FirstName, Lastname: user.LastName, Mobile: user.Mobile, Email: user.Email, Created: user.CreatedDate, Status: user.Status})
+		userResult = append(userResult, &model.GetUser{UserID: user.ID, Firstname: user.FirstName, Lastname: user.LastName, Mobile: user.Mobile, Email: user.Email, Profileimage:user.Profileimage,Created: user.CreatedDate, Status: user.Status})
 	}
 	return userResult, nil
 }
