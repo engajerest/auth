@@ -286,12 +286,15 @@ func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
 		Message: "Success",
 		UserInfo: &model.UserData1{
 			UserID:      id.ID,
-			Firstname:   id.Profileimage,
+			Firstname:   id.FirstName,
 			Lastname:    id.LastName,
 			Email:       id.Email,
 			Mobile:      id.Mobile,
 			CreatedDate: id.CreatedDate,
 			Status:      id.Status,
+			Profileimage: id.Profileimage,
+			Roleid: &id.Roleid,
+			Configid: &id.Configid,
 		}}, nil
 }
 

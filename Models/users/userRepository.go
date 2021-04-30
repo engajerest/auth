@@ -26,7 +26,7 @@ const (
 	resetPasswordQuery         = "UPDATE app_users SET password=? ,hashsalt=?  WHERE userid = ?"
 	insertTokentoSessionQuery  = "INSERT INTO app_session (userid,sessionname,sessiondate,sessionexpiry) VALUES(?,?,?,?)"
 	checkUseridinSessionQuery  = "select userid from app_session WHERE userid= ?"
-	userAuthentication         = "SELECT a.userid,b.firstname,b.lastname,b.email,b.contactno,IFNULL(b.profileimage,'') AS profileimage,b.status,b.created FROM app_users a, app_userprofiles b WHERE a.userid=b.userid AND a.status ='Active' AND a.userid=?"
+	userAuthentication         = "SELECT a.userid,a.roleid,a.configid,b.firstname,b.lastname,b.email,b.contactno,IFNULL(b.profileimage,'') AS profileimage,b.status,b.created FROM app_users a, app_userprofiles b WHERE a.userid=b.userid AND a.status ='Active' AND a.userid=?"
 	loginResponseQueryByUserid = "SELECT a.userid,b.firstname,b.lastname,b.contactno,b.email,IFNULL(b.userlocationid,0) AS userlocationid,b.status,b.created, IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(d.packageid,0) AS packageid, IFNULL(d.moduleid,0) AS moduleid, IFNULL(e.modulename,'') AS modulename, IFNULL(f.opentime,'') AS opentime,IFNULL(f.closetime,'') AS closetime  FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantsubscription d ON c.tenantid=d.tenantid LEFT OUTER JOIN app_module e ON d.moduleid=e.moduleid  LEFT OUTER JOIN tenantlocations f ON c.tenantid=f.tenantid WHERE a.userid=?"
 	updateenanttoken           = "UPDATE tenants SET tenanttoken=? WHERE tenantid=?"
 	checkauthname              = "SELECT userid,IFNULL(configid,0) AS configid FROM app_users WHERE authname= ? OR contactno=?"
@@ -391,7 +391,7 @@ func (user *User) UserAuthentication(id int64) (*User, bool, error) {
 	}
 	defer stmt.Close()
 	row := stmt.QueryRow(id)
-	err = row.Scan(&data.ID, &data.FirstName, &data.LastName, &data.Email, &data.Mobile, &data.Profileimage, &data.Status, &data.CreatedDate)
+	err = row.Scan(&data.ID,&data.Roleid,&data.Configid, &data.FirstName, &data.LastName, &data.Email, &data.Mobile, &data.Profileimage, &data.Status, &data.CreatedDate)
 	print(err)
 	if err != nil {
 		if err == sql.ErrNoRows {
