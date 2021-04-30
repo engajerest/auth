@@ -55,12 +55,12 @@ type ComplexityRoot struct {
 	}
 
 	LoginData struct {
-		Code        func(childComplexity int) int
-		Locationino func(childComplexity int) int
-		Message     func(childComplexity int) int
-		Status      func(childComplexity int) int
-		Tenantinfo  func(childComplexity int) int
-		UserInfo    func(childComplexity int) int
+		Code         func(childComplexity int) int
+		Locationinfo func(childComplexity int) int
+		Message      func(childComplexity int) int
+		Status       func(childComplexity int) int
+		Tenantinfo   func(childComplexity int) int
+		UserInfo     func(childComplexity int) int
 	}
 
 	Mutation struct {
@@ -255,12 +255,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.LoginData.Code(childComplexity), true
 
-	case "LoginData.locationino":
-		if e.complexity.LoginData.Locationino == nil {
+	case "LoginData.locationinfo":
+		if e.complexity.LoginData.Locationinfo == nil {
 			break
 		}
 
-		return e.complexity.LoginData.Locationino(childComplexity), true
+		return e.complexity.LoginData.Locationinfo(childComplexity), true
 
 	case "LoginData.message":
 		if e.complexity.LoginData.Message == nil {
@@ -972,7 +972,7 @@ code:Int!
 message:String!
 userInfo:UserData1
 tenantinfo:[tenantdata]
-locationino:[location]
+locationinfo:[location]
 }
 type location {
 Locationid:Int!
@@ -1627,7 +1627,7 @@ func (ec *executionContext) _LoginData_tenantinfo(ctx context.Context, field gra
 	return ec.marshalOtenantdata2ᚕᚖgithubᚗcomᚋengajerestᚋauthᚋgraphᚋmodelᚐTenantdata(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _LoginData_locationino(ctx context.Context, field graphql.CollectedField, obj *model.LoginData) (ret graphql.Marshaler) {
+func (ec *executionContext) _LoginData_locationinfo(ctx context.Context, field graphql.CollectedField, obj *model.LoginData) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1645,7 +1645,7 @@ func (ec *executionContext) _LoginData_locationino(ctx context.Context, field gr
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Locationino, nil
+		return obj.Locationinfo, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5714,8 +5714,8 @@ func (ec *executionContext) _LoginData(ctx context.Context, sel ast.SelectionSet
 			out.Values[i] = ec._LoginData_userInfo(ctx, field, obj)
 		case "tenantinfo":
 			out.Values[i] = ec._LoginData_tenantinfo(ctx, field, obj)
-		case "locationino":
-			out.Values[i] = ec._LoginData_locationino(ctx, field, obj)
+		case "locationinfo":
+			out.Values[i] = ec._LoginData_locationinfo(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

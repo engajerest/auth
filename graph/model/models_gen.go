@@ -20,12 +20,12 @@ type Login struct {
 }
 
 type LoginData struct {
-	Status      bool          `json:"status"`
-	Code        int           `json:"code"`
-	Message     string        `json:"message"`
-	UserInfo    *UserData1    `json:"userInfo"`
-	Tenantinfo  []*Tenantdata `json:"tenantinfo"`
-	Locationino []*Location   `json:"locationino"`
+	Status       bool          `json:"status"`
+	Code         int           `json:"code"`
+	Message      string        `json:"message"`
+	UserInfo     *UserData1    `json:"userInfo"`
+	Tenantinfo   []*Tenantdata `json:"tenantinfo"`
+	Locationinfo []*Location   `json:"locationinfo"`
 }
 
 type NewUser struct {

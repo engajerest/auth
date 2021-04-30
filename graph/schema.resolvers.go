@@ -169,7 +169,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			Tenantname:     &user.Tenantname,
 			Tenantimageurl: &user.Tenantimage,
 			Profileimage:   user.Profileimage,
-		}, Tenantinfo: tenantlist, Locationino: loclist,
+		}, Tenantinfo: tenantlist, Locationinfo: loclist,
 	}, nil
 }
 
@@ -285,16 +285,16 @@ func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
 		Code:    http.StatusOK,
 		Message: "Success",
 		UserInfo: &model.UserData1{
-			UserID:      id.ID,
-			Firstname:   id.FirstName,
-			Lastname:    id.LastName,
-			Email:       id.Email,
-			Mobile:      id.Mobile,
-			CreatedDate: id.CreatedDate,
-			Status:      id.Status,
+			UserID:       id.ID,
+			Firstname:    id.FirstName,
+			Lastname:     id.LastName,
+			Email:        id.Email,
+			Mobile:       id.Mobile,
+			CreatedDate:  id.CreatedDate,
+			Status:       id.Status,
 			Profileimage: id.Profileimage,
-			Roleid: &id.Roleid,
-			Configid: &id.Configid,
+			Roleid:       &id.Roleid,
+			Configid:     &id.Configid,
 		}}, nil
 }
 

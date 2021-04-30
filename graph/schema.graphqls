@@ -73,7 +73,7 @@ code:Int!
 message:String!
 userInfo:UserData1
 tenantinfo:[tenantdata]
-locationino:[location]
+locationinfo:[location]
 }
 type location {
 Locationid:Int!
