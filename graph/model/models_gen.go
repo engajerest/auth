@@ -20,11 +20,12 @@ type Login struct {
 }
 
 type LoginData struct {
-	Status     bool          `json:"status"`
-	Code       int           `json:"code"`
-	Message    string        `json:"message"`
-	UserInfo   *UserData     `json:"userInfo"`
-	Tenantinfo []*Tenantdata `json:"tenantinfo"`
+	Status      bool          `json:"status"`
+	Code        int           `json:"code"`
+	Message     string        `json:"message"`
+	UserInfo    *UserData1    `json:"userInfo"`
+	Tenantinfo  []*Tenantdata `json:"tenantinfo"`
+	Locationino []*Location   `json:"locationino"`
 }
 
 type NewUser struct {
@@ -79,19 +80,54 @@ type UserData struct {
 	Status         string  `json:"Status"`
 }
 
+type UserData1 struct {
+	UserID         int     `json:"UserId"`
+	Firstname      string  `json:"Firstname"`
+	Lastname       string  `json:"Lastname"`
+	Email          string  `json:"Email"`
+	Mobile         string  `json:"Mobile"`
+	Profileimage   string  `json:"Profileimage"`
+	Roleid         *int    `json:"Roleid"`
+	Configid       *int    `json:"Configid"`
+	Token          string  `json:"Token"`
+	Tenantid       *int    `json:"Tenantid"`
+	Tenantname     *string `json:"Tenantname"`
+	Tenantimageurl *string `json:"Tenantimageurl"`
+	CreatedDate    string  `json:"CreatedDate"`
+	Status         string  `json:"Status"`
+}
+
+type Location struct {
+	Locationid   int    `json:"Locationid"`
+	Tenantid     int    `json:"Tenantid"`
+	Locationname string `json:"Locationname"`
+	Email        string `json:"Email"`
+	Contactno    string `json:"Contactno"`
+	Address      string `json:"Address"`
+	City         string `json:"City"`
+	State        string `json:"State"`
+	Postcode     string `json:"Postcode"`
+	Latitude     string `json:"Latitude"`
+	Longitude    string `json:"Longitude"`
+	Opentime     string `json:"Opentime"`
+	Closetime    string `json:"Closetime"`
+}
+
 type Tenantdata struct {
-	Subscriptionid int    `json:"Subscriptionid"`
-	Packageid      int    `json:"Packageid"`
-	Packagename    string `json:"Packagename"`
-	Moduleid       int    `json:"Moduleid"`
-	Modulename     string `json:"Modulename"`
-	Validitydate   string `json:"Validitydate"`
-	Validity       bool   `json:"Validity"`
-	Categoryid     int    `json:"Categoryid"`
-	Subcategoryid  int    `json:"Subcategoryid"`
-	Iconurl        string `json:"Iconurl"`
-	Logourl        string `json:"Logourl"`
-	Paymentstatus  bool   `json:"Paymentstatus"`
+	Subscriptionid       int    `json:"Subscriptionid"`
+	Packageid            int    `json:"Packageid"`
+	Packagename          string `json:"Packagename"`
+	Moduleid             int    `json:"Moduleid"`
+	Modulename           string `json:"Modulename"`
+	Validitydate         string `json:"Validitydate"`
+	Validity             bool   `json:"Validity"`
+	Categoryid           int    `json:"Categoryid"`
+	Subcategoryid        int    `json:"Subcategoryid"`
+	Iconurl              string `json:"Iconurl"`
+	Logourl              string `json:"Logourl"`
+	Paymentstatus        bool   `json:"Paymentstatus"`
+	Subscriptionaccid    string `json:"Subscriptionaccid"`
+	Subscriptionmethodid string `json:"Subscriptionmethodid"`
 }
 
 type Updateddata struct {

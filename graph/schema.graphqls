@@ -33,6 +33,22 @@ Closetime:String
 CreatedDate:String!
 Status:String!
 }
+type UserData1{
+UserId:Int!
+Firstname:String!
+Lastname:String!
+Email:String!
+Mobile:String!
+Profileimage:String!
+Roleid:Int
+Configid:Int
+Token:String!
+Tenantid:Int
+Tenantname:String
+Tenantimageurl:String
+CreatedDate:String!
+Status:String!
+}
 type tenantdata{
   Subscriptionid:Int!
   Packageid:Int!
@@ -46,6 +62,8 @@ type tenantdata{
  Iconurl:String!
  Logourl:String!
  Paymentstatus:Boolean!
+ Subscriptionaccid:String!
+ Subscriptionmethodid:String!
 
 }
 
@@ -53,8 +71,24 @@ type LoginData{
 status:Boolean!
 code:Int!
 message:String!
-userInfo:UserData
+userInfo:UserData1
 tenantinfo:[tenantdata]
+locationino:[location]
+}
+type location {
+Locationid:Int!
+Tenantid:Int!
+Locationname:String!
+Email:String!
+Contactno:String!
+Address:String!
+City:String!
+State:String!
+Postcode:String!
+Latitude:String!
+Longitude:String!
+Opentime:String!
+Closetime:String!
 }
 type UserCreatedData{
 status:Boolean!

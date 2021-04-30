@@ -89,6 +89,8 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 	var user users.User
 	var tenantlist []*model.Tenantdata
 	var t []users.Tenant
+	var loc []users.Location
+	var loclist []*model.Location
 	user.FirstName = input.Username
 	user.Password = input.Password
 	if input.Password != "" {
@@ -132,8 +134,14 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 				tenantlist = append(tenantlist, &model.Tenantdata{Subscriptionid: k.Subscriptionid,
 					Packageid: k.Packageid, Packagename: k.Packagename, Moduleid: k.Moduleid, Validitydate: k.Validiydate,
 					Validity: k.Validity, Categoryid: k.Categoryid, Subcategoryid: k.Subcategoryid,
-					Paymentstatus: k.Paymentstatus, Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
+					Subscriptionaccid: k.Subscriptionaccid, Subscriptionmethodid: k.Subscriptionmethodid, Paymentstatus: k.Paymentstatus, Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
 			}
+		}
+		loc = users.Locationresponse(user.Referenceid)
+		for _, n := range loc {
+			loclist = append(loclist, &model.Location{Locationid: n.LocationId, Tenantid: n.Tenantid, Locationname: n.Locationname,
+				Email: n.Email, Contactno: n.Contactno, Address: n.Address, City: n.City, State: n.State, Postcode: n.Postcode,
+				Latitude: n.Latitude, Longitude: n.Longitude, Opentime: n.Opentime, Closetime: n.Closetime})
 		}
 
 	} else {
@@ -144,25 +152,25 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 		Status:  true,
 		Code:    http.StatusOK,
 		Message: "Success",
-		UserInfo: &model.UserData{
-			UserID:         user.ID,
-			Tenantid:       &user.Referenceid,
-			Locationid:     &user.LocationId,
-			Firstname:      user.FirstName,
-			Lastname:       user.LastName,
-			Email:          user.Email,
-			Mobile:         user.Mobile,
-			Token:          token,
-			Opentime:       &user.Opentime,
-			Closetime:      &user.Closetime,
+		UserInfo: &model.UserData1{
+			UserID:   user.ID,
+			Tenantid: &user.Referenceid,
+
+			Firstname: user.FirstName,
+			Lastname:  user.LastName,
+			Email:     user.Email,
+			Mobile:    user.Mobile,
+			Token:     token,
+
 			CreatedDate:    user.CreatedDate,
 			Status:         user.Status,
 			Roleid:         &user.Roleid,
 			Configid:       &user.Configid,
 			Tenantname:     &user.Tenantname,
 			Tenantimageurl: &user.Tenantimage,
-			Profileimage: user.Profileimage,
-		}, Tenantinfo: tenantlist}, nil
+			Profileimage:   user.Profileimage,
+		}, Tenantinfo: tenantlist, Locationino: loclist,
+	}, nil
 }
 
 func (r *mutationResolver) ResetPassword(ctx context.Context, input model.Reset) (string, error) {
@@ -220,7 +228,7 @@ func (r *mutationResolver) Updateuser(ctx context.Context, input *model.Userupda
 	d.FirstName = input.Firstname
 	d.LastName = input.Lastname
 	d.Email = input.Email
-	d.Profileimage=input.Profileimage
+	d.Profileimage = input.Profileimage
 	d.Mobile = input.Contactno
 	d.ID = input.Userid
 	stat, err := d.Updateappuser()
@@ -252,7 +260,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.GetUser, error) {
 
 	userGetAll = users.GetAllUsers()
 	for _, user := range userGetAll {
-		userResult = append(userResult, &model.GetUser{UserID: user.ID, Firstname: user.FirstName, Lastname: user.LastName, Mobile: user.Mobile, Email: user.Email, Profileimage:user.Profileimage,Created: user.CreatedDate, Status: user.Status})
+		userResult = append(userResult, &model.GetUser{UserID: user.ID, Firstname: user.FirstName, Lastname: user.LastName, Mobile: user.Mobile, Email: user.Email, Profileimage: user.Profileimage, Created: user.CreatedDate, Status: user.Status})
 	}
 	return userResult, nil
 }
@@ -276,9 +284,9 @@ func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
 		Status:  true,
 		Code:    http.StatusOK,
 		Message: "Success",
-		UserInfo: &model.UserData{
+		UserInfo: &model.UserData1{
 			UserID:      id.ID,
-			Firstname:   id.FirstName,
+			Firstname:   id.Profileimage,
 			Lastname:    id.LastName,
 			Email:       id.Email,
 			Mobile:      id.Mobile,
