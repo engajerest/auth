@@ -134,7 +134,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 				tenantlist = append(tenantlist, &model.Tenantdata{Subscriptionid: k.Subscriptionid,
 					Packageid: k.Packageid, Packagename: k.Packagename, Moduleid: k.Moduleid, Validitydate: k.Validiydate,
 					Validity: k.Validity, Categoryid: k.Categoryid, Subcategoryid: k.Subcategoryid,
-					Subscriptionaccid: k.Subscriptionaccid, Subscriptionmethodid: k.Subscriptionmethodid, Paymentstatus: k.Paymentstatus, Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
+				Taxamount: k.Taxamount,Totalamount: k.Totalamount,	Subscriptionaccid: k.Subscriptionaccid, Subscriptionmethodid: k.Subscriptionmethodid, Paymentstatus: k.Paymentstatus, Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
 			}
 		}
 		loc = users.Locationresponse(user.Referenceid)
@@ -156,12 +156,11 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			UserID:   user.ID,
 			Tenantid: &user.Referenceid,
 
-			Firstname: user.FirstName,
-			Lastname:  user.LastName,
-			Email:     user.Email,
-			Mobile:    user.Mobile,
-			Token:     token,
-
+			Firstname:      user.FirstName,
+			Lastname:       user.LastName,
+			Email:          user.Email,
+			Mobile:         user.Mobile,
+			Token:          token,
 			CreatedDate:    user.CreatedDate,
 			Status:         user.Status,
 			Roleid:         &user.Roleid,
@@ -169,6 +168,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			Tenantname:     &user.Tenantname,
 			Tenantimageurl: &user.Tenantimage,
 			Profileimage:   user.Profileimage,
+			Tenantaccid: user.Tenantaccid,
 		}, Tenantinfo: tenantlist, Locationinfo: loclist,
 	}, nil
 }

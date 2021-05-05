@@ -22,6 +22,7 @@ type User struct {
 	Opentime     string `json:"opentime"`
 	Closetime    string `json:"closetime"`
 	From         string `json:"from"`
+	Tenantaccid string `json:"tenantaccid"`
 }
 type Tenant struct {
 	Subscriptionid int    `json:"subscriptonid"`
@@ -38,6 +39,8 @@ type Tenant struct {
 	Paymentstatus  bool   `json:"paymentstatus"`
 	Subscriptionmethodid string `json:"subscriptionmethodid"`
 	Subscriptionaccid string `json:"subscriptionaccid"`
+	Taxamount float64 `json:"taxamount"`
+	Totalamount float64 `json:"totalamount"`
 }
 type Location struct {
 	LocationId   int    `json:"locationid"`

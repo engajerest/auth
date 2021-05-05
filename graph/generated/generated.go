@@ -118,6 +118,7 @@ type ComplexityRoot struct {
 		Profileimage   func(childComplexity int) int
 		Roleid         func(childComplexity int) int
 		Status         func(childComplexity int) int
+		Tenantaccid    func(childComplexity int) int
 		Tenantid       func(childComplexity int) int
 		Tenantimageurl func(childComplexity int) int
 		Tenantname     func(childComplexity int) int
@@ -154,6 +155,8 @@ type ComplexityRoot struct {
 		Subscriptionaccid    func(childComplexity int) int
 		Subscriptionid       func(childComplexity int) int
 		Subscriptionmethodid func(childComplexity int) int
+		Taxamount            func(childComplexity int) int
+		Totalamount          func(childComplexity int) int
 		Validity             func(childComplexity int) int
 		Validitydate         func(childComplexity int) int
 	}
@@ -588,6 +591,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserData1.Status(childComplexity), true
 
+	case "UserData1.Tenantaccid":
+		if e.complexity.UserData1.Tenantaccid == nil {
+			break
+		}
+
+		return e.complexity.UserData1.Tenantaccid(childComplexity), true
+
 	case "UserData1.Tenantid":
 		if e.complexity.UserData1.Tenantid == nil {
 			break
@@ -798,6 +808,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Tenantdata.Subscriptionmethodid(childComplexity), true
 
+	case "tenantdata.Taxamount":
+		if e.complexity.Tenantdata.Taxamount == nil {
+			break
+		}
+
+		return e.complexity.Tenantdata.Taxamount(childComplexity), true
+
+	case "tenantdata.Totalamount":
+		if e.complexity.Tenantdata.Totalamount == nil {
+			break
+		}
+
+		return e.complexity.Tenantdata.Totalamount(childComplexity), true
+
 	case "tenantdata.Validity":
 		if e.complexity.Tenantdata.Validity == nil {
 			break
@@ -945,6 +969,7 @@ Token:String!
 Tenantid:Int
 Tenantname:String
 Tenantimageurl:String
+Tenantaccid:String!
 CreatedDate:String!
 Status:String!
 }
@@ -963,6 +988,8 @@ type tenantdata{
  Paymentstatus:Boolean!
  Subscriptionaccid:String!
  Subscriptionmethodid:String!
+ Taxamount:Float!
+ Totalamount:Float!
 
 }
 
@@ -3187,6 +3214,41 @@ func (ec *executionContext) _UserData1_Tenantimageurl(ctx context.Context, field
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _UserData1_Tenantaccid(ctx context.Context, field graphql.CollectedField, obj *model.UserData1) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "UserData1",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tenantaccid, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _UserData1_CreatedDate(ctx context.Context, field graphql.CollectedField, obj *model.UserData1) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -5285,6 +5347,76 @@ func (ec *executionContext) _tenantdata_Subscriptionmethodid(ctx context.Context
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _tenantdata_Taxamount(ctx context.Context, field graphql.CollectedField, obj *model.Tenantdata) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "tenantdata",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Taxamount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _tenantdata_Totalamount(ctx context.Context, field graphql.CollectedField, obj *model.Tenantdata) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "tenantdata",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Totalamount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _updateddata_status(ctx context.Context, field graphql.CollectedField, obj *model.Updateddata) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -6040,6 +6172,11 @@ func (ec *executionContext) _UserData1(ctx context.Context, sel ast.SelectionSet
 			out.Values[i] = ec._UserData1_Tenantname(ctx, field, obj)
 		case "Tenantimageurl":
 			out.Values[i] = ec._UserData1_Tenantimageurl(ctx, field, obj)
+		case "Tenantaccid":
+			out.Values[i] = ec._UserData1_Tenantaccid(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "CreatedDate":
 			out.Values[i] = ec._UserData1_CreatedDate(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -6470,6 +6607,16 @@ func (ec *executionContext) _tenantdata(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "Taxamount":
+			out.Values[i] = ec._tenantdata_Taxamount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Totalamount":
+			out.Values[i] = ec._tenantdata_Totalamount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6529,6 +6676,21 @@ func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interf
 
 func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.SelectionSet, v bool) graphql.Marshaler {
 	res := graphql.MarshalBoolean(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v interface{}) (float64, error) {
+	res, err := graphql.UnmarshalFloat(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
+	res := graphql.MarshalFloat(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")

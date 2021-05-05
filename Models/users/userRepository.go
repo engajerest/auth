@@ -33,8 +33,8 @@ const (
 	getCustomerByid            = "SELECT customerid,firstname,lastname,contactno,email,IFNULL(configid,0) AS configid  FROM customers WHERE customerid=?"
 	updateappuser              = "UPDATE app_users SET authname=? , contactno=? WHERE userid=?"
 	updateuserprofile          = "UPDATE app_userprofiles SET firstname=?,lastname=?,email=?,contactno=?,profileimage=? WHERE userid=?"
-	loginuserresponse          = "SELECT a.userid,a.authname,a.contactno,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(b.profileimage,'') AS profileimage,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname,IFNULL(c.tenantimage,'') AS tenantimage FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid  WHERE   a.userid=?"
-	logintenantresponse        = "SELECT a.subscriptionid,a.packageid,a.moduleid,a.categoryid,a.subcategoryid,IFNULL(a.validitydate,'') AS validitydate,IF(a.validitydate>=DATE(NOW()), true, false) AS validity,a.paymentstatus,IFNULL(a.subscriptionaccid,'') AS subscriptionaccid,IFNULL(a.subscriptionmethodid,'') AS subscriptionmethodid,b.modulename,IFNULL(b.logourl,'') AS logourl,IFNULL(b.iconurl,'') AS iconurl FROM tenantsubscription a,app_module b WHERE a.moduleid=b.moduleid  AND  tenantid=? ORDER BY a.subscriptionid ASC "
+	loginuserresponse          = "SELECT a.userid,a.authname,a.contactno,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(b.profileimage,'') AS profileimage,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(c.tenantaccid,'') AS tenantaccid FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid  WHERE   a.userid=?"
+	logintenantresponse        = "SELECT a.subscriptionid,a.packageid,a.moduleid,a.categoryid,a.subcategoryid,IFNULL(a.validitydate,'') AS validitydate,IF(a.validitydate>=DATE(NOW()), true, false) AS validity,a.paymentstatus,a.taxamount,a.totalamount,IFNULL(a.subscriptionaccid,'') AS subscriptionaccid,IFNULL(a.subscriptionmethodid,'') AS subscriptionmethodid,b.modulename,IFNULL(b.logourl,'') AS logourl,IFNULL(b.iconurl,'') AS iconurl FROM tenantsubscription a,app_module b WHERE a.moduleid=b.moduleid  AND  tenantid=? ORDER BY a.subscriptionid ASC "
 	loginlocationresponse      = "SELECT locationid,tenantid,locationname,email,contactno,address,city,state,postcode,IFNULL(latitude,'') AS latitude,IFNULL(longitude,'') AS longitude,IFNULL(opentime,'') AS opentime,IFNULL(closetime,'') AS closetime  FROM tenantlocations  WHERE tenantid=?"
 )
 
@@ -256,7 +256,7 @@ func Tenantresponse(userid int) []Tenant {
 	var list []Tenant
 	for rows.Next() {
 		var t Tenant
-		err := rows.Scan(&t.Subscriptionid, &t.Packageid, &t.Moduleid, &t.Categoryid, &t.Subcategoryid, &t.Validiydate, &t.Validity, &t.Paymentstatus,&t.Subscriptionaccid,&t.Subscriptionmethodid, &t.Modulename, &t.Logourl, &t.Iconurl)
+		err := rows.Scan(&t.Subscriptionid, &t.Packageid, &t.Moduleid, &t.Categoryid, &t.Subcategoryid, &t.Validiydate, &t.Validity, &t.Paymentstatus,&t.Taxamount,&t.Totalamount,&t.Subscriptionaccid,&t.Subscriptionmethodid, &t.Modulename, &t.Logourl, &t.Iconurl)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -344,7 +344,8 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	row := stmt.QueryRow(id)
 	// print(row)
 	err = row.Scan(&data.ID, &data.Email, &data.Mobile, &data.Roleid, &data.Configid, &data.Status,
-		&data.CreatedDate, &data.FirstName, &data.LastName, &data.Profileimage, &data.Referenceid, &data.Tenantname, &data.Tenantimage)
+		&data.CreatedDate, &data.FirstName, &data.LastName, &data.Profileimage, &data.Referenceid, &data.Tenantname, &data.Tenantimage,
+	&data.Tenantaccid)
 	print(err)
 	fmt.Println("2")
 	if err != nil {

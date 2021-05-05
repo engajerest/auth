@@ -93,6 +93,7 @@ type UserData1 struct {
 	Tenantid       *int    `json:"Tenantid"`
 	Tenantname     *string `json:"Tenantname"`
 	Tenantimageurl *string `json:"Tenantimageurl"`
+	Tenantaccid    string  `json:"Tenantaccid"`
 	CreatedDate    string  `json:"CreatedDate"`
 	Status         string  `json:"Status"`
 }
@@ -114,20 +115,22 @@ type Location struct {
 }
 
 type Tenantdata struct {
-	Subscriptionid       int    `json:"Subscriptionid"`
-	Packageid            int    `json:"Packageid"`
-	Packagename          string `json:"Packagename"`
-	Moduleid             int    `json:"Moduleid"`
-	Modulename           string `json:"Modulename"`
-	Validitydate         string `json:"Validitydate"`
-	Validity             bool   `json:"Validity"`
-	Categoryid           int    `json:"Categoryid"`
-	Subcategoryid        int    `json:"Subcategoryid"`
-	Iconurl              string `json:"Iconurl"`
-	Logourl              string `json:"Logourl"`
-	Paymentstatus        bool   `json:"Paymentstatus"`
-	Subscriptionaccid    string `json:"Subscriptionaccid"`
-	Subscriptionmethodid string `json:"Subscriptionmethodid"`
+	Subscriptionid       int     `json:"Subscriptionid"`
+	Packageid            int     `json:"Packageid"`
+	Packagename          string  `json:"Packagename"`
+	Moduleid             int     `json:"Moduleid"`
+	Modulename           string  `json:"Modulename"`
+	Validitydate         string  `json:"Validitydate"`
+	Validity             bool    `json:"Validity"`
+	Categoryid           int     `json:"Categoryid"`
+	Subcategoryid        int     `json:"Subcategoryid"`
+	Iconurl              string  `json:"Iconurl"`
+	Logourl              string  `json:"Logourl"`
+	Paymentstatus        bool    `json:"Paymentstatus"`
+	Subscriptionaccid    string  `json:"Subscriptionaccid"`
+	Subscriptionmethodid string  `json:"Subscriptionmethodid"`
+	Taxamount            float64 `json:"Taxamount"`
+	Totalamount          float64 `json:"Totalamount"`
 }
 
 type Updateddata struct {

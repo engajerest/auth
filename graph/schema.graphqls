@@ -46,6 +46,7 @@ Token:String!
 Tenantid:Int
 Tenantname:String
 Tenantimageurl:String
+Tenantaccid:String!
 CreatedDate:String!
 Status:String!
 }
@@ -64,6 +65,8 @@ type tenantdata{
  Paymentstatus:Boolean!
  Subscriptionaccid:String!
  Subscriptionmethodid:String!
+ Taxamount:Float!
+ Totalamount:Float!
 
 }
 
