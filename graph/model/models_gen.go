@@ -94,6 +94,10 @@ type UserData1 struct {
 	Tenantname     *string `json:"Tenantname"`
 	Tenantimageurl *string `json:"Tenantimageurl"`
 	Tenantaccid    string  `json:"Tenantaccid"`
+	Countrycode    string  `json:"Countrycode"`
+	Currencyid     int     `json:"Currencyid"`
+	Currencycode   string  `json:"Currencycode"`
+	Currencysymbol string  `json:"Currencysymbol"`
 	CreatedDate    string  `json:"CreatedDate"`
 	Status         string  `json:"Status"`
 }

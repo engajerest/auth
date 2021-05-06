@@ -23,6 +23,10 @@ type User struct {
 	Closetime    string `json:"closetime"`
 	From         string `json:"from"`
 	Tenantaccid string `json:"tenantaccid"`
+	Countrycode string `json:"countrycode"`
+	Currencyid int `json:"currencyid"`
+	Currencysymbol string `json:"currencysymbol"`
+	CurrencyCode    string               `json:"currencycode"`
 }
 type Tenant struct {
 	Subscriptionid int    `json:"subscriptonid"`

@@ -110,7 +110,11 @@ type ComplexityRoot struct {
 
 	UserData1 struct {
 		Configid       func(childComplexity int) int
+		Countrycode    func(childComplexity int) int
 		CreatedDate    func(childComplexity int) int
+		Currencycode   func(childComplexity int) int
+		Currencyid     func(childComplexity int) int
+		Currencysymbol func(childComplexity int) int
 		Email          func(childComplexity int) int
 		Firstname      func(childComplexity int) int
 		Lastname       func(childComplexity int) int
@@ -535,12 +539,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserData1.Configid(childComplexity), true
 
+	case "UserData1.Countrycode":
+		if e.complexity.UserData1.Countrycode == nil {
+			break
+		}
+
+		return e.complexity.UserData1.Countrycode(childComplexity), true
+
 	case "UserData1.CreatedDate":
 		if e.complexity.UserData1.CreatedDate == nil {
 			break
 		}
 
 		return e.complexity.UserData1.CreatedDate(childComplexity), true
+
+	case "UserData1.Currencycode":
+		if e.complexity.UserData1.Currencycode == nil {
+			break
+		}
+
+		return e.complexity.UserData1.Currencycode(childComplexity), true
+
+	case "UserData1.Currencyid":
+		if e.complexity.UserData1.Currencyid == nil {
+			break
+		}
+
+		return e.complexity.UserData1.Currencyid(childComplexity), true
+
+	case "UserData1.Currencysymbol":
+		if e.complexity.UserData1.Currencysymbol == nil {
+			break
+		}
+
+		return e.complexity.UserData1.Currencysymbol(childComplexity), true
 
 	case "UserData1.Email":
 		if e.complexity.UserData1.Email == nil {
@@ -970,6 +1002,10 @@ Tenantid:Int
 Tenantname:String
 Tenantimageurl:String
 Tenantaccid:String!
+Countrycode:String!
+Currencyid:Int!
+Currencycode:String!
+Currencysymbol:String!
 CreatedDate:String!
 Status:String!
 }
@@ -3233,6 +3269,146 @@ func (ec *executionContext) _UserData1_Tenantaccid(ctx context.Context, field gr
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.Tenantaccid, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _UserData1_Countrycode(ctx context.Context, field graphql.CollectedField, obj *model.UserData1) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "UserData1",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Countrycode, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _UserData1_Currencyid(ctx context.Context, field graphql.CollectedField, obj *model.UserData1) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "UserData1",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Currencyid, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _UserData1_Currencycode(ctx context.Context, field graphql.CollectedField, obj *model.UserData1) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "UserData1",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Currencycode, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _UserData1_Currencysymbol(ctx context.Context, field graphql.CollectedField, obj *model.UserData1) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "UserData1",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Currencysymbol, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6174,6 +6350,26 @@ func (ec *executionContext) _UserData1(ctx context.Context, sel ast.SelectionSet
 			out.Values[i] = ec._UserData1_Tenantimageurl(ctx, field, obj)
 		case "Tenantaccid":
 			out.Values[i] = ec._UserData1_Tenantaccid(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Countrycode":
+			out.Values[i] = ec._UserData1_Countrycode(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Currencyid":
+			out.Values[i] = ec._UserData1_Currencyid(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Currencycode":
+			out.Values[i] = ec._UserData1_Currencycode(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Currencysymbol":
+			out.Values[i] = ec._UserData1_Currencysymbol(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

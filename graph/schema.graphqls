@@ -47,6 +47,10 @@ Tenantid:Int
 Tenantname:String
 Tenantimageurl:String
 Tenantaccid:String!
+Countrycode:String!
+Currencyid:Int!
+Currencycode:String!
+Currencysymbol:String!
 CreatedDate:String!
 Status:String!
 }

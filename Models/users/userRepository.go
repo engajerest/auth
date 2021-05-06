@@ -33,7 +33,7 @@ const (
 	getCustomerByid            = "SELECT customerid,firstname,lastname,contactno,email,IFNULL(configid,0) AS configid  FROM customers WHERE customerid=?"
 	updateappuser              = "UPDATE app_users SET authname=? , contactno=? WHERE userid=?"
 	updateuserprofile          = "UPDATE app_userprofiles SET firstname=?,lastname=?,email=?,contactno=?,profileimage=? WHERE userid=?"
-	loginuserresponse          = "SELECT a.userid,a.authname,a.contactno,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(b.profileimage,'') AS profileimage,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(c.tenantaccid,'') AS tenantaccid FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid  WHERE   a.userid=?"
+	loginuserresponse          = "SELECT a.userid,a.authname,a.contactno,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(b.profileimage,'') AS profileimage,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(c.countrycode,'') AS countrycode,IFNULL(c.currencyid,0) AS currencyid,IFNULL(c.currencycode,'') AS currencycode,IFNULL(c.currencysymbol,'') AS currencysymbol,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(c.tenantaccid,'') AS tenantaccid FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid  WHERE   a.userid=?"
 	logintenantresponse        = "SELECT a.subscriptionid,a.packageid,a.moduleid,a.categoryid,a.subcategoryid,IFNULL(a.validitydate,'') AS validitydate,IF(a.validitydate>=DATE(NOW()), true, false) AS validity,a.paymentstatus,a.taxamount,a.totalamount,IFNULL(a.subscriptionaccid,'') AS subscriptionaccid,IFNULL(a.subscriptionmethodid,'') AS subscriptionmethodid,b.modulename,IFNULL(b.logourl,'') AS logourl,IFNULL(b.iconurl,'') AS iconurl FROM tenantsubscription a,app_module b WHERE a.moduleid=b.moduleid  AND  tenantid=? ORDER BY a.subscriptionid ASC "
 	loginlocationresponse      = "SELECT locationid,tenantid,locationname,email,contactno,address,city,state,postcode,IFNULL(latitude,'') AS latitude,IFNULL(longitude,'') AS longitude,IFNULL(opentime,'') AS opentime,IFNULL(closetime,'') AS closetime  FROM tenantlocations  WHERE tenantid=?"
 )
@@ -256,7 +256,7 @@ func Tenantresponse(userid int) []Tenant {
 	var list []Tenant
 	for rows.Next() {
 		var t Tenant
-		err := rows.Scan(&t.Subscriptionid, &t.Packageid, &t.Moduleid, &t.Categoryid, &t.Subcategoryid, &t.Validiydate, &t.Validity, &t.Paymentstatus,&t.Taxamount,&t.Totalamount,&t.Subscriptionaccid,&t.Subscriptionmethodid, &t.Modulename, &t.Logourl, &t.Iconurl)
+		err := rows.Scan(&t.Subscriptionid, &t.Packageid, &t.Moduleid, &t.Categoryid, &t.Subcategoryid, &t.Validiydate, &t.Validity, &t.Paymentstatus, &t.Taxamount, &t.Totalamount, &t.Subscriptionaccid, &t.Subscriptionmethodid, &t.Modulename, &t.Logourl, &t.Iconurl)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -281,8 +281,8 @@ func Locationresponse(userid int) []Location {
 	var list []Location
 	for rows.Next() {
 		var t Location
-		err := rows.Scan(&t.LocationId,&t.Tenantid,&t.Locationname,&t.Email,&t.Contactno,&t.Address,&t.City,
-		&t.State,&t.Postcode,&t.Latitude,&t.Longitude,&t.Opentime,&t.Closetime)
+		err := rows.Scan(&t.LocationId, &t.Tenantid, &t.Locationname, &t.Email, &t.Contactno, &t.Address, &t.City,
+			&t.State, &t.Postcode, &t.Latitude, &t.Longitude, &t.Opentime, &t.Closetime)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -344,8 +344,9 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	row := stmt.QueryRow(id)
 	// print(row)
 	err = row.Scan(&data.ID, &data.Email, &data.Mobile, &data.Roleid, &data.Configid, &data.Status,
-		&data.CreatedDate, &data.FirstName, &data.LastName, &data.Profileimage, &data.Referenceid, &data.Tenantname, &data.Tenantimage,
-	&data.Tenantaccid)
+		&data.CreatedDate, &data.FirstName, &data.LastName, &data.Profileimage, &data.Referenceid, &data.Tenantname,
+		&data.Countrycode, &data.Currencyid, &data.CurrencyCode, &data.Currencysymbol, &data.Tenantimage,
+		&data.Tenantaccid)
 	print(err)
 	fmt.Println("2")
 	if err != nil {
@@ -373,6 +374,11 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	// user.Opentime = data.Opentime
 	user.Tenantimage = data.Tenantimage
 	user.Profileimage = data.Profileimage
+	user.Tenantaccid = data.Tenantaccid
+	user.Countrycode = data.Countrycode
+	user.CurrencyCode = data.CurrencyCode
+	user.Currencyid = data.Currencyid
+	user.Currencysymbol = data.Currencysymbol
 	print(user.ID)
 	// print(user.FirstName)
 	// print(user.LastName)
@@ -392,7 +398,7 @@ func (user *User) UserAuthentication(id int64) (*User, bool, error) {
 	}
 	defer stmt.Close()
 	row := stmt.QueryRow(id)
-	err = row.Scan(&data.ID,&data.Roleid,&data.Configid, &data.FirstName, &data.LastName, &data.Email, &data.Mobile, &data.Profileimage, &data.Status, &data.CreatedDate)
+	err = row.Scan(&data.ID, &data.Roleid, &data.Configid, &data.FirstName, &data.LastName, &data.Email, &data.Mobile, &data.Profileimage, &data.Status, &data.CreatedDate)
 	print(err)
 	if err != nil {
 		if err == sql.ErrNoRows {
