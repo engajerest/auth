@@ -89,6 +89,7 @@ Locationname:String!
 Email:String!
 Contactno:String!
 Address:String!
+Suburb:String!
 City:String!
 State:String!
 Postcode:String!

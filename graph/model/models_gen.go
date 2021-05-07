@@ -109,6 +109,7 @@ type Location struct {
 	Email        string `json:"Email"`
 	Contactno    string `json:"Contactno"`
 	Address      string `json:"Address"`
+	Suburb       string `json:"Suburb"`
 	City         string `json:"City"`
 	State        string `json:"State"`
 	Postcode     string `json:"Postcode"`

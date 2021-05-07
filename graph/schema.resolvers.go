@@ -141,7 +141,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 		for _, n := range loc {
 			loclist = append(loclist, &model.Location{Locationid: n.LocationId, Tenantid: n.Tenantid, Locationname: n.Locationname,
 				Email: n.Email, Contactno: n.Contactno, Address: n.Address, City: n.City, State: n.State, Postcode: n.Postcode,
-				Latitude: n.Latitude, Longitude: n.Longitude, Opentime: n.Opentime, Closetime: n.Closetime})
+			Suburb: n.Suburb,	Latitude: n.Latitude, Longitude: n.Longitude, Opentime: n.Opentime, Closetime: n.Closetime})
 		}
 
 	} else {
@@ -169,9 +169,9 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			Tenantimageurl: &user.Tenantimage,
 			Profileimage:   user.Profileimage,
 			Tenantaccid:    user.Tenantaccid,
-			Countrycode: user.Countrycode,
-			Currencyid: user.Currencyid,
-			Currencycode: user.CurrencyCode,
+			Countrycode:    user.Countrycode,
+			Currencyid:     user.Currencyid,
+			Currencycode:   user.CurrencyCode,
 			Currencysymbol: user.Currencysymbol,
 		}, Tenantinfo: tenantlist, Locationinfo: loclist,
 	}, nil

@@ -143,6 +143,7 @@ type ComplexityRoot struct {
 		Opentime     func(childComplexity int) int
 		Postcode     func(childComplexity int) int
 		State        func(childComplexity int) int
+		Suburb       func(childComplexity int) int
 		Tenantid     func(childComplexity int) int
 	}
 
@@ -749,6 +750,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Location.State(childComplexity), true
 
+	case "location.Suburb":
+		if e.complexity.Location.Suburb == nil {
+			break
+		}
+
+		return e.complexity.Location.Suburb(childComplexity), true
+
 	case "location.Tenantid":
 		if e.complexity.Location.Tenantid == nil {
 			break
@@ -1044,6 +1052,7 @@ Locationname:String!
 Email:String!
 Contactno:String!
 Address:String!
+Suburb:String!
 City:String!
 State:String!
 Postcode:String!
@@ -4788,6 +4797,41 @@ func (ec *executionContext) _location_Address(ctx context.Context, field graphql
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _location_Suburb(ctx context.Context, field graphql.CollectedField, obj *model.Location) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "location",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Suburb, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _location_City(ctx context.Context, field graphql.CollectedField, obj *model.Location) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -6673,6 +6717,11 @@ func (ec *executionContext) _location(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "Address":
 			out.Values[i] = ec._location_Address(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Suburb":
+			out.Values[i] = ec._location_Suburb(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
