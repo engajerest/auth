@@ -93,6 +93,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 	var loclist []*model.Location
 	user.FirstName = input.Username
 	user.Password = input.Password
+	user.Devicetype = input.Devicetype
 	if input.Password != "" {
 		correct := user.Authenticate()
 		if !correct {
@@ -123,8 +124,8 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 	user.InsertToken(token)
 	if user.Referenceid != 0 {
 		print("not 0")
-		if input.Tenanttoken != "" {
-			status := users.Updatetenant(input.Tenanttoken, user.Referenceid)
+		if input.Tenanttoken != "" || input.Devicetype!=""  {
+			status := users.Updatetenant(input.Tenanttoken, input.Devicetype, user.Referenceid)
 			print("tentokenupdate=", status)
 		}
 
@@ -141,7 +142,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 		for _, n := range loc {
 			loclist = append(loclist, &model.Location{Locationid: n.LocationId, Tenantid: n.Tenantid, Locationname: n.Locationname,
 				Email: n.Email, Contactno: n.Contactno, Address: n.Address, City: n.City, State: n.State, Postcode: n.Postcode,
-			Suburb: n.Suburb,	Latitude: n.Latitude, Longitude: n.Longitude, Opentime: n.Opentime, Closetime: n.Closetime})
+				Suburb: n.Suburb, Latitude: n.Latitude, Longitude: n.Longitude, Opentime: n.Opentime, Closetime: n.Closetime})
 		}
 
 	} else {
@@ -153,9 +154,9 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 		Code:    http.StatusOK,
 		Message: "Success",
 		UserInfo: &model.UserData1{
-			UserID:   user.ID,
-			Tenantid: &user.Referenceid,
-
+			UserID:         user.ID,
+			Tenantid:       &user.Referenceid,
+			Devicetype:     user.Devicetype,
 			Firstname:      user.FirstName,
 			Lastname:       user.LastName,
 			Email:          user.Email,

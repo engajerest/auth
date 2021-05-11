@@ -17,6 +17,7 @@ type Login struct {
 	Username    string `json:"username"`
 	Password    string `json:"password"`
 	Tenanttoken string `json:"tenanttoken"`
+	Devicetype  string `json:"devicetype"`
 }
 
 type LoginData struct {
@@ -100,6 +101,7 @@ type UserData1 struct {
 	Currencysymbol string  `json:"Currencysymbol"`
 	CreatedDate    string  `json:"CreatedDate"`
 	Status         string  `json:"Status"`
+	Devicetype     string  `json:"Devicetype"`
 }
 
 type Location struct {

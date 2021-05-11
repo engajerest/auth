@@ -28,12 +28,12 @@ const (
 	checkUseridinSessionQuery  = "select userid from app_session WHERE userid= ?"
 	userAuthentication         = "SELECT a.userid,a.roleid,a.configid,b.firstname,b.lastname,b.email,b.contactno,IFNULL(b.profileimage,'') AS profileimage,b.status,b.created FROM app_users a, app_userprofiles b WHERE a.userid=b.userid AND a.status ='Active' AND a.userid=?"
 	loginResponseQueryByUserid = "SELECT a.userid,b.firstname,b.lastname,b.contactno,b.email,IFNULL(b.userlocationid,0) AS userlocationid,b.status,b.created, IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(d.packageid,0) AS packageid, IFNULL(d.moduleid,0) AS moduleid, IFNULL(e.modulename,'') AS modulename, IFNULL(f.opentime,'') AS opentime,IFNULL(f.closetime,'') AS closetime  FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantsubscription d ON c.tenantid=d.tenantid LEFT OUTER JOIN app_module e ON d.moduleid=e.moduleid  LEFT OUTER JOIN tenantlocations f ON c.tenantid=f.tenantid WHERE a.userid=?"
-	updateenanttoken           = "UPDATE tenants SET tenanttoken=? WHERE tenantid=?"
+	updateenanttoken           = "UPDATE tenants SET tenanttoken=?,devicetype=? WHERE tenantid=?"
 	checkauthname              = "SELECT userid,IFNULL(configid,0) AS configid FROM app_users WHERE authname= ? OR contactno=?"
 	getCustomerByid            = "SELECT customerid,firstname,lastname,contactno,email,IFNULL(configid,0) AS configid  FROM customers WHERE customerid=?"
 	updateappuser              = "UPDATE app_users SET authname=? , contactno=? WHERE userid=?"
 	updateuserprofile          = "UPDATE app_userprofiles SET firstname=?,lastname=?,email=?,contactno=?,profileimage=? WHERE userid=?"
-	loginuserresponse          = "SELECT a.userid,a.authname,a.contactno,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(b.profileimage,'') AS profileimage,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(c.countrycode,'') AS countrycode,IFNULL(c.currencyid,0) AS currencyid,IFNULL(c.currencycode,'') AS currencycode,IFNULL(c.currencysymbol,'') AS currencysymbol,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(c.tenantaccid,'') AS tenantaccid FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid  WHERE   a.userid=?"
+	loginuserresponse          = "SELECT a.userid,a.authname,a.contactno,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(b.profileimage,'') AS profileimage,IFNULL(c.devicetype,'') AS devicetype,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(c.countrycode,'') AS countrycode,IFNULL(c.currencyid,0) AS currencyid,IFNULL(c.currencycode,'') AS currencycode,IFNULL(c.currencysymbol,'') AS currencysymbol,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(c.tenantaccid,'') AS tenantaccid FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid  WHERE   a.userid=?"
 	logintenantresponse        = "SELECT a.subscriptionid,a.packageid,a.moduleid,a.categoryid,a.subcategoryid,IFNULL(a.validitydate,'') AS validitydate,IF(a.validitydate>=DATE(NOW()), true, false) AS validity,a.paymentstatus,a.taxamount,a.totalamount,IFNULL(a.subscriptionaccid,'') AS subscriptionaccid,IFNULL(a.subscriptionmethodid,'') AS subscriptionmethodid,b.modulename,IFNULL(b.logourl,'') AS logourl,IFNULL(b.iconurl,'') AS iconurl FROM tenantsubscription a,app_module b WHERE a.moduleid=b.moduleid  AND  tenantid=? ORDER BY a.subscriptionid ASC "
 	loginlocationresponse      = "SELECT locationid,tenantid,locationname,email,contactno,address,IFNULL(suburb,'') AS suburb,city,state,postcode,IFNULL(latitude,'') AS latitude,IFNULL(longitude,'') AS longitude,IFNULL(opentime,'') AS opentime,IFNULL(closetime,'') AS closetime  FROM tenantlocations  WHERE tenantid=?"
 )
@@ -344,7 +344,7 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	row := stmt.QueryRow(id)
 	// print(row)
 	err = row.Scan(&data.ID, &data.Email, &data.Mobile, &data.Roleid, &data.Configid, &data.Status,
-		&data.CreatedDate, &data.FirstName, &data.LastName, &data.Profileimage, &data.Referenceid, &data.Tenantname,
+		&data.CreatedDate, &data.FirstName, &data.LastName, &data.Profileimage,&data.Devicetype, &data.Referenceid, &data.Tenantname,
 		&data.Countrycode, &data.Currencyid, &data.CurrencyCode, &data.Currencysymbol, &data.Tenantimage,
 		&data.Tenantaccid)
 	print(err)
@@ -379,6 +379,7 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	user.CurrencyCode = data.CurrencyCode
 	user.Currencyid = data.Currencyid
 	user.Currencysymbol = data.Currencysymbol
+	user.Devicetype=data.Devicetype
 	print(user.ID)
 	// print(user.FirstName)
 	// print(user.LastName)
@@ -538,13 +539,13 @@ func (user *User) RetrieveToken(c *gin.Context) bool {
 	}
 	return true
 }
-func Updatetenant(token string, tenantid int) bool {
+func Updatetenant(token,devicetype string, tenantid int) bool {
 	stmt, err := database.Db.Prepare(updateenanttoken)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	_, err = stmt.Exec(token, tenantid)
+	_, err = stmt.Exec(token,devicetype, tenantid)
 	if err != nil {
 		log.Fatal(err)
 	}

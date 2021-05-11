@@ -53,6 +53,7 @@ Currencycode:String!
 Currencysymbol:String!
 CreatedDate:String!
 Status:String!
+Devicetype:String!
 }
 type tenantdata{
   Subscriptionid:Int!
@@ -122,6 +123,7 @@ input Login {
 username: String!
 password: String!
 tenanttoken:String!
+devicetype:String!
 }
 input Reset {
  password: String!
