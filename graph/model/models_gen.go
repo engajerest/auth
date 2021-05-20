@@ -3,14 +3,17 @@
 package model
 
 type GetUser struct {
-	UserID       int    `json:"UserId"`
-	Firstname    string `json:"firstname"`
-	Lastname     string `json:"lastname"`
-	Mobile       string `json:"mobile"`
-	Email        string `json:"email"`
-	Profileimage string `json:"Profileimage"`
-	Created      string `json:"created"`
-	Status       string `json:"status"`
+	Userid         int    `json:"Userid"`
+	Firstname      string `json:"Firstname"`
+	Lastname       string `json:"Lastname"`
+	Mobile         string `json:"Mobile"`
+	Email          string `json:"Email"`
+	Profileimage   string `json:"Profileimage"`
+	Currencysymbol string `json:"Currencysymbol"`
+	Currencycode   string `json:"Currencycode"`
+	Countrycode    string `json:"Countrycode"`
+	Created        string `json:"Created"`
+	Status         string `json:"Status"`
 }
 
 type Login struct {
@@ -30,15 +33,18 @@ type LoginData struct {
 }
 
 type NewUser struct {
-	Firstname   string `json:"firstname"`
-	Lastname    string `json:"lastname"`
-	Email       string `json:"email"`
-	Password    string `json:"password"`
-	Mobile      string `json:"Mobile"`
-	Roleid      int    `json:"roleid"`
-	Referenceid int    `json:"referenceid"`
-	Locationid  int    `json:"locationid"`
-	Configid    int    `json:"configid"`
+	Firstname      string `json:"firstname"`
+	Lastname       string `json:"lastname"`
+	Email          string `json:"email"`
+	Password       string `json:"password"`
+	Mobile         string `json:"Mobile"`
+	Roleid         int    `json:"roleid"`
+	Referenceid    int    `json:"referenceid"`
+	Locationid     int    `json:"locationid"`
+	Configid       int    `json:"configid"`
+	Countrycode    string `json:"countrycode"`
+	Currencycode   string `json:"currencycode"`
+	Currencysymbol string `json:"currencysymbol"`
 }
 
 type RefreshTokenInput struct {
@@ -68,6 +74,9 @@ type UserData struct {
 	Email          string  `json:"Email"`
 	Mobile         string  `json:"Mobile"`
 	Profileimage   string  `json:"Profileimage"`
+	Currencysymbol string  `json:"Currencysymbol"`
+	Currencycode   string  `json:"Currencycode"`
+	Countrycode    string  `json:"Countrycode"`
 	Roleid         *int    `json:"Roleid"`
 	Configid       *int    `json:"Configid"`
 	Token          string  `json:"Token"`
@@ -82,26 +91,29 @@ type UserData struct {
 }
 
 type UserData1 struct {
-	UserID         int     `json:"UserId"`
-	Firstname      string  `json:"Firstname"`
-	Lastname       string  `json:"Lastname"`
-	Email          string  `json:"Email"`
-	Mobile         string  `json:"Mobile"`
-	Profileimage   string  `json:"Profileimage"`
-	Roleid         *int    `json:"Roleid"`
-	Configid       *int    `json:"Configid"`
-	Token          string  `json:"Token"`
-	Tenantid       *int    `json:"Tenantid"`
-	Tenantname     *string `json:"Tenantname"`
-	Tenantimageurl *string `json:"Tenantimageurl"`
-	Tenantaccid    string  `json:"Tenantaccid"`
-	Countrycode    string  `json:"Countrycode"`
-	Currencyid     int     `json:"Currencyid"`
-	Currencycode   string  `json:"Currencycode"`
-	Currencysymbol string  `json:"Currencysymbol"`
-	CreatedDate    string  `json:"CreatedDate"`
-	Status         string  `json:"Status"`
-	Devicetype     string  `json:"Devicetype"`
+	UserID             int     `json:"UserId"`
+	Firstname          string  `json:"Firstname"`
+	Lastname           string  `json:"Lastname"`
+	Email              string  `json:"Email"`
+	Mobile             string  `json:"Mobile"`
+	Profileimage       string  `json:"Profileimage"`
+	Usercurrencysymbol string  `json:"Usercurrencysymbol"`
+	Usercurrencycode   string  `json:"Usercurrencycode"`
+	Usercountrycode    string  `json:"Usercountrycode"`
+	Roleid             *int    `json:"Roleid"`
+	Configid           *int    `json:"Configid"`
+	Token              string  `json:"Token"`
+	Tenantid           *int    `json:"Tenantid"`
+	Tenantname         *string `json:"Tenantname"`
+	Tenantimageurl     *string `json:"Tenantimageurl"`
+	Tenantaccid        string  `json:"Tenantaccid"`
+	Countrycode        string  `json:"Countrycode"`
+	Currencyid         int     `json:"Currencyid"`
+	Currencycode       string  `json:"Currencycode"`
+	Currencysymbol     string  `json:"Currencysymbol"`
+	CreatedDate        string  `json:"CreatedDate"`
+	Status             string  `json:"Status"`
+	Devicetype         string  `json:"Devicetype"`
 }
 
 type Location struct {

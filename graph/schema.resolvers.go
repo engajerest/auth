@@ -26,6 +26,9 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 	user.Mobile = create.Mobile
 	user.Roleid = create.Roleid
 	user.Configid = create.Configid
+	user.Countrycode=create.Countrycode
+	user.CurrencyCode=create.Currencycode
+	user.Currencysymbol=create.Currencysymbol
 	var userid int64
 	var err error
 	// user.Status = "Active"
@@ -82,6 +85,9 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 			Token:       "",
 			CreatedDate: user.CreatedDate,
 			Status:      user.Status,
+			Currencysymbol: user.Currencysymbol,
+			Currencycode: user.CurrencyCode,
+			Countrycode: user.Countrycode,
 		}}, nil
 }
 
@@ -124,7 +130,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 	user.InsertToken(token)
 	if user.Referenceid != 0 {
 		print("not 0")
-		if input.Tenanttoken != "" || input.Devicetype!=""  {
+		if input.Tenanttoken != "" || input.Devicetype != "" {
 			status := users.Updatetenant(input.Tenanttoken, input.Devicetype, user.Referenceid)
 			print("tentokenupdate=", status)
 		}
@@ -162,6 +168,9 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			Email:          user.Email,
 			Mobile:         user.Mobile,
 			Token:          token,
+			Usercurrencysymbol: user.Usercurrencysymbol,
+			Usercurrencycode: user.UsercurrencyCode,
+			Usercountrycode: user.Usercountrycode,
 			CreatedDate:    user.CreatedDate,
 			Status:         user.Status,
 			Roleid:         &user.Roleid,
@@ -265,7 +274,8 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.GetUser, error) {
 
 	userGetAll = users.GetAllUsers()
 	for _, user := range userGetAll {
-		userResult = append(userResult, &model.GetUser{UserID: user.ID, Firstname: user.FirstName, Lastname: user.LastName, Mobile: user.Mobile, Email: user.Email, Profileimage: user.Profileimage, Created: user.CreatedDate, Status: user.Status})
+		userResult = append(userResult, &model.GetUser{Userid: user.ID, Firstname: user.FirstName, Lastname: user.LastName, Mobile: user.Mobile, Email: user.Email, Profileimage: user.Profileimage,
+			Currencysymbol: user.Currencysymbol,Currencycode: user.CurrencyCode,Countrycode: user.Countrycode, Created: user.CreatedDate, Status: user.Status})
 	}
 	return userResult, nil
 }
@@ -300,6 +310,9 @@ func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
 			Profileimage: id.Profileimage,
 			Roleid:       &id.Roleid,
 			Configid:     &id.Configid,
+			Countrycode: id.Countrycode,
+			Currencycode: id.CurrencyCode,
+			Currencysymbol: id.Currencysymbol,
 		}}, nil
 }
 

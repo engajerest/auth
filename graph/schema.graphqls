@@ -5,14 +5,17 @@ id: Int!
 name: String!
 }
 type GetUser{
-UserId: Int!
-firstname: String!
-lastname:String!
-mobile:String!
-email:String!
+Userid: Int!
+Firstname: String!
+Lastname:String!
+Mobile:String!
+Email:String!
 Profileimage:String!
-created:String!
-status:String!
+Currencysymbol:String!
+Currencycode:String!
+Countrycode:String!
+Created:String!
+Status:String!
 }
 type UserData{
 UserId:Int!
@@ -21,6 +24,9 @@ Lastname:String!
 Email:String!
 Mobile:String!
 Profileimage:String!
+Currencysymbol:String!
+Currencycode:String!
+Countrycode:String!
 Roleid:Int
 Configid:Int
 Token:String!
@@ -40,6 +46,9 @@ Lastname:String!
 Email:String!
 Mobile:String!
 Profileimage:String!
+Usercurrencysymbol:String!
+Usercurrencycode:String!
+Usercountrycode:String!
 Roleid:Int
 Configid:Int
 Token:String!
@@ -118,6 +127,9 @@ roleid:Int!
 referenceid:Int!
 locationid:Int!
 configid:Int!
+countrycode:String!
+currencycode:String!
+currencysymbol:String!
 }
 input Login {
 username: String!
