@@ -35,6 +35,7 @@ type User struct {
 type Tenant struct {
 	Subscriptionid       int     `json:"subscriptonid"`
 	Moduleid             int     `json:"moduleid"`
+	Featureid int `json:"featureid"`
 	Packageid            int     `json:"packageid"`
 	Modulename           string  `json:"modulename"`
 	Iconurl              string  `json:"iconurl"`

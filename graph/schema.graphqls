@@ -69,6 +69,7 @@ type tenantdata{
   Packageid:Int!
   Packagename:String!
   Moduleid:Int!
+  Featureid:Int!
   Modulename:String!
   Validitydate:String!
   Validity:Boolean!

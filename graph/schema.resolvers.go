@@ -26,9 +26,9 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 	user.Mobile = create.Mobile
 	user.Roleid = create.Roleid
 	user.Configid = create.Configid
-	user.Countrycode=create.Countrycode
-	user.CurrencyCode=create.Currencycode
-	user.Currencysymbol=create.Currencysymbol
+	user.Countrycode = create.Countrycode
+	user.CurrencyCode = create.Currencycode
+	user.Currencysymbol = create.Currencysymbol
 	var userid int64
 	var err error
 	// user.Status = "Active"
@@ -77,17 +77,17 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 		Code:    http.StatusOK,
 		Message: "Success",
 		UserInfo: &model.UserData{
-			UserID:      user.ID,
-			Firstname:   user.FirstName,
-			Lastname:    user.LastName,
-			Email:       user.Email,
-			Mobile:      user.Mobile,
-			Token:       "",
-			CreatedDate: user.CreatedDate,
-			Status:      user.Status,
+			UserID:         user.ID,
+			Firstname:      user.FirstName,
+			Lastname:       user.LastName,
+			Email:          user.Email,
+			Mobile:         user.Mobile,
+			Token:          "",
+			CreatedDate:    user.CreatedDate,
+			Status:         user.Status,
 			Currencysymbol: user.Currencysymbol,
-			Currencycode: user.CurrencyCode,
-			Countrycode: user.Countrycode,
+			Currencycode:   user.CurrencyCode,
+			Countrycode:    user.Countrycode,
 		}}, nil
 }
 
@@ -141,7 +141,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 				tenantlist = append(tenantlist, &model.Tenantdata{Subscriptionid: k.Subscriptionid,
 					Packageid: k.Packageid, Packagename: k.Packagename, Moduleid: k.Moduleid, Validitydate: k.Validiydate,
 					Validity: k.Validity, Categoryid: k.Categoryid, Subcategoryid: k.Subcategoryid,
-					Taxamount: k.Taxamount, Totalamount: k.Totalamount, Subscriptionaccid: k.Subscriptionaccid, Subscriptionmethodid: k.Subscriptionmethodid, Paymentstatus: k.Paymentstatus, Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
+				Featureid:k.Featureid,	Taxamount: k.Taxamount, Totalamount: k.Totalamount, Subscriptionaccid: k.Subscriptionaccid, Subscriptionmethodid: k.Subscriptionmethodid, Paymentstatus: k.Paymentstatus, Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
 			}
 		}
 		loc = users.Locationresponse(user.Referenceid)
@@ -160,29 +160,29 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 		Code:    http.StatusOK,
 		Message: "Success",
 		UserInfo: &model.UserData1{
-			UserID:         user.ID,
-			Tenantid:       &user.Referenceid,
-			Devicetype:     user.Devicetype,
-			Firstname:      user.FirstName,
-			Lastname:       user.LastName,
-			Email:          user.Email,
-			Mobile:         user.Mobile,
-			Token:          token,
+			UserID:             user.ID,
+			Tenantid:           &user.Referenceid,
+			Devicetype:         user.Devicetype,
+			Firstname:          user.FirstName,
+			Lastname:           user.LastName,
+			Email:              user.Email,
+			Mobile:             user.Mobile,
+			Token:              token,
 			Usercurrencysymbol: user.Usercurrencysymbol,
-			Usercurrencycode: user.UsercurrencyCode,
-			Usercountrycode: user.Usercountrycode,
-			CreatedDate:    user.CreatedDate,
-			Status:         user.Status,
-			Roleid:         &user.Roleid,
-			Configid:       &user.Configid,
-			Tenantname:     &user.Tenantname,
-			Tenantimageurl: &user.Tenantimage,
-			Profileimage:   user.Profileimage,
-			Tenantaccid:    user.Tenantaccid,
-			Countrycode:    user.Countrycode,
-			Currencyid:     user.Currencyid,
-			Currencycode:   user.CurrencyCode,
-			Currencysymbol: user.Currencysymbol,
+			Usercurrencycode:   user.UsercurrencyCode,
+			Usercountrycode:    user.Usercountrycode,
+			CreatedDate:        user.CreatedDate,
+			Status:             user.Status,
+			Roleid:             &user.Roleid,
+			Configid:           &user.Configid,
+			Tenantname:         &user.Tenantname,
+			Tenantimageurl:     &user.Tenantimage,
+			Profileimage:       user.Profileimage,
+			Tenantaccid:        user.Tenantaccid,
+			Countrycode:        user.Countrycode,
+			Currencyid:         user.Currencyid,
+			Currencycode:       user.CurrencyCode,
+			Currencysymbol:     user.Currencysymbol,
 		}, Tenantinfo: tenantlist, Locationinfo: loclist,
 	}, nil
 }
@@ -275,7 +275,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.GetUser, error) {
 	userGetAll = users.GetAllUsers()
 	for _, user := range userGetAll {
 		userResult = append(userResult, &model.GetUser{Userid: user.ID, Firstname: user.FirstName, Lastname: user.LastName, Mobile: user.Mobile, Email: user.Email, Profileimage: user.Profileimage,
-			Currencysymbol: user.Currencysymbol,Currencycode: user.CurrencyCode,Countrycode: user.Countrycode, Created: user.CreatedDate, Status: user.Status})
+			Currencysymbol: user.Currencysymbol, Currencycode: user.CurrencyCode, Countrycode: user.Countrycode, Created: user.CreatedDate, Status: user.Status})
 	}
 	return userResult, nil
 }
@@ -300,18 +300,18 @@ func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
 		Code:    http.StatusOK,
 		Message: "Success",
 		UserInfo: &model.UserData1{
-			UserID:       id.ID,
-			Firstname:    id.FirstName,
-			Lastname:     id.LastName,
-			Email:        id.Email,
-			Mobile:       id.Mobile,
-			CreatedDate:  id.CreatedDate,
-			Status:       id.Status,
-			Profileimage: id.Profileimage,
-			Roleid:       &id.Roleid,
-			Configid:     &id.Configid,
-			Countrycode: id.Countrycode,
-			Currencycode: id.CurrencyCode,
+			UserID:         id.ID,
+			Firstname:      id.FirstName,
+			Lastname:       id.LastName,
+			Email:          id.Email,
+			Mobile:         id.Mobile,
+			CreatedDate:    id.CreatedDate,
+			Status:         id.Status,
+			Profileimage:   id.Profileimage,
+			Roleid:         &id.Roleid,
+			Configid:       &id.Configid,
+			Countrycode:    id.Countrycode,
+			Currencycode:   id.CurrencyCode,
 			Currencysymbol: id.Currencysymbol,
 		}}, nil
 }

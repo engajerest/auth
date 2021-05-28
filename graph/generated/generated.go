@@ -159,6 +159,7 @@ type ComplexityRoot struct {
 
 	Tenantdata struct {
 		Categoryid           func(childComplexity int) int
+		Featureid            func(childComplexity int) int
 		Iconurl              func(childComplexity int) int
 		Logourl              func(childComplexity int) int
 		Moduleid             func(childComplexity int) int
@@ -851,6 +852,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Tenantdata.Categoryid(childComplexity), true
 
+	case "tenantdata.Featureid":
+		if e.complexity.Tenantdata.Featureid == nil {
+			break
+		}
+
+		return e.complexity.Tenantdata.Featureid(childComplexity), true
+
 	case "tenantdata.Iconurl":
 		if e.complexity.Tenantdata.Iconurl == nil {
 			break
@@ -1112,6 +1120,7 @@ type tenantdata{
   Packageid:Int!
   Packagename:String!
   Moduleid:Int!
+  Featureid:Int!
   Modulename:String!
   Validitydate:String!
   Validity:Boolean!
@@ -5661,6 +5670,41 @@ func (ec *executionContext) _tenantdata_Moduleid(ctx context.Context, field grap
 	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _tenantdata_Featureid(ctx context.Context, field graphql.CollectedField, obj *model.Tenantdata) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "tenantdata",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Featureid, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _tenantdata_Modulename(ctx context.Context, field graphql.CollectedField, obj *model.Tenantdata) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -7325,6 +7369,11 @@ func (ec *executionContext) _tenantdata(ctx context.Context, sel ast.SelectionSe
 			}
 		case "Moduleid":
 			out.Values[i] = ec._tenantdata_Moduleid(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Featureid":
+			out.Values[i] = ec._tenantdata_Featureid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

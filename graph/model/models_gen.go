@@ -138,6 +138,7 @@ type Tenantdata struct {
 	Packageid            int     `json:"Packageid"`
 	Packagename          string  `json:"Packagename"`
 	Moduleid             int     `json:"Moduleid"`
+	Featureid            int     `json:"Featureid"`
 	Modulename           string  `json:"Modulename"`
 	Validitydate         string  `json:"Validitydate"`
 	Validity             bool    `json:"Validity"`
