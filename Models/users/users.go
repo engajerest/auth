@@ -7,7 +7,7 @@ type User struct {
 	Password           string `json:"password"`
 	Email              string `json:"email"`
 	Mobile             string `json:"mobile"`
-	Dailcode string `json:"dailcode"`
+	Dialcode string `json:"dialcode"`
 	Profileimage       string `json:"profileimage"`
 	CreatedDate        string `json:"created"`
 	Status             string `json:"status"`

@@ -7,7 +7,7 @@ type GetUser struct {
 	Firstname      string `json:"Firstname"`
 	Lastname       string `json:"Lastname"`
 	Mobile         string `json:"Mobile"`
-	Dailcode       string `json:"Dailcode"`
+	Dialcode       string `json:"Dialcode"`
 	Email          string `json:"Email"`
 	Profileimage   string `json:"Profileimage"`
 	Currencysymbol string `json:"Currencysymbol"`
@@ -39,7 +39,7 @@ type NewUser struct {
 	Email          string `json:"email"`
 	Password       string `json:"password"`
 	Mobile         string `json:"Mobile"`
-	Dailcode       string `json:"Dailcode"`
+	Dialcode       string `json:"Dialcode"`
 	Roleid         int    `json:"roleid"`
 	Referenceid    int    `json:"referenceid"`
 	Locationid     int    `json:"locationid"`
@@ -75,7 +75,7 @@ type UserData struct {
 	Lastname       string  `json:"Lastname"`
 	Email          string  `json:"Email"`
 	Mobile         string  `json:"Mobile"`
-	Dailcode       string  `json:"Dailcode"`
+	Dialcode       string  `json:"Dialcode"`
 	Profileimage   string  `json:"Profileimage"`
 	Currencysymbol string  `json:"Currencysymbol"`
 	Currencycode   string  `json:"Currencycode"`
@@ -99,7 +99,7 @@ type UserData1 struct {
 	Lastname           string  `json:"Lastname"`
 	Email              string  `json:"Email"`
 	Mobile             string  `json:"Mobile"`
-	Dailcode           string  `json:"Dailcode"`
+	Dialcode           string  `json:"Dialcode"`
 	Profileimage       string  `json:"Profileimage"`
 	Usercurrencysymbol string  `json:"Usercurrencysymbol"`
 	Usercurrencycode   string  `json:"Usercurrencycode"`
@@ -169,6 +169,6 @@ type Userupdateinput struct {
 	Lastname     string `json:"lastname"`
 	Email        string `json:"email"`
 	Contactno    string `json:"contactno"`
-	Dailcode     string `json:"dailcode"`
+	Dialcode     string `json:"dialcode"`
 	Profileimage string `json:"profileimage"`
 }

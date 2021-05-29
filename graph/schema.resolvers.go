@@ -29,7 +29,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 	user.Countrycode = create.Countrycode
 	user.CurrencyCode = create.Currencycode
 	user.Currencysymbol = create.Currencysymbol
-	user.Dailcode = create.Dailcode
+	user.Dialcode = create.Dialcode
 	var userid int64
 	var err error
 	// user.Status = "Active"
@@ -89,7 +89,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 			Currencysymbol: user.Currencysymbol,
 			Currencycode:   user.CurrencyCode,
 			Countrycode:    user.Countrycode,
-			Dailcode:       user.Dailcode,
+			Dialcode:        user.Dialcode,
 		}}, nil
 }
 
@@ -185,7 +185,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			Currencyid:         user.Currencyid,
 			Currencycode:       user.CurrencyCode,
 			Currencysymbol:     user.Currencysymbol,
-			Dailcode:           user.Dailcode,
+			Dialcode:           user.Dialcode,
 		}, Tenantinfo: tenantlist, Locationinfo: loclist,
 	}, nil
 }
@@ -248,7 +248,7 @@ func (r *mutationResolver) Updateuser(ctx context.Context, input *model.Userupda
 	d.Profileimage = input.Profileimage
 	d.Mobile = input.Contactno
 	d.ID = input.Userid
-	d.Dailcode=input.Dailcode
+	d.Dialcode = input.Dialcode
 	stat, err := d.Updateappuser()
 	if err != nil {
 		if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'authname'", d.Email) {
@@ -279,7 +279,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.GetUser, error) {
 	userGetAll = users.GetAllUsers()
 	for _, user := range userGetAll {
 		userResult = append(userResult, &model.GetUser{Userid: user.ID, Firstname: user.FirstName, Lastname: user.LastName, Mobile: user.Mobile, Email: user.Email, Profileimage: user.Profileimage,
-			Dailcode: user.Dailcode, Currencysymbol: user.Currencysymbol, Currencycode: user.CurrencyCode, Countrycode: user.Countrycode, Created: user.CreatedDate, Status: user.Status})
+			Dialcode: user.Dialcode, Currencysymbol: user.Currencysymbol, Currencycode: user.CurrencyCode, Countrycode: user.Countrycode, Created: user.CreatedDate, Status: user.Status})
 	}
 	return userResult, nil
 }
@@ -317,7 +317,7 @@ func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
 			Countrycode:    id.Countrycode,
 			Currencycode:   id.CurrencyCode,
 			Currencysymbol: id.Currencysymbol,
-			Dailcode:       id.Dailcode,
+			Dialcode:       id.Dialcode,
 		}}, nil
 }
 

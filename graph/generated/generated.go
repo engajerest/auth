@@ -48,7 +48,7 @@ type ComplexityRoot struct {
 		Created        func(childComplexity int) int
 		Currencycode   func(childComplexity int) int
 		Currencysymbol func(childComplexity int) int
-		Dailcode       func(childComplexity int) int
+		Dialcode       func(childComplexity int) int
 		Email          func(childComplexity int) int
 		Firstname      func(childComplexity int) int
 		Lastname       func(childComplexity int) int
@@ -99,7 +99,7 @@ type ComplexityRoot struct {
 		CreatedDate    func(childComplexity int) int
 		Currencycode   func(childComplexity int) int
 		Currencysymbol func(childComplexity int) int
-		Dailcode       func(childComplexity int) int
+		Dialcode       func(childComplexity int) int
 		Email          func(childComplexity int) int
 		Firstname      func(childComplexity int) int
 		Lastname       func(childComplexity int) int
@@ -123,8 +123,8 @@ type ComplexityRoot struct {
 		Currencycode       func(childComplexity int) int
 		Currencyid         func(childComplexity int) int
 		Currencysymbol     func(childComplexity int) int
-		Dailcode           func(childComplexity int) int
 		Devicetype         func(childComplexity int) int
+		Dialcode           func(childComplexity int) int
 		Email              func(childComplexity int) int
 		Firstname          func(childComplexity int) int
 		Lastname           func(childComplexity int) int
@@ -242,12 +242,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GetUser.Currencysymbol(childComplexity), true
 
-	case "GetUser.Dailcode":
-		if e.complexity.GetUser.Dailcode == nil {
+	case "GetUser.Dialcode":
+		if e.complexity.GetUser.Dialcode == nil {
 			break
 		}
 
-		return e.complexity.GetUser.Dailcode(childComplexity), true
+		return e.complexity.GetUser.Dialcode(childComplexity), true
 
 	case "GetUser.Email":
 		if e.complexity.GetUser.Email == nil {
@@ -498,12 +498,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserData.Currencysymbol(childComplexity), true
 
-	case "UserData.Dailcode":
-		if e.complexity.UserData.Dailcode == nil {
+	case "UserData.Dialcode":
+		if e.complexity.UserData.Dialcode == nil {
 			break
 		}
 
-		return e.complexity.UserData.Dailcode(childComplexity), true
+		return e.complexity.UserData.Dialcode(childComplexity), true
 
 	case "UserData.Email":
 		if e.complexity.UserData.Email == nil {
@@ -645,19 +645,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserData1.Currencysymbol(childComplexity), true
 
-	case "UserData1.Dailcode":
-		if e.complexity.UserData1.Dailcode == nil {
-			break
-		}
-
-		return e.complexity.UserData1.Dailcode(childComplexity), true
-
 	case "UserData1.Devicetype":
 		if e.complexity.UserData1.Devicetype == nil {
 			break
 		}
 
 		return e.complexity.UserData1.Devicetype(childComplexity), true
+
+	case "UserData1.Dialcode":
+		if e.complexity.UserData1.Dialcode == nil {
+			break
+		}
+
+		return e.complexity.UserData1.Dialcode(childComplexity), true
 
 	case "UserData1.Email":
 		if e.complexity.UserData1.Email == nil {
@@ -1084,7 +1084,7 @@ Userid: Int!
 Firstname: String!
 Lastname:String!
 Mobile:String!
-Dailcode:String!
+Dialcode:String!
 Email:String!
 Profileimage:String!
 Currencysymbol:String!
@@ -1099,7 +1099,7 @@ Firstname:String!
 Lastname:String!
 Email:String!
 Mobile:String!
-Dailcode:String!
+Dialcode:String!
 Profileimage:String!
 Currencysymbol:String!
 Currencycode:String!
@@ -1122,7 +1122,7 @@ Firstname:String!
 Lastname:String!
 Email:String!
 Mobile:String!
-Dailcode:String!
+Dialcode:String!
 Profileimage:String!
 Usercurrencysymbol:String!
 Usercurrencycode:String!
@@ -1202,7 +1202,7 @@ lastname:String!
 email:String!
 password: String!
 Mobile:String!
-Dailcode:String!
+Dialcode:String!
 roleid:Int!
 referenceid:Int!
 locationid:Int!
@@ -1226,7 +1226,7 @@ input userupdateinput{
   lastname:String!
   email:String!
   contactno:String!
-  dailcode:String!
+  dialcode:String!
   profileimage:String!
 
 }
@@ -1522,7 +1522,7 @@ func (ec *executionContext) _GetUser_Mobile(ctx context.Context, field graphql.C
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _GetUser_Dailcode(ctx context.Context, field graphql.CollectedField, obj *model.GetUser) (ret graphql.Marshaler) {
+func (ec *executionContext) _GetUser_Dialcode(ctx context.Context, field graphql.CollectedField, obj *model.GetUser) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1540,7 +1540,7 @@ func (ec *executionContext) _GetUser_Dailcode(ctx context.Context, field graphql
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Dailcode, nil
+		return obj.Dialcode, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2730,7 +2730,7 @@ func (ec *executionContext) _UserData_Mobile(ctx context.Context, field graphql.
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _UserData_Dailcode(ctx context.Context, field graphql.CollectedField, obj *model.UserData) (ret graphql.Marshaler) {
+func (ec *executionContext) _UserData_Dialcode(ctx context.Context, field graphql.CollectedField, obj *model.UserData) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -2748,7 +2748,7 @@ func (ec *executionContext) _UserData_Dailcode(ctx context.Context, field graphq
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Dailcode, nil
+		return obj.Dialcode, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3441,7 +3441,7 @@ func (ec *executionContext) _UserData1_Mobile(ctx context.Context, field graphql
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _UserData1_Dailcode(ctx context.Context, field graphql.CollectedField, obj *model.UserData1) (ret graphql.Marshaler) {
+func (ec *executionContext) _UserData1_Dialcode(ctx context.Context, field graphql.CollectedField, obj *model.UserData1) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -3459,7 +3459,7 @@ func (ec *executionContext) _UserData1_Dailcode(ctx context.Context, field graph
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Dailcode, nil
+		return obj.Dialcode, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6458,11 +6458,11 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 			if err != nil {
 				return it, err
 			}
-		case "Dailcode":
+		case "Dialcode":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Dailcode"))
-			it.Dailcode, err = ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Dialcode"))
+			it.Dialcode, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6614,11 +6614,11 @@ func (ec *executionContext) unmarshalInputuserupdateinput(ctx context.Context, o
 			if err != nil {
 				return it, err
 			}
-		case "dailcode":
+		case "dialcode":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dailcode"))
-			it.Dailcode, err = ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dialcode"))
+			it.Dialcode, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6675,8 +6675,8 @@ func (ec *executionContext) _GetUser(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "Dailcode":
-			out.Values[i] = ec._GetUser_Dailcode(ctx, field, obj)
+		case "Dialcode":
+			out.Values[i] = ec._GetUser_Dialcode(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -6979,8 +6979,8 @@ func (ec *executionContext) _UserData(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "Dailcode":
-			out.Values[i] = ec._UserData_Dailcode(ctx, field, obj)
+		case "Dialcode":
+			out.Values[i] = ec._UserData_Dialcode(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -7082,8 +7082,8 @@ func (ec *executionContext) _UserData1(ctx context.Context, sel ast.SelectionSet
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "Dailcode":
-			out.Values[i] = ec._UserData1_Dailcode(ctx, field, obj)
+		case "Dialcode":
+			out.Values[i] = ec._UserData1_Dialcode(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
