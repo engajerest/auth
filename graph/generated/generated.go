@@ -48,6 +48,7 @@ type ComplexityRoot struct {
 		Created        func(childComplexity int) int
 		Currencycode   func(childComplexity int) int
 		Currencysymbol func(childComplexity int) int
+		Dailcode       func(childComplexity int) int
 		Email          func(childComplexity int) int
 		Firstname      func(childComplexity int) int
 		Lastname       func(childComplexity int) int
@@ -98,6 +99,7 @@ type ComplexityRoot struct {
 		CreatedDate    func(childComplexity int) int
 		Currencycode   func(childComplexity int) int
 		Currencysymbol func(childComplexity int) int
+		Dailcode       func(childComplexity int) int
 		Email          func(childComplexity int) int
 		Firstname      func(childComplexity int) int
 		Lastname       func(childComplexity int) int
@@ -121,6 +123,7 @@ type ComplexityRoot struct {
 		Currencycode       func(childComplexity int) int
 		Currencyid         func(childComplexity int) int
 		Currencysymbol     func(childComplexity int) int
+		Dailcode           func(childComplexity int) int
 		Devicetype         func(childComplexity int) int
 		Email              func(childComplexity int) int
 		Firstname          func(childComplexity int) int
@@ -238,6 +241,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.GetUser.Currencysymbol(childComplexity), true
+
+	case "GetUser.Dailcode":
+		if e.complexity.GetUser.Dailcode == nil {
+			break
+		}
+
+		return e.complexity.GetUser.Dailcode(childComplexity), true
 
 	case "GetUser.Email":
 		if e.complexity.GetUser.Email == nil {
@@ -488,6 +498,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserData.Currencysymbol(childComplexity), true
 
+	case "UserData.Dailcode":
+		if e.complexity.UserData.Dailcode == nil {
+			break
+		}
+
+		return e.complexity.UserData.Dailcode(childComplexity), true
+
 	case "UserData.Email":
 		if e.complexity.UserData.Email == nil {
 			break
@@ -627,6 +644,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserData1.Currencysymbol(childComplexity), true
+
+	case "UserData1.Dailcode":
+		if e.complexity.UserData1.Dailcode == nil {
+			break
+		}
+
+		return e.complexity.UserData1.Dailcode(childComplexity), true
 
 	case "UserData1.Devicetype":
 		if e.complexity.UserData1.Devicetype == nil {
@@ -1060,6 +1084,7 @@ Userid: Int!
 Firstname: String!
 Lastname:String!
 Mobile:String!
+Dailcode:String!
 Email:String!
 Profileimage:String!
 Currencysymbol:String!
@@ -1074,6 +1099,7 @@ Firstname:String!
 Lastname:String!
 Email:String!
 Mobile:String!
+Dailcode:String!
 Profileimage:String!
 Currencysymbol:String!
 Currencycode:String!
@@ -1096,6 +1122,7 @@ Firstname:String!
 Lastname:String!
 Email:String!
 Mobile:String!
+Dailcode:String!
 Profileimage:String!
 Usercurrencysymbol:String!
 Usercurrencycode:String!
@@ -1175,6 +1202,7 @@ lastname:String!
 email:String!
 password: String!
 Mobile:String!
+Dailcode:String!
 roleid:Int!
 referenceid:Int!
 locationid:Int!
@@ -1198,6 +1226,7 @@ input userupdateinput{
   lastname:String!
   email:String!
   contactno:String!
+  dailcode:String!
   profileimage:String!
 
 }
@@ -1477,6 +1506,41 @@ func (ec *executionContext) _GetUser_Mobile(ctx context.Context, field graphql.C
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.Mobile, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _GetUser_Dailcode(ctx context.Context, field graphql.CollectedField, obj *model.GetUser) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "GetUser",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Dailcode, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2666,6 +2730,41 @@ func (ec *executionContext) _UserData_Mobile(ctx context.Context, field graphql.
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _UserData_Dailcode(ctx context.Context, field graphql.CollectedField, obj *model.UserData) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "UserData",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Dailcode, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _UserData_Profileimage(ctx context.Context, field graphql.CollectedField, obj *model.UserData) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3326,6 +3425,41 @@ func (ec *executionContext) _UserData1_Mobile(ctx context.Context, field graphql
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.Mobile, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _UserData1_Dailcode(ctx context.Context, field graphql.CollectedField, obj *model.UserData1) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "UserData1",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Dailcode, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6324,6 +6458,14 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 			if err != nil {
 				return it, err
 			}
+		case "Dailcode":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Dailcode"))
+			it.Dailcode, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "roleid":
 			var err error
 
@@ -6472,6 +6614,14 @@ func (ec *executionContext) unmarshalInputuserupdateinput(ctx context.Context, o
 			if err != nil {
 				return it, err
 			}
+		case "dailcode":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dailcode"))
+			it.Dailcode, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "profileimage":
 			var err error
 
@@ -6522,6 +6672,11 @@ func (ec *executionContext) _GetUser(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "Mobile":
 			out.Values[i] = ec._GetUser_Mobile(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Dailcode":
+			out.Values[i] = ec._GetUser_Dailcode(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -6824,6 +6979,11 @@ func (ec *executionContext) _UserData(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "Dailcode":
+			out.Values[i] = ec._UserData_Dailcode(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "Profileimage":
 			out.Values[i] = ec._UserData_Profileimage(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -6919,6 +7079,11 @@ func (ec *executionContext) _UserData1(ctx context.Context, sel ast.SelectionSet
 			}
 		case "Mobile":
 			out.Values[i] = ec._UserData1_Mobile(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Dailcode":
+			out.Values[i] = ec._UserData1_Dailcode(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

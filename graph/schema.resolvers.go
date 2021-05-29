@@ -29,6 +29,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 	user.Countrycode = create.Countrycode
 	user.CurrencyCode = create.Currencycode
 	user.Currencysymbol = create.Currencysymbol
+	user.Dailcode = create.Dailcode
 	var userid int64
 	var err error
 	// user.Status = "Active"
@@ -88,6 +89,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 			Currencysymbol: user.Currencysymbol,
 			Currencycode:   user.CurrencyCode,
 			Countrycode:    user.Countrycode,
+			Dailcode:       user.Dailcode,
 		}}, nil
 }
 
@@ -141,7 +143,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 				tenantlist = append(tenantlist, &model.Tenantdata{Subscriptionid: k.Subscriptionid,
 					Packageid: k.Packageid, Packagename: k.Packagename, Moduleid: k.Moduleid, Validitydate: k.Validiydate,
 					Validity: k.Validity, Categoryid: k.Categoryid, Subcategoryid: k.Subcategoryid,
-				Featureid:k.Featureid,	Taxamount: k.Taxamount, Totalamount: k.Totalamount, Subscriptionaccid: k.Subscriptionaccid, Subscriptionmethodid: k.Subscriptionmethodid, Paymentstatus: k.Paymentstatus, Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
+					Featureid: k.Featureid, Taxamount: k.Taxamount, Totalamount: k.Totalamount, Subscriptionaccid: k.Subscriptionaccid, Subscriptionmethodid: k.Subscriptionmethodid, Paymentstatus: k.Paymentstatus, Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
 			}
 		}
 		loc = users.Locationresponse(user.Referenceid)
@@ -183,6 +185,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			Currencyid:         user.Currencyid,
 			Currencycode:       user.CurrencyCode,
 			Currencysymbol:     user.Currencysymbol,
+			Dailcode:           user.Dailcode,
 		}, Tenantinfo: tenantlist, Locationinfo: loclist,
 	}, nil
 }
@@ -245,6 +248,7 @@ func (r *mutationResolver) Updateuser(ctx context.Context, input *model.Userupda
 	d.Profileimage = input.Profileimage
 	d.Mobile = input.Contactno
 	d.ID = input.Userid
+	d.Dailcode=input.Dailcode
 	stat, err := d.Updateappuser()
 	if err != nil {
 		if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'authname'", d.Email) {
@@ -275,7 +279,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.GetUser, error) {
 	userGetAll = users.GetAllUsers()
 	for _, user := range userGetAll {
 		userResult = append(userResult, &model.GetUser{Userid: user.ID, Firstname: user.FirstName, Lastname: user.LastName, Mobile: user.Mobile, Email: user.Email, Profileimage: user.Profileimage,
-			Currencysymbol: user.Currencysymbol, Currencycode: user.CurrencyCode, Countrycode: user.Countrycode, Created: user.CreatedDate, Status: user.Status})
+			Dailcode: user.Dailcode, Currencysymbol: user.Currencysymbol, Currencycode: user.CurrencyCode, Countrycode: user.Countrycode, Created: user.CreatedDate, Status: user.Status})
 	}
 	return userResult, nil
 }
@@ -313,6 +317,7 @@ func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
 			Countrycode:    id.Countrycode,
 			Currencycode:   id.CurrencyCode,
 			Currencysymbol: id.Currencysymbol,
+			Dailcode:       id.Dailcode,
 		}}, nil
 }
 

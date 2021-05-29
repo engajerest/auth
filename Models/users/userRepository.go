@@ -16,24 +16,24 @@ import (
 )
 
 const (
-	createUserQuery            = "INSERT INTO app_users (authname,password,hashsalt,contactno,roleid,configid) VALUES(?,?,?,?,?,?)"
-	createUsernopassword       = "INSERT INTO app_users (authname,contactno,roleid,configid) VALUES(?,?,?,?)"
-	insertUsertoProfileQuery   = "INSERT INTO app_userprofiles (userid,firstname,lastname,email,contactno,countrycode,currencycode,currencysymbol) VALUES(?,?,?,?,?,?,?,?)"
+	createUserQuery            = "INSERT INTO app_users (authname,password,hashsalt,contactno,dailcode,roleid,configid) VALUES(?,?,?,?,?,?,?)"
+	createUsernopassword       = "INSERT INTO app_users (authname,contactno,dailcode,roleid,configid) VALUES(?,?,?,?,?)"
+	insertUsertoProfileQuery   = "INSERT INTO app_userprofiles (userid,firstname,lastname,email,contactno,dailcode,countrycode,currencycode,currencysymbol) VALUES(?,?,?,?,?,?,?,?,?)"
 	getUseridByNameQuery       = "select user_id, email, mobile,status,created_date from engaje_users WHERE user_name = ?"
 	authenticationQuery        = "SELECT userid,password,hashsalt,IFNULL(configid,0) AS configid FROM app_users WHERE authname=? OR contactno=? AND password=? "
-	usersGetAllQuery           = "select userid, firstname,lastname, contactno,email,IFNULL(profileimage,'') AS profileimage,IFNULL(countrycode,'') AS countrycode,IFNULL(currencycode,'') AS currencycode,IFNULL(currencysymbol,'') AS currencysymbol, status,created from app_userprofiles"
-	getUserByidQuery           = "select userid, firstname,lastname,contactno,email,IFNULL(countrycode,'') AS countrycode,IFNULL(currencycode,'') AS currencycode,IFNULL(currencysymbol,'') AS currencysymbol,status,created from app_userprofiles WHERE userid=?"
+	usersGetAllQuery           = "select userid, firstname,lastname, contactno,dailcode,email,IFNULL(profileimage,'') AS profileimage,IFNULL(countrycode,'') AS countrycode,IFNULL(currencycode,'') AS currencycode,IFNULL(currencysymbol,'') AS currencysymbol, status,created from app_userprofiles"
+	getUserByidQuery           = "select userid, firstname,lastname,contactno,dailcode,email,IFNULL(countrycode,'') AS countrycode,IFNULL(currencycode,'') AS currencycode,IFNULL(currencysymbol,'') AS currencysymbol,status,created from app_userprofiles WHERE userid=?"
 	resetPasswordQuery         = "UPDATE app_users SET password=? ,hashsalt=?  WHERE userid = ?"
 	insertTokentoSessionQuery  = "INSERT INTO app_session (userid,sessionname,sessiondate,sessionexpiry) VALUES(?,?,?,?)"
 	checkUseridinSessionQuery  = "select userid from app_session WHERE userid= ?"
-	userAuthentication         = "SELECT a.userid,a.roleid,a.configid,b.firstname,b.lastname,b.email,b.contactno,IFNULL(b.profileimage,'') AS profileimage,IFNULL(b.countrycode,'') AS countrycode,IFNULL(b.currencycode,'') AS currencycode,IFNULL(b.currencysymbol,'') AS currencysymbol,b.status,b.created FROM app_users a, app_userprofiles b WHERE a.userid=b.userid AND a.status ='Active' AND a.userid=?"
-	loginResponseQueryByUserid = "SELECT a.userid,b.firstname,b.lastname,b.contactno,b.email,IFNULL(b.userlocationid,0) AS userlocationid,b.status,b.created, IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(d.packageid,0) AS packageid, IFNULL(d.moduleid,0) AS moduleid, IFNULL(e.modulename,'') AS modulename, IFNULL(f.opentime,'') AS opentime,IFNULL(f.closetime,'') AS closetime  FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantsubscription d ON c.tenantid=d.tenantid LEFT OUTER JOIN app_module e ON d.moduleid=e.moduleid  LEFT OUTER JOIN tenantlocations f ON c.tenantid=f.tenantid WHERE a.userid=?"
+	userAuthentication         = "SELECT a.userid,a.roleid,a.configid,b.firstname,b.lastname,b.email,b.contactno,b.dailcode,IFNULL(b.profileimage,'') AS profileimage,IFNULL(b.countrycode,'') AS countrycode,IFNULL(b.currencycode,'') AS currencycode,IFNULL(b.currencysymbol,'') AS currencysymbol,b.status,b.created FROM app_users a, app_userprofiles b WHERE a.userid=b.userid AND a.status ='Active' AND a.userid=?"
+	loginResponseQueryByUserid = "SELECT a.userid,b.firstname,b.lastname,b.contactno,b.dailcode,b.email,IFNULL(b.userlocationid,0) AS userlocationid,b.status,b.created, IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(d.packageid,0) AS packageid, IFNULL(d.moduleid,0) AS moduleid, IFNULL(e.modulename,'') AS modulename, IFNULL(f.opentime,'') AS opentime,IFNULL(f.closetime,'') AS closetime  FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantsubscription d ON c.tenantid=d.tenantid LEFT OUTER JOIN app_module e ON d.moduleid=e.moduleid  LEFT OUTER JOIN tenantlocations f ON c.tenantid=f.tenantid WHERE a.userid=?"
 	updateenanttoken           = "UPDATE tenants SET tenanttoken=?,devicetype=? WHERE tenantid=?"
 	checkauthname              = "SELECT userid,IFNULL(configid,0) AS configid FROM app_users WHERE authname= ? OR contactno=?"
 	getCustomerByid            = "SELECT customerid,firstname,lastname,contactno,email,IFNULL(configid,0) AS configid  FROM customers WHERE customerid=?"
-	updateappuser              = "UPDATE app_users SET authname=? , contactno=? WHERE userid=?"
-	updateuserprofile          = "UPDATE app_userprofiles SET firstname=?,lastname=?,email=?,contactno=?,profileimage=? WHERE userid=?"
-	loginuserresponse          = "SELECT a.userid,a.authname,a.contactno,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(b.profileimage,'') AS profileimage,IFNULL(b.countrycode,'') AS usercountrycode,IFNULL(b.currencycode,'') AS usercurrencycode,IFNULL(b.currencysymbol,'') AS usercurrencysymbol,IFNULL(c.devicetype,'') AS devicetype,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(c.countrycode,'') AS countrycode,IFNULL(c.currencyid,0) AS currencyid,IFNULL(c.currencycode,'') AS currencycode,IFNULL(c.currencysymbol,'') AS currencysymbol,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(c.tenantaccid,'') AS tenantaccid FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid  WHERE   a.userid=?"
+	updateappuser              = "UPDATE app_users SET authname=? , contactno=?,dailcode=? WHERE userid=?"
+	updateuserprofile          = "UPDATE app_userprofiles SET firstname=?,lastname=?,email=?,contactno=?,dailcode=?,profileimage=? WHERE userid=?"
+	loginuserresponse          = "SELECT a.userid,a.authname,a.contactno,a.dailcode,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(b.profileimage,'') AS profileimage,IFNULL(b.countrycode,'') AS usercountrycode,IFNULL(b.currencycode,'') AS usercurrencycode,IFNULL(b.currencysymbol,'') AS usercurrencysymbol,IFNULL(c.devicetype,'') AS devicetype,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(c.countrycode,'') AS countrycode,IFNULL(c.currencyid,0) AS currencyid,IFNULL(c.currencycode,'') AS currencycode,IFNULL(c.currencysymbol,'') AS currencysymbol,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(c.tenantaccid,'') AS tenantaccid FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid  WHERE   a.userid=?"
 	logintenantresponse        = "SELECT a.subscriptionid,a.packageid,a.moduleid,a.featureid,a.categoryid,a.subcategoryid,IFNULL(a.validitydate,'') AS validitydate,IF(a.validitydate>=DATE(NOW()), true, false) AS validity,a.paymentstatus,a.taxamount,a.totalamount,IFNULL(a.subscriptionaccid,'') AS subscriptionaccid,IFNULL(a.subscriptionmethodid,'') AS subscriptionmethodid,b.modulename,IFNULL(b.logourl,'') AS logourl,IFNULL(b.iconurl,'') AS iconurl FROM tenantsubscription a,app_module b WHERE a.moduleid=b.moduleid  AND  tenantid=? ORDER BY a.subscriptionid ASC "
 	loginlocationresponse      = "SELECT locationid,tenantid,locationname,email,contactno,address,IFNULL(suburb,'') AS suburb,city,state,postcode,IFNULL(latitude,'') AS latitude,IFNULL(longitude,'') AS longitude,IFNULL(opentime,'') AS opentime,IFNULL(closetime,'') AS closetime  FROM tenantlocations  WHERE tenantid=?"
 )
@@ -50,7 +50,7 @@ func (user *User) Create() (int64, error) {
 	hashedPassword, err := HashPassword(user.Password)
 	fmt.Println("2")
 
-	res, err1 := statement.Exec(&user.Email, &user.Password, &hashedPassword, &user.Mobile, &user.Roleid, &user.Configid)
+	res, err1 := statement.Exec(&user.Email, &user.Password, &hashedPassword, &user.Mobile,&user.Dailcode, &user.Roleid, &user.Configid)
 	if err1 != nil {
 
 		// log.Fatal(err1)
@@ -78,7 +78,7 @@ func (user *User) Createwithoutpassword() (int64, error) {
 
 	fmt.Println("2")
 
-	res, err1 := statement.Exec(&user.Email, &user.Mobile, &user.Roleid, &user.Configid)
+	res, err1 := statement.Exec(&user.Email, &user.Mobile,&user.Dailcode, &user.Roleid, &user.Configid)
 	if err1 != nil {
 
 		fmt.Println(err1)
@@ -102,7 +102,7 @@ func (user *User) InsertUserintoProfile() int64 {
 		log.Fatal(err)
 	}
 	defer statement.Close()
-	res, err := statement.Exec(&user.ID, &user.FirstName, &user.LastName, &user.Email, &user.Mobile, &user.Countrycode,
+	res, err := statement.Exec(&user.ID, &user.FirstName, &user.LastName, &user.Email, &user.Mobile,&user.Dailcode, &user.Countrycode,
 		&user.CurrencyCode, &user.Currencysymbol)
 	if err != nil {
 		log.Fatal(err)
@@ -232,7 +232,7 @@ func GetAllUsers() []User {
 	var users []User
 	for rows.Next() {
 		var user User
-		err := rows.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Mobile, &user.Email, &user.Profileimage,
+		err := rows.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Mobile,&user.Dailcode, &user.Email, &user.Profileimage,
 			&user.Countrycode, &user.CurrencyCode, &user.Currencysymbol,
 			&user.Status, &user.CreatedDate)
 		if err != nil {
@@ -308,7 +308,7 @@ func (user *User) GetByUserId(id int64) (*User, error) {
 	defer stmt.Close()
 	row := stmt.QueryRow(id)
 	// print(row)
-	err = row.Scan(&data.ID, &data.FirstName, &data.LastName, &data.Mobile, &data.Email, &data.Countrycode, &data.CurrencyCode, &data.Currencysymbol, &data.Status, &data.CreatedDate)
+	err = row.Scan(&data.ID, &data.FirstName, &data.LastName, &data.Mobile,&data.Dailcode, &data.Email, &data.Countrycode, &data.CurrencyCode, &data.Currencysymbol, &data.Status, &data.CreatedDate)
 	print(err)
 	fmt.Println("2")
 	if err != nil {
@@ -326,6 +326,7 @@ func (user *User) GetByUserId(id int64) (*User, error) {
 	user.CreatedDate = data.CreatedDate
 	user.Mobile = data.Mobile
 	user.Status = data.Status
+	user.Dailcode=data.Dailcode
 	print(user.ID)
 	// print(user.FirstName)
 	// print(user.LastName)
@@ -346,7 +347,7 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	defer stmt.Close()
 	row := stmt.QueryRow(id)
 	// print(row)
-	err = row.Scan(&data.ID, &data.Email, &data.Mobile, &data.Roleid, &data.Configid, &data.Status,
+	err = row.Scan(&data.ID, &data.Email, &data.Mobile,&data.Dailcode, &data.Roleid, &data.Configid, &data.Status,
 		&data.CreatedDate, &data.FirstName, &data.LastName, &data.Profileimage, &data.Usercountrycode,
 		&data.UsercurrencyCode, &data.Usercurrencysymbol, &data.Devicetype, &data.Referenceid, &data.Tenantname,
 		&data.Countrycode, &data.Currencyid, &data.CurrencyCode, &data.Currencysymbol, &data.Tenantimage,
@@ -387,6 +388,7 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	user.Usercountrycode = data.Usercountrycode
 	user.UsercurrencyCode = data.UsercurrencyCode
 	user.Usercurrencysymbol = data.Usercurrencysymbol
+	user.Dailcode=data.Dailcode
 	print(user.ID)
 	// print(user.FirstName)
 	// print(user.LastName)
@@ -406,7 +408,7 @@ func (user *User) UserAuthentication(id int64) (*User, bool, error) {
 	}
 	defer stmt.Close()
 	row := stmt.QueryRow(id)
-	err = row.Scan(&data.ID, &data.Roleid, &data.Configid, &data.FirstName, &data.LastName, &data.Email, &data.Mobile, &data.Profileimage,
+	err = row.Scan(&data.ID, &data.Roleid, &data.Configid, &data.FirstName, &data.LastName, &data.Email, &data.Mobile,&data.Dailcode, &data.Profileimage,
 		&data.Countrycode, &data.CurrencyCode, &data.Currencysymbol, &data.Status, &data.CreatedDate)
 	print(err)
 	if err != nil {
@@ -568,7 +570,7 @@ func (u *User) Updateappuser() (bool, error) {
 
 	}
 
-	_, err1 := stmt.Exec(&u.Email, &u.Mobile, &u.ID)
+	_, err1 := stmt.Exec(&u.Email, &u.Mobile,&u.Dailcode, &u.ID)
 	if err1 != nil {
 		fmt.Println(err1)
 		return false, err1
@@ -585,7 +587,7 @@ func (u *User) Updateuserprofile() (bool, error) {
 
 	}
 
-	_, err1 := stmt.Exec(&u.FirstName, &u.LastName, &u.Email, &u.Mobile, &u.Profileimage, &u.ID)
+	_, err1 := stmt.Exec(&u.FirstName, &u.LastName, &u.Email,&u.Mobile, &u.Dailcode, &u.Profileimage, &u.ID)
 	if err1 != nil {
 		fmt.Println(err1)
 		return false, err1

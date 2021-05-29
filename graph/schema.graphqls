@@ -9,6 +9,7 @@ Userid: Int!
 Firstname: String!
 Lastname:String!
 Mobile:String!
+Dailcode:String!
 Email:String!
 Profileimage:String!
 Currencysymbol:String!
@@ -23,6 +24,7 @@ Firstname:String!
 Lastname:String!
 Email:String!
 Mobile:String!
+Dailcode:String!
 Profileimage:String!
 Currencysymbol:String!
 Currencycode:String!
@@ -45,6 +47,7 @@ Firstname:String!
 Lastname:String!
 Email:String!
 Mobile:String!
+Dailcode:String!
 Profileimage:String!
 Usercurrencysymbol:String!
 Usercurrencycode:String!
@@ -124,6 +127,7 @@ lastname:String!
 email:String!
 password: String!
 Mobile:String!
+Dailcode:String!
 roleid:Int!
 referenceid:Int!
 locationid:Int!
@@ -147,6 +151,7 @@ input userupdateinput{
   lastname:String!
   email:String!
   contactno:String!
+  dailcode:String!
   profileimage:String!
 
 }
