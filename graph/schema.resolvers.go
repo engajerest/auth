@@ -89,7 +89,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 			Currencysymbol: user.Currencysymbol,
 			Currencycode:   user.CurrencyCode,
 			Countrycode:    user.Countrycode,
-			Dialcode:        user.Dialcode,
+			Dialcode:       user.Dialcode,
 		}}, nil
 }
 
@@ -143,7 +143,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 				tenantlist = append(tenantlist, &model.Tenantdata{Subscriptionid: k.Subscriptionid,
 					Packageid: k.Packageid, Packagename: k.Packagename, Moduleid: k.Moduleid, Validitydate: k.Validiydate,
 					Validity: k.Validity, Categoryid: k.Categoryid, Subcategoryid: k.Subcategoryid,
-					Featureid: k.Featureid, Taxamount: k.Taxamount, Totalamount: k.Totalamount, Subscriptionaccid: k.Subscriptionaccid, Subscriptionmethodid: k.Subscriptionmethodid, Paymentstatus: k.Paymentstatus, Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
+				Status: k.Status,	Featureid: k.Featureid, Taxamount: k.Taxamount, Totalamount: k.Totalamount, Subscriptionaccid: k.Subscriptionaccid, Subscriptionmethodid: k.Subscriptionmethodid, Paymentstatus: k.Paymentstatus, Modulename: k.Modulename, Iconurl: k.Iconurl, Logourl: k.Logourl})
 			}
 		}
 		loc = users.Locationresponse(user.Referenceid)

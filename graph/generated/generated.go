@@ -170,6 +170,7 @@ type ComplexityRoot struct {
 		Packageid            func(childComplexity int) int
 		Packagename          func(childComplexity int) int
 		Paymentstatus        func(childComplexity int) int
+		Status               func(childComplexity int) int
 		Subcategoryid        func(childComplexity int) int
 		Subscriptionaccid    func(childComplexity int) int
 		Subscriptionid       func(childComplexity int) int
@@ -932,6 +933,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Tenantdata.Paymentstatus(childComplexity), true
 
+	case "tenantdata.Status":
+		if e.complexity.Tenantdata.Status == nil {
+			break
+		}
+
+		return e.complexity.Tenantdata.Status(childComplexity), true
+
 	case "tenantdata.Subcategoryid":
 		if e.complexity.Tenantdata.Subcategoryid == nil {
 			break
@@ -1160,6 +1168,7 @@ type tenantdata{
  Subscriptionmethodid:String!
  Taxamount:Float!
  Totalamount:Float!
+ Status:String!
 
 }
 
@@ -6259,6 +6268,41 @@ func (ec *executionContext) _tenantdata_Totalamount(ctx context.Context, field g
 	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _tenantdata_Status(ctx context.Context, field graphql.CollectedField, obj *model.Tenantdata) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "tenantdata",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Status, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _updateddata_status(ctx context.Context, field graphql.CollectedField, obj *model.Updateddata) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -7599,6 +7643,11 @@ func (ec *executionContext) _tenantdata(ctx context.Context, sel ast.SelectionSe
 			}
 		case "Totalamount":
 			out.Values[i] = ec._tenantdata_Totalamount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Status":
+			out.Values[i] = ec._tenantdata_Status(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

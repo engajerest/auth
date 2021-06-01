@@ -34,7 +34,7 @@ const (
 	updateappuser              = "UPDATE app_users SET authname=? , contactno=?,dialcode=? WHERE userid=?"
 	updateuserprofile          = "UPDATE app_userprofiles SET firstname=?,lastname=?,email=?,contactno=?,dialcode=?,profileimage=? WHERE userid=?"
 	loginuserresponse          = "SELECT a.userid,a.authname,a.contactno,a.dialcode,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(b.profileimage,'') AS profileimage,IFNULL(b.countrycode,'') AS usercountrycode,IFNULL(b.currencycode,'') AS usercurrencycode,IFNULL(b.currencysymbol,'') AS usercurrencysymbol,IFNULL(c.devicetype,'') AS devicetype,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(c.countrycode,'') AS countrycode,IFNULL(c.currencyid,0) AS currencyid,IFNULL(c.currencycode,'') AS currencycode,IFNULL(c.currencysymbol,'') AS currencysymbol,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(c.tenantaccid,'') AS tenantaccid FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid  WHERE   a.userid=?"
-	logintenantresponse        = "SELECT a.subscriptionid,a.packageid,a.moduleid,a.featureid,a.categoryid,a.subcategoryid,IFNULL(a.validitydate,'') AS validitydate,IF(a.validitydate>=DATE(NOW()), true, false) AS validity,a.paymentstatus,a.taxamount,a.totalamount,IFNULL(a.subscriptionaccid,'') AS subscriptionaccid,IFNULL(a.subscriptionmethodid,'') AS subscriptionmethodid,b.modulename,IFNULL(b.logourl,'') AS logourl,IFNULL(b.iconurl,'') AS iconurl FROM tenantsubscription a,app_module b WHERE a.moduleid=b.moduleid  AND  tenantid=? ORDER BY a.subscriptionid ASC "
+	logintenantresponse        = "SELECT a.subscriptionid,a.packageid,a.moduleid,a.featureid,a.categoryid,a.subcategoryid,IFNULL(a.validitydate,'') AS validitydate,IF(a.validitydate>=DATE(NOW()), true, false) AS validity,a.paymentstatus,a.taxamount,a.totalamount,IFNULL(a.subscriptionaccid,'') AS subscriptionaccid,IFNULL(a.subscriptionmethodid,'') AS subscriptionmethodid,a.status,b.modulename,IFNULL(b.logourl,'') AS logourl,IFNULL(b.iconurl,'') AS iconurl FROM tenantsubscription a,app_module b WHERE a.moduleid=b.moduleid AND a.status='Active'  AND  tenantid=? ORDER BY a.subscriptionid ASC "
 	loginlocationresponse      = "SELECT locationid,tenantid,locationname,email,contactno,address,IFNULL(suburb,'') AS suburb,city,state,postcode,IFNULL(latitude,'') AS latitude,IFNULL(longitude,'') AS longitude,IFNULL(opentime,'') AS opentime,IFNULL(closetime,'') AS closetime  FROM tenantlocations  WHERE tenantid=?"
 )
 
@@ -259,7 +259,7 @@ func Tenantresponse(userid int) []Tenant {
 	var list []Tenant
 	for rows.Next() {
 		var t Tenant
-		err := rows.Scan(&t.Subscriptionid, &t.Packageid, &t.Moduleid, &t.Featureid,&t.Categoryid, &t.Subcategoryid, &t.Validiydate, &t.Validity, &t.Paymentstatus, &t.Taxamount, &t.Totalamount, &t.Subscriptionaccid, &t.Subscriptionmethodid, &t.Modulename, &t.Logourl, &t.Iconurl)
+		err := rows.Scan(&t.Subscriptionid, &t.Packageid, &t.Moduleid, &t.Featureid,&t.Categoryid, &t.Subcategoryid, &t.Validiydate, &t.Validity, &t.Paymentstatus, &t.Taxamount, &t.Totalamount, &t.Subscriptionaccid, &t.Subscriptionmethodid,&t.Status, &t.Modulename, &t.Logourl, &t.Iconurl)
 		if err != nil {
 			log.Fatal(err)
 		}

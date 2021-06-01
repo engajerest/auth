@@ -155,6 +155,7 @@ type Tenantdata struct {
 	Subscriptionmethodid string  `json:"Subscriptionmethodid"`
 	Taxamount            float64 `json:"Taxamount"`
 	Totalamount          float64 `json:"Totalamount"`
+	Status               string  `json:"Status"`
 }
 
 type Updateddata struct {
