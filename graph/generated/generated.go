@@ -176,6 +176,7 @@ type ComplexityRoot struct {
 		Subscriptionid       func(childComplexity int) int
 		Subscriptionmethodid func(childComplexity int) int
 		Taxamount            func(childComplexity int) int
+		Taxpercent           func(childComplexity int) int
 		Totalamount          func(childComplexity int) int
 		Validity             func(childComplexity int) int
 		Validitydate         func(childComplexity int) int
@@ -975,6 +976,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Tenantdata.Taxamount(childComplexity), true
 
+	case "tenantdata.Taxpercent":
+		if e.complexity.Tenantdata.Taxpercent == nil {
+			break
+		}
+
+		return e.complexity.Tenantdata.Taxpercent(childComplexity), true
+
 	case "tenantdata.Totalamount":
 		if e.complexity.Tenantdata.Totalamount == nil {
 			break
@@ -1167,6 +1175,7 @@ type tenantdata{
  Subscriptionaccid:String!
  Subscriptionmethodid:String!
  Taxamount:Float!
+  Taxpercent:String!
  Totalamount:Float!
  Status:String!
 
@@ -6233,6 +6242,41 @@ func (ec *executionContext) _tenantdata_Taxamount(ctx context.Context, field gra
 	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _tenantdata_Taxpercent(ctx context.Context, field graphql.CollectedField, obj *model.Tenantdata) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "tenantdata",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Taxpercent, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _tenantdata_Totalamount(ctx context.Context, field graphql.CollectedField, obj *model.Tenantdata) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -7638,6 +7682,11 @@ func (ec *executionContext) _tenantdata(ctx context.Context, sel ast.SelectionSe
 			}
 		case "Taxamount":
 			out.Values[i] = ec._tenantdata_Taxamount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Taxpercent":
+			out.Values[i] = ec._tenantdata_Taxpercent(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

@@ -154,6 +154,7 @@ type Tenantdata struct {
 	Subscriptionaccid    string  `json:"Subscriptionaccid"`
 	Subscriptionmethodid string  `json:"Subscriptionmethodid"`
 	Taxamount            float64 `json:"Taxamount"`
+	Taxpercent           string  `json:"Taxpercent"`
 	Totalamount          float64 `json:"Totalamount"`
 	Status               string  `json:"Status"`
 }

@@ -84,6 +84,7 @@ type tenantdata{
  Subscriptionaccid:String!
  Subscriptionmethodid:String!
  Taxamount:Float!
+  Taxpercent:String!
  Totalamount:Float!
  Status:String!
 
