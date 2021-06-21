@@ -29,8 +29,9 @@ func StartApplication() {
 	defaultPort := viper.GetString("APP.PORT")
 	key := viper.GetString("APP.USER_CONTEXT_KEY")
 	print("key====",key)
-	router.Use(controller.TokenNoAuthMiddleware(key))
+	
 	router.Use(Datasource())
+	router.Use(controller.TokenNoAuthMiddleware(key))
 	fmt.Print("Heloo world")
 	
 	Mapurls()
