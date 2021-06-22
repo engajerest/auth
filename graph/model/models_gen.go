@@ -118,6 +118,7 @@ type UserData1 struct {
 	CreatedDate        string  `json:"CreatedDate"`
 	Status             string  `json:"Status"`
 	Devicetype         string  `json:"Devicetype"`
+	Tenantstatus       string  `json:"Tenantstatus"`
 }
 
 type Location struct {

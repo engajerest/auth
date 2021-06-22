@@ -32,6 +32,7 @@ type User struct {
 	Usercountrycode    string `json:"usercountrycode"`
 	Usercurrencysymbol string `json:"usercurrencysymbol"`
 	UsercurrencyCode   string `json:"usercurrencycode"`
+	Tenantstatus string `json:"tenantstatus"`
 }
 type Tenant struct {
 	Subscriptionid       int     `json:"subscriptonid"`

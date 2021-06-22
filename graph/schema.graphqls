@@ -66,6 +66,7 @@ Currencysymbol:String!
 CreatedDate:String!
 Status:String!
 Devicetype:String!
+Tenantstatus:String!
 }
 type tenantdata{
   Subscriptionid:Int!

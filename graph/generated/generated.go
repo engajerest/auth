@@ -136,6 +136,7 @@ type ComplexityRoot struct {
 		Tenantid           func(childComplexity int) int
 		Tenantimageurl     func(childComplexity int) int
 		Tenantname         func(childComplexity int) int
+		Tenantstatus       func(childComplexity int) int
 		Token              func(childComplexity int) int
 		UserID             func(childComplexity int) int
 		Usercountrycode    func(childComplexity int) int
@@ -738,6 +739,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserData1.Tenantname(childComplexity), true
 
+	case "UserData1.Tenantstatus":
+		if e.complexity.UserData1.Tenantstatus == nil {
+			break
+		}
+
+		return e.complexity.UserData1.Tenantstatus(childComplexity), true
+
 	case "UserData1.Token":
 		if e.complexity.UserData1.Token == nil {
 			break
@@ -1157,6 +1165,7 @@ Currencysymbol:String!
 CreatedDate:String!
 Status:String!
 Devicetype:String!
+Tenantstatus:String!
 }
 type tenantdata{
   Subscriptionid:Int!
@@ -4093,6 +4102,41 @@ func (ec *executionContext) _UserData1_Devicetype(ctx context.Context, field gra
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.Devicetype, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _UserData1_Tenantstatus(ctx context.Context, field graphql.CollectedField, obj *model.UserData1) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "UserData1",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tenantstatus, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7247,6 +7291,11 @@ func (ec *executionContext) _UserData1(ctx context.Context, sel ast.SelectionSet
 			}
 		case "Devicetype":
 			out.Values[i] = ec._UserData1_Devicetype(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "Tenantstatus":
+			out.Values[i] = ec._UserData1_Tenantstatus(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

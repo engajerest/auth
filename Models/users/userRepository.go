@@ -33,7 +33,7 @@ const (
 	getCustomerByid            = "SELECT customerid,firstname,lastname,contactno,email,IFNULL(configid,0) AS configid  FROM customers WHERE customerid=?"
 	updateappuser              = "UPDATE app_users SET authname=? , contactno=?,dialcode=? WHERE userid=?"
 	updateuserprofile          = "UPDATE app_userprofiles SET firstname=?,lastname=?,email=?,contactno=?,dialcode=?,profileimage=? WHERE userid=?"
-	loginuserresponse          = "SELECT a.userid,a.authname,a.contactno,a.dialcode,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(b.profileimage,'') AS profileimage,IFNULL(b.countrycode,'') AS usercountrycode,IFNULL(b.currencycode,'') AS usercurrencycode,IFNULL(b.currencysymbol,'') AS usercurrencysymbol,IFNULL(c.devicetype,'') AS devicetype,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(c.countrycode,'') AS countrycode,IFNULL(c.currencyid,0) AS currencyid,IFNULL(c.currencycode,'') AS currencycode,IFNULL(c.currencysymbol,'') AS currencysymbol,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(c.tenantaccid,'') AS tenantaccid FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid  WHERE   a.userid=?"
+	loginuserresponse          = "SELECT a.userid,a.authname,a.contactno,a.dialcode,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(b.profileimage,'') AS profileimage,IFNULL(b.countrycode,'') AS usercountrycode,IFNULL(b.currencycode,'') AS usercurrencycode,IFNULL(b.currencysymbol,'') AS usercurrencysymbol,IFNULL(c.devicetype,'') AS devicetype,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(c.countrycode,'') AS countrycode,IFNULL(c.currencyid,0) AS currencyid,IFNULL(c.currencycode,'') AS currencycode,IFNULL(c.currencysymbol,'') AS currencysymbol,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(c.tenantaccid,'') AS tenantaccid,c.status FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid  WHERE   a.userid=?"
 	logintenantresponse        = "SELECT a.subscriptionid,IFNULL(a.packageid,0) AS packageid,a.moduleid,a.featureid,a.categoryid,a.subcategoryid,IFNULL(a.validitydate,'') AS validitydate,IF(a.validitydate>=DATE(NOW()), true, false) AS validity,a.paymentstatus,a.taxamount,a.taxpercent,a.totalamount,IFNULL(a.subscriptionaccid,'') AS subscriptionaccid,IFNULL(a.subscriptionmethodid,'') AS subscriptionmethodid,a.status,b.modulename,IFNULL(b.logourl,'') AS logourl,IFNULL(b.iconurl,'') AS iconurl FROM tenantsubscription a,app_module b WHERE a.moduleid=b.moduleid AND a.status='Active'  AND  tenantid=? ORDER BY a.subscriptionid ASC "
 	loginlocationresponse      = "SELECT locationid,tenantid,locationname,email,contactno,address,IFNULL(suburb,'') AS suburb,city,state,postcode,IFNULL(latitude,'') AS latitude,IFNULL(longitude,'') AS longitude,IFNULL(opentime,'') AS opentime,IFNULL(closetime,'') AS closetime  FROM tenantlocations  WHERE tenantid=?"
 )
@@ -351,7 +351,7 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 		&data.CreatedDate, &data.FirstName, &data.LastName, &data.Profileimage, &data.Usercountrycode,
 		&data.UsercurrencyCode, &data.Usercurrencysymbol, &data.Devicetype, &data.Referenceid, &data.Tenantname,
 		&data.Countrycode, &data.Currencyid, &data.CurrencyCode, &data.Currencysymbol, &data.Tenantimage,
-		&data.Tenantaccid)
+		&data.Tenantaccid,&data.Tenantstatus)
 	print(err)
 	fmt.Println("2")
 	if err != nil {
@@ -389,6 +389,7 @@ func (user *User) LoginResponse(id int64) (*User, error) {
 	user.UsercurrencyCode = data.UsercurrencyCode
 	user.Usercurrencysymbol = data.Usercurrencysymbol
 	user.Dialcode=data.Dialcode
+	user.Tenantstatus=data.Tenantstatus
 	print(user.ID)
 	// print(user.FirstName)
 	// print(user.LastName)
