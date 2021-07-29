@@ -288,6 +288,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.GetUser, error) {
 func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
 	id, usererr := datacontext.ForAuthContext(ctx)
 	if usererr != nil {
+		print("errr",usererr)
 		return nil, &gqlerror.Error{
 
 			Path:    graphql.GetPath(ctx),

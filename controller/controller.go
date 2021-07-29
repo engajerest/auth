@@ -2,21 +2,14 @@ package controller
 
 import (
 	"context"
-	// "errors"
-	"fmt"
-	"net/http"
-
-	// "os"
-
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/engajerest/auth/Models/users"
 	"github.com/engajerest/auth/graph"
-
 	"github.com/engajerest/auth/graph/generated"
-
 	"github.com/engajerest/auth/utils/accesstoken"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func PlaygroundHandlers() gin.HandlerFunc {
@@ -35,26 +28,24 @@ func GraphHandler() gin.HandlerFunc {
 
 func TokenAuthMiddleware(contextkey string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println("tkn1")
-		token := c.Request.Header.Get("token")
 
-		fmt.Println("tkn2")
+		token := c.Request.Header.Get("token")
 		print(token)
 		if token == "" {
 			c.JSON(http.StatusUnauthorized, "token null")
 			c.Abort()
-	
+
 			return
 		}
-		// fmt.Println("tkn3")
+
 		userId, configid, err := accesstoken.ParseToken(token)
-		// fmt.Println("5")
+
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, "token denied")
 			c.Abort()
 			return
 		}
-		// fmt.Println("tkn4")
+
 		id := int(userId)
 		id1 := int(configid)
 		print("confiid", id1)
@@ -72,8 +63,8 @@ func TokenAuthMiddleware(contextkey string) gin.HandlerFunc {
 			ctx := context.WithValue(c.Request.Context(), contextkey, user)
 			c.Request = c.Request.WithContext(ctx)
 			c.Next()
-		} else {
-			print("configid>1")
+		} else if id1 == 4 {
+			print("configid=4 customer")
 			data1 := users.User{}
 			user, status, errrr := data1.Customerauthenticate(int64(id))
 			print(status)
@@ -87,6 +78,19 @@ func TokenAuthMiddleware(contextkey string) gin.HandlerFunc {
 			c.Request = c.Request.WithContext(ctx)
 			c.Next()
 
+		} else if id1 == 7 {
+			print("id=7 session based customer")
+			var user users.User
+			user.ID = id
+			user.Configid = id1
+			ctx := context.WithValue(c.Request.Context(), contextkey, user)
+			c.Request = c.Request.WithContext(ctx)
+			c.Next()
+		} else {
+			print("configid not 4")
+			c.JSON(http.StatusUnauthorized, "configid not 4")
+			c.Abort()
+			return
 		}
 
 	}
@@ -94,10 +98,9 @@ func TokenAuthMiddleware(contextkey string) gin.HandlerFunc {
 
 func TokenNoAuthMiddleware(contextkey string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println("tkn1")
+
 		token := c.Request.Header.Get("token")
 
-		fmt.Println("tkn2")
 		print(token)
 		if token == "" {
 			// c.JSON(http.StatusUnauthorized, "token null")
@@ -105,15 +108,15 @@ func TokenNoAuthMiddleware(contextkey string) gin.HandlerFunc {
 			c.Next()
 			return
 		}
-		// fmt.Println("tkn3")
+
 		userId, configid, err := accesstoken.ParseToken(token)
-		// fmt.Println("5")
+
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, "token denied")
 			c.Abort()
 			return
 		}
-		// fmt.Println("tkn4")
+
 		id := int(userId)
 		id1 := int(configid)
 		print("confiid", id1)
@@ -131,8 +134,8 @@ func TokenNoAuthMiddleware(contextkey string) gin.HandlerFunc {
 			ctx := context.WithValue(c.Request.Context(), contextkey, user)
 			c.Request = c.Request.WithContext(ctx)
 			c.Next()
-		} else {
-			print("configid>1")
+		} else if id1 == 4 {
+			print("configid=4 customer")
 			data1 := users.User{}
 			user, status, errrr := data1.Customerauthenticate(int64(id))
 			print(status)
@@ -146,6 +149,18 @@ func TokenNoAuthMiddleware(contextkey string) gin.HandlerFunc {
 			c.Request = c.Request.WithContext(ctx)
 			c.Next()
 
+		} else if id1 == 7 {
+			print("id=7 session based customer")
+			data1 := users.User{}
+			user := data1.Getzeroauth(int64(id), int64(id1))
+			ctx := context.WithValue(c.Request.Context(), contextkey, user)
+			c.Request = c.Request.WithContext(ctx)
+			c.Next()
+		} else {
+			print("configid not 4")
+			c.JSON(http.StatusUnauthorized, "configid not 4")
+			c.Abort()
+			return
 		}
 
 	}

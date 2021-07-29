@@ -5,12 +5,10 @@ import (
 	"fmt"
 	"log"
 	"time"
-
 	"github.com/engajerest/auth/logger"
 	"github.com/engajerest/auth/utils/Errors"
 	"github.com/engajerest/auth/utils/accesstoken"
 	database "github.com/engajerest/auth/utils/dbconfig"
-
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -465,7 +463,17 @@ func (c *User) Customerauthenticate(id int64) (*User, bool, error) {
 	fmt.Println("completed")
 	return &data, true, nil
 }
+func (c *User) Getzeroauth(custid, config int64) *User {
 
+	fmt.Println("enrty in zeroauth")
+
+	var data User
+	data.Configid = int(config)
+	data.ID = int(custid)
+	fmt.Println("completed customer 0 auth")
+	data.From = "SESSION CUSTOMER"
+	return &data
+}
 func (user *User) ResetPassword() bool {
 	stmt, err := database.Db.Prepare(resetPasswordQuery)
 	if err != nil {
