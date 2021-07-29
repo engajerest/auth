@@ -28,7 +28,7 @@ const (
 	loginResponseQueryByUserid = "SELECT a.userid,b.firstname,b.lastname,b.contactno,b.dialcode,b.email,IFNULL(b.userlocationid,0) AS userlocationid,b.status,b.created, IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(d.packageid,0) AS packageid, IFNULL(d.moduleid,0) AS moduleid, IFNULL(e.modulename,'') AS modulename, IFNULL(f.opentime,'') AS opentime,IFNULL(f.closetime,'') AS closetime  FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantsubscription d ON c.tenantid=d.tenantid LEFT OUTER JOIN app_module e ON d.moduleid=e.moduleid  LEFT OUTER JOIN tenantlocations f ON c.tenantid=f.tenantid WHERE a.userid=?"
 	updateenanttoken           = "UPDATE tenants SET tenanttoken=?,devicetype=? WHERE tenantid=?"
 	checkauthname              = "SELECT userid,IFNULL(configid,0) AS configid FROM app_users WHERE authname= ? OR contactno=?"
-	getCustomerByid            = "SELECT customerid,firstname,lastname,contactno,email,IFNULL(configid,0) AS configid  FROM customers WHERE customerid=?"
+	getCustomerByid            = "SELECT customerid,firstname,lastname,contactno,email,IFNULL(configid,0) AS configid,postcode  FROM customers WHERE customerid=?"
 	updateappuser              = "UPDATE app_users SET authname=? , contactno=?,dialcode=? WHERE userid=?"
 	updateuserprofile          = "UPDATE app_userprofiles SET firstname=?,lastname=?,email=?,contactno=?,dialcode=?,profileimage=? WHERE userid=?"
 	loginuserresponse          = "SELECT a.userid,a.authname,a.contactno,a.dialcode,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(b.profileimage,'') AS profileimage,IFNULL(b.countrycode,'') AS usercountrycode,IFNULL(b.currencycode,'') AS usercurrencycode,IFNULL(b.currencysymbol,'') AS usercurrencysymbol,IFNULL(c.devicetype,'') AS devicetype,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(c.countrycode,'') AS countrycode,IFNULL(c.currencyid,0) AS currencyid,IFNULL(c.currencycode,'') AS currencycode,IFNULL(c.currencysymbol,'') AS currencysymbol,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(c.tenantaccid,'') AS tenantaccid,IFNULL(c.status,'') AS status FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid  WHERE   a.userid=?"
@@ -441,7 +441,7 @@ func (c *User) Customerauthenticate(id int64) (*User, bool, error) {
 	defer stmt.Close()
 	row := stmt.QueryRow(id)
 	// print(row)
-	err = row.Scan(&data.ID, &data.FirstName, &data.LastName, &data.Mobile, &data.Email, &data.Configid)
+	err = row.Scan(&data.ID, &data.FirstName, &data.LastName, &data.Mobile, &data.Email, &data.Configid,&data.Postcode)
 	print(err)
 	fmt.Println("2")
 	if err != nil {

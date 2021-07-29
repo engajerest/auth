@@ -299,7 +299,7 @@ func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
 			},
 		}
 	}
-	print(id.From)
+
 
 	return &model.LoginData{
 		Status:  true,
