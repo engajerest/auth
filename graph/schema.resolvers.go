@@ -33,36 +33,47 @@ func (r *mutationResolver) CreateUser(ctx context.Context, create model.NewUser)
 	var userid int64
 	var err error
 	// user.Status = "Active"
-	if create.Password != "" {
-
-		userid, err = user.Create()
-		if err != nil {
-			if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'authname'", user.Email) {
-				print("true")
-				return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Email Already Exists",
-					UserInfo: &model.UserData{}}, nil
-			} else if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'contactno'", user.Mobile) {
-				return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Contactno Already Exists",
-					UserInfo: &model.UserData{}}, nil
-			} else {
-				return nil, err
-			}
-
+	id := user.CheckUser()
+	if id.ID != 0 {
+		if id.Email == create.Email {
+			return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Email Already Exists",
+				UserInfo: &model.UserData{}}, nil
+		} else if id.Mobile == create.Mobile {
+			return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Contactno Already Exists",
+				UserInfo: &model.UserData{}}, nil
 		}
 	} else {
-		userid, err = user.Createwithoutpassword()
-		if err != nil {
-			if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'authname'", user.Email) {
-				print("true")
-				return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Email Already Exists",
-					UserInfo: &model.UserData{}}, nil
-			} else if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'contactno'", user.Mobile) {
-				return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Contactno Already Exists",
-					UserInfo: &model.UserData{}}, nil
-			} else {
-				return nil, err
-			}
+		if create.Password != "" {
 
+			userid, err = user.Create()
+			if err != nil {
+				if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'authname'", user.Email) {
+					print("true")
+					return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Email Already Exists",
+						UserInfo: &model.UserData{}}, nil
+				} else if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'contactno'", user.Mobile) {
+					return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Contactno Already Exists",
+						UserInfo: &model.UserData{}}, nil
+				} else {
+					return nil, err
+				}
+
+			}
+		} else {
+			userid, err = user.Createwithoutpassword()
+			if err != nil {
+				if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'authname'", user.Email) {
+					print("true")
+					return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Email Already Exists",
+						UserInfo: &model.UserData{}}, nil
+				} else if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'contactno'", user.Mobile) {
+					return &model.UserCreatedData{Status: false, Code: http.StatusConflict, Message: "Contactno Already Exists",
+						UserInfo: &model.UserData{}}, nil
+				} else {
+					return nil, err
+				}
+
+			}
 		}
 	}
 
@@ -186,7 +197,7 @@ func (r *mutationResolver) Login(ctx context.Context, input model.Login) (*model
 			Currencycode:       user.CurrencyCode,
 			Currencysymbol:     user.Currencysymbol,
 			Dialcode:           user.Dialcode,
-			Tenantstatus: user.Tenantstatus,
+			Tenantstatus:       user.Tenantstatus,
 		}, Tenantinfo: tenantlist, Locationinfo: loclist,
 	}, nil
 }
@@ -250,24 +261,35 @@ func (r *mutationResolver) Updateuser(ctx context.Context, input *model.Userupda
 	d.Mobile = input.Contactno
 	d.ID = input.Userid
 	d.Dialcode = input.Dialcode
-	stat, err := d.Updateappuser()
-	if err != nil {
-		if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'authname'", d.Email) {
-			print("true")
+	d.Configid = id.Configid
+	print("updateconfig", d.Configid)
+	res := d.CheckUserforupdate()
+	if res.ID != 0 {
+		if res.Email == input.Email {
 			return &model.Updateddata{Status: false, Code: http.StatusConflict, Message: "Email Already Exists"}, nil
-		} else if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'contactno'", d.Mobile) {
+		} else if res.Mobile == input.Contactno {
 			return &model.Updateddata{Status: false, Code: http.StatusConflict, Message: "Contactno Already Exists"}, nil
-		} else {
-			return nil, err
 		}
+	} else {
+		stat, err := d.Updateappuser()
+		if err != nil {
+			if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'authname'", d.Email) {
+				print("true")
+				return &model.Updateddata{Status: false, Code: http.StatusConflict, Message: "Email Already Exists"}, nil
+			} else if err.Error() == fmt.Sprintf("Error 1062: Duplicate entry '%s' for key 'contactno'", d.Mobile) {
+				return &model.Updateddata{Status: false, Code: http.StatusConflict, Message: "Contactno Already Exists"}, nil
+			} else {
+				return nil, err
+			}
 
-	}
-	if stat == true {
-		st, er1 := d.Updateuserprofile()
-		if er1 != nil {
-			return nil, er1
 		}
-		print("userprofileupdate", st)
+		if stat == true {
+			st, er1 := d.Updateuserprofile()
+			if er1 != nil {
+				return nil, er1
+			}
+			print("userprofileupdate", st)
+		}
 	}
 
 	return &model.Updateddata{Status: true, Code: http.StatusCreated, Message: "Profile Update Successfully"}, nil
@@ -288,7 +310,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.GetUser, error) {
 func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
 	id, usererr := datacontext.ForAuthContext(ctx)
 	if usererr != nil {
-		print("errr",usererr)
+		print("errr", usererr)
 		return nil, &gqlerror.Error{
 
 			Path:    graphql.GetPath(ctx),
@@ -299,7 +321,6 @@ func (r *queryResolver) Getuser(ctx context.Context) (*model.LoginData, error) {
 			},
 		}
 	}
-
 
 	return &model.LoginData{
 		Status:  true,

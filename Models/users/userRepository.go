@@ -18,7 +18,7 @@ const (
 	createUsernopassword       = "INSERT INTO app_users (authname,contactno,dialcode,roleid,configid) VALUES(?,?,?,?,?)"
 	insertUsertoProfileQuery   = "INSERT INTO app_userprofiles (userid,firstname,lastname,email,contactno,dialcode,countrycode,currencycode,currencysymbol) VALUES(?,?,?,?,?,?,?,?,?)"
 	getUseridByNameQuery       = "select user_id, email, mobile,status,created_date from engaje_users WHERE user_name = ?"
-	authenticationQuery        = "SELECT userid,password,hashsalt,IFNULL(configid,0) AS configid FROM app_users WHERE authname=? OR contactno=? AND password=? "
+	authenticationQuery        = "SELECT userid,password,hashsalt,IFNULL(configid,0) AS configid FROM app_users WHERE authname=? OR contactno=? AND password=? and configid=1 "
 	usersGetAllQuery           = "select userid, firstname,lastname, contactno,dialcode,email,IFNULL(profileimage,'') AS profileimage,IFNULL(countrycode,'') AS countrycode,IFNULL(currencycode,'') AS currencycode,IFNULL(currencysymbol,'') AS currencysymbol, status,created from app_userprofiles"
 	getUserByidQuery           = "select userid, firstname,lastname,contactno,dialcode,email,IFNULL(countrycode,'') AS countrycode,IFNULL(currencycode,'') AS currencycode,IFNULL(currencysymbol,'') AS currencysymbol,status,created from app_userprofiles WHERE userid=?"
 	resetPasswordQuery         = "UPDATE app_users SET password=? ,hashsalt=?  WHERE userid = ?"
@@ -27,13 +27,15 @@ const (
 	userAuthentication         = "SELECT a.userid,a.roleid,a.configid,b.firstname,b.lastname,b.email,b.contactno,b.dialcode,IFNULL(b.profileimage,'') AS profileimage,IFNULL(b.countrycode,'') AS countrycode,IFNULL(b.currencycode,'') AS currencycode,IFNULL(b.currencysymbol,'') AS currencysymbol,b.status,b.created FROM app_users a, app_userprofiles b WHERE a.userid=b.userid AND a.status ='Active' AND a.userid=?"
 	loginResponseQueryByUserid = "SELECT a.userid,b.firstname,b.lastname,b.contactno,b.dialcode,b.email,IFNULL(b.userlocationid,0) AS userlocationid,b.status,b.created, IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(d.packageid,0) AS packageid, IFNULL(d.moduleid,0) AS moduleid, IFNULL(e.modulename,'') AS modulename, IFNULL(f.opentime,'') AS opentime,IFNULL(f.closetime,'') AS closetime  FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid LEFT OUTER JOIN tenantsubscription d ON c.tenantid=d.tenantid LEFT OUTER JOIN app_module e ON d.moduleid=e.moduleid  LEFT OUTER JOIN tenantlocations f ON c.tenantid=f.tenantid WHERE a.userid=?"
 	updateenanttoken           = "UPDATE tenants SET tenanttoken=?,devicetype=? WHERE tenantid=?"
-	checkauthname              = "SELECT userid,IFNULL(configid,0) AS configid FROM app_users WHERE authname= ? OR contactno=?"
+	checkauthname              = "SELECT userid,IFNULL(configid,0) AS configid FROM app_users WHERE authname= ? OR contactno=? and configid=1"
 	getCustomerByid            = "SELECT customerid,firstname,lastname,contactno,email,IFNULL(configid,0) AS configid,postcode  FROM customers WHERE customerid=?"
 	updateappuser              = "UPDATE app_users SET authname=? , contactno=?,dialcode=? WHERE userid=?"
 	updateuserprofile          = "UPDATE app_userprofiles SET firstname=?,lastname=?,email=?,contactno=?,dialcode=?,profileimage=? WHERE userid=?"
 	loginuserresponse          = "SELECT a.userid,a.authname,a.contactno,a.dialcode,a.roleid,a.configid,a.status,a.created,b.firstname,b.lastname,IFNULL(b.profileimage,'') AS profileimage,IFNULL(b.countrycode,'') AS usercountrycode,IFNULL(b.currencycode,'') AS usercurrencycode,IFNULL(b.currencysymbol,'') AS usercurrencysymbol,IFNULL(c.devicetype,'') AS devicetype,IFNULL(c.tenantid,0) AS tenantid,IFNULL(c.tenantname,'') AS tenantname, IFNULL(c.countrycode,'') AS countrycode,IFNULL(c.currencyid,0) AS currencyid,IFNULL(c.currencycode,'') AS currencycode,IFNULL(c.currencysymbol,'') AS currencysymbol,IFNULL(c.tenantimage,'') AS tenantimage,IFNULL(c.tenantaccid,'') AS tenantaccid,IFNULL(c.status,'') AS status FROM app_users a INNER JOIN app_userprofiles b ON a.userid = b.userid LEFT OUTER JOIN tenants c ON a.referenceid=c.tenantid  WHERE   a.userid=?"
 	logintenantresponse        = "SELECT a.subscriptionid,IFNULL(a.packageid,0) AS packageid,a.moduleid,a.featureid,a.categoryid,a.subcategoryid,IFNULL(a.validitydate,'') AS validitydate,IF(a.validitydate>=DATE(NOW()), true, false) AS validity,a.paymentstatus,a.taxamount,a.taxpercent,a.totalamount,IFNULL(a.subscriptionaccid,'') AS subscriptionaccid,IFNULL(a.subscriptionmethodid,'') AS subscriptionmethodid,a.status,b.modulename,IFNULL(b.logourl,'') AS logourl,IFNULL(b.iconurl,'') AS iconurl FROM tenantsubscription a,app_module b WHERE a.moduleid=b.moduleid AND a.status='Active'  AND  tenantid=? ORDER BY a.subscriptionid ASC "
 	loginlocationresponse      = "SELECT locationid,tenantid,locationname,email,contactno,address,IFNULL(suburb,'') AS suburb,city,state,postcode,IFNULL(latitude,'') AS latitude,IFNULL(longitude,'') AS longitude,IFNULL(opentime,'') AS opentime,IFNULL(closetime,'') AS closetime  FROM tenantlocations  WHERE tenantid=?"
+	checkuser = "SELECT IFNULL(userid,0) AS userid,authname,contactno FROM app_users WHERE authname=? AND contactno=? AND configid=?"
+	checkuserforupdate = "SELECT IFNULL(userid,0) AS userid,authname,contactno FROM app_users WHERE authname=? AND contactno=? AND configid=? AND userid NOT IN (?)"
 )
 
 func (user *User) Create() (int64, error) {
@@ -112,7 +114,61 @@ func (user *User) InsertUserintoProfile() int64 {
 	log.Print("Row inserted!")
 	return id
 }
+func (user *User) CheckUserforupdate() *User{
+	var data User
+	statement, err := database.Db.Prepare(checkuserforupdate)
 
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("1")
+	row := statement.QueryRow(user.Email, user.Mobile,user.Configid,user.ID)
+	err = row.Scan(&data.ID,&data.Email,&data.Mobile)
+	print(err)
+	fmt.Println("2")
+	if err != nil {
+		if err == sql.ErrNoRows {
+			data.ID=0
+			return &data
+		} else {
+			data.ID=0
+			return &data
+
+		}
+	}
+	// fmt.Println(user)
+	user.ID = data.ID
+	user.Email=data.Email
+	user.Mobile=data.Mobile
+	return &data
+}
+func (user *User) CheckUser() *User{
+	var data User
+	statement, err := database.Db.Prepare(checkuser)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("1")
+	row := statement.QueryRow(user.Email, user.Mobile,user.Configid)
+	err = row.Scan(&data.ID,&data.Email,&data.Mobile)
+	print(err)
+	fmt.Println("2")
+	if err != nil {
+		if err == sql.ErrNoRows {
+			data.ID=0
+			return &data
+		} else {
+			data.ID=0
+			return &data
+
+		}
+	}
+	// fmt.Println(user)
+	user.ID = data.ID
+	
+	return &data
+}
 //HashPassword hashes given password
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
