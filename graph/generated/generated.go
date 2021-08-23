@@ -1243,6 +1243,7 @@ username: String!
 password: String!
 tenanttoken:String!
 devicetype:String!
+
 }
 input Reset {
  password: String!
